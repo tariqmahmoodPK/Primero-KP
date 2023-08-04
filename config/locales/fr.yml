@@ -826,7 +826,7 @@ fr:
         terms_of_use_format: Le fichier doit être au format png
         name_present: ne peut pas être vide
       child:
-        age: L'âge doit être compris entre 0 et 130
+        age: L'âge doit être compris entre 0 et 18
         date_of_birth: Saisissez une date de naissance valide pour le dossier de ce cas
       export_configuration:
         opt_out_field_does_not_exist: Le champ spécifié n'existe pas sur l'enregistrement.

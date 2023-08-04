@@ -799,7 +799,7 @@ so:
         terms_of_use_format: faylku waa inuu ahaado sawir
         name_present: Waxaa waajib ah inaanu banaanaan
       child:
-        age: Da'du waa inay u dhaxaysaa 0 ilà 130
+        age: Da'du waa inay u dhaxaysaa 0 ilà 18
         date_of_birth: Fadlan gali taariikhda dhalashada oo sax ah diiwaanka kiiskan
       export_configuration:
         opt_out_field_does_not_exist: Cayin in aanu ku jirin diiwaanku goobtaasi

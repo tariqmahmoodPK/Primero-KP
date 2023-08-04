@@ -665,7 +665,7 @@ ar-SD:
         logo_format: يجب أن يكون الملف png
         name_present: لا يجب أن يكون خاليا
       child:
-        age: يجب أن يكون العُمر بين 0 و 130
+        age: يجب أن يكون العُمر بين 0 و 18
         date_of_birth: رجاء إدخال تاريخ ميلاد صحيح لسجل هذه الحالة
       export_configuration:
         opt_out_field_does_not_exist: لا يوجد في هذا الملف المجال المذكور

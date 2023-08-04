@@ -804,7 +804,7 @@ am-ET:
         terms_of_use_format: ፋይል png መሆን አለበት።
         name_present: ባዶ መሆን የለበትም
       child:
-        age: ዕድሜ ከ0 እስከ 130 መካከል መሆን አለበት።
+        age: ዕድሜ ከ0 እስከ 18 መካከል መሆን አለበት።
         date_of_birth: ለዚህ የጉዳይ ምዝገባ ትክክለኛውን የልደት ቀን አስገባ
       export_configuration:
         opt_out_field_does_not_exist: የተወሰነ የመርጦ መውጫ መስክ በመዝገቡ ላይ የለም

@@ -776,7 +776,7 @@ my:
         terms_of_use_format: ဖိုင်သည် png ဖြစ်သင့်သည်။
         name_present: ကွက်လပ်မဖြစ်ရပါ
       child:
-        age: အသက်သည် 0 နှင့် 130 အကြားဖြစ်ရမည်
+        age: အသက်သည် 0 နှင့် 18 အကြားဖြစ်ရမည်
         date_of_birth: ဒီဖြစ်ရပ်အတွက် မှန်ကန်သော မွေးနေ့သက္ကရာဇ်ကို ရေးသွင်းပါ။
       export_configuration:
         opt_out_field_does_not_exist: သတ်မှတ်ထားသော opt_out field သည်မှတ်တမ်းထဲတွင်မရှိပါ။

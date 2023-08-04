@@ -741,7 +741,7 @@ th:
         terms_of_use_format: File should be png
         name_present: ต้องกรอกข้อมูล
       child:
-        age: อายุต้องอยู่ระหว่าง 0 ถึง 130
+        age: อายุต้องอยู่ระหว่าง 0 ถึง 18
         date_of_birth: กรุณากรอกวันเกิดที่ถูกต้องในบันทึกนี้
       export_configuration:
         opt_out_field_does_not_exist: ไม่มีช่องกรอกข้อมูลที่เลือกเอาออกอยู่ในบันทึก

@@ -880,7 +880,7 @@ ar:
         terms_of_use_format: يجب أن يكون الملف بتنسيق png
         name_present: لا يجب أن يكون فارغا
       child:
-        age: يجب أن يكون العمر ما بين 0 و 130
+        age: يجب أن يكون العمر ما بين 0 و 18
         date_of_birth: الرجاء إدخال تاريخ ميلاد صالح لسجل الحالة هذه
       export_configuration:
         opt_out_field_does_not_exist: حقل عدم المشاركة المحدد لا يوجد في السجل

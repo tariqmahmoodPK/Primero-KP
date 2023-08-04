@@ -769,7 +769,7 @@ id:
         terms_of_use_format: File harus dalam png
         name_present: Tidak boleh kosong
       child:
-        age: Umur harus antara 0 dan 130
+        age: Umur harus antara 0 dan 18
         date_of_birth: Silahkan masukkan tanggal lahir yang benar untuk data kasus ini
       export_configuration:
         opt_out_field_does_not_exist: Bidang opt_out yang ditentukan tidak ada pada catatan.

@@ -786,7 +786,7 @@ bn:
         terms_of_use_format: ফাইলটি png হওয়া উচিত
         name_present: 'খালি রাখবেন না '
       child:
-        age: 'বয়স ০ এবং ১৩০ এর মধ্যে হতে হবে '
+        age: 'বয়স ০ থেকে ১৮ এর মধ্যে হতে হবে '
         date_of_birth: 'অনুগ্রহ করে এই ক্ষেত্রে রেকর্ডের জন্য একটি সঠিক জন্ম তারিখ লিখুন '
       export_configuration:
         opt_out_field_does_not_exist: ' রেকর্ড-এ সুনির্দিষ্ট অপট_আউট থাকে না '

@@ -61,13 +61,14 @@ export const fieldValidations = (field, { i18n, online = false }) => {
   }
 
   if (NUMERIC_FIELD === type) {
+    // If the field is 'age' then apply this block's validations.
     if (name.match(/.*age$/)) {
       validations[name] = number()
         .nullable()
         .transform(value => (Number.isNaN(value) ? null : value))
         .positive()
         .min(0, i18n.t("errors.models.child.age"))
-        .max(130, i18n.t("errors.models.child.age"));
+        .max(18, i18n.t("errors.models.child.age"));
     } else {
       validations[name] = number()
         .nullable()

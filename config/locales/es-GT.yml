@@ -826,7 +826,7 @@ es-GT:
         terms_of_use_format: El archivo debe ser png
         name_present: no puede estar vacío
       child:
-        age: La edad debe ser entre 0 y 130
+        age: La edad debe ser entre 0 y 18
         date_of_birth: Ingrese una fecha de nacimiento válida para este registro de caso
       export_configuration:
         opt_out_field_does_not_exist: El campo especificado, optar_por_salir, no existe en el registro
