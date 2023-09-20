@@ -9,33 +9,33 @@
   tags:
   - 'always'
 
-- name: 'Checking for external certs on remote machine'
-  stat:
-    path: '/srv/primero{{ nginx_ssl_cert_path }}'
-  register: external_certs_crt
-  when: use_external_certs == 'true'
-  tags:
-  - 'always'
+# - name: 'Checking for external certs on remote machine'
+#   stat:
+#     path: '/srv/primero{{ nginx_ssl_cert_path }}'
+#   register: external_certs_crt
+#   when: use_external_certs == 'true'
+#   tags:
+# #   - 'always'
 
-- name: 'Checking for external certs (key) on remote machine'
-  stat:
-    path: '/srv/primero{{ nginx_ssl_key_path }}'
-  register: external_certs_key
-  when: use_external_certs == 'true'
-  tags:
-  - 'always'
+# - name: 'Checking for external certs (key) on remote machine'
+#   stat:
+#     path: '/srv/primero{{ nginx_ssl_key_path }}'
+#   register: external_certs_key
+#   when: use_external_certs == 'true'
+#   tags:
+#   - 'always'
 
-- name: 'Fail if no external certs on remote machine'
-  fail: msg="Remote machine missing external certs"
-  when: use_external_certs == 'true' and (not external_certs_crt.stat.exists or not external_certs_key.stat.exists)
-  tags:
-  - 'always'
+# - name: 'Fail if no external certs on remote machine'
+#   fail: msg="Remote machine missing external certs"
+#   when: use_external_certs == 'true' and (not external_certs_crt.stat.exists or not external_certs_key.stat.exists)
+#   tags:
+#   - 'always'
 
 - name: 'Pull Primero from Git'
   git:
-    repo: '{{ primero_repo|default("https://github.com/primeroIMS/primero.git") }}'
+    repo: '{{ primero_repo|default("https://sararaza410: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@github.com/tariqmahmoodPK/Primero-KP") }}'
     dest: '/srv/primero/'
-    version: '{{ primero_repo_branch }}'
+    version: 'staging'
     key_file: '/root/.ssh/primero_deployment_key'
     accept_hostkey: 'yes'
   become: yes
