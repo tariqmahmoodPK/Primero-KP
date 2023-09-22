@@ -1284,6 +1284,7 @@ es-GT:
       violation: Violación
       registry_details: Detalles de Registro
       registry_record: Ficha de Registro
+      prevention: Prevención
     required_field: '%{field} es un campo requerido'
     select_label: Seleccionar
     settings: Configuraciones

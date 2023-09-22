@@ -1344,12 +1344,11 @@ ku:
       reportable_protection_concern: نیگەرانیەکانى پاراستن
       reportable_service: خزمەتگوزارى
       tracing_request: داواکاری بۆ بەدواداگەڕان
-      transfers_assignments: 'گواستنەوە/ پێسپاردنەكان
-
-         '
+      transfers_assignments: 'گواستنەوە/ پێسپاردنەكان'
       violation: توندوتیژى
       registry_details: ووردەكاریی تۆمارکردن
       registry_record: تۆمارگەی تۆمارکردن
+      prevention: پێشگیری
     required_field: ' %{field}بوارێکی پێویستە'
     select_label: دیاریکردن
     settings: ڕیکخستن

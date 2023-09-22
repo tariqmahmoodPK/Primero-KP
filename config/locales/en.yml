@@ -1329,6 +1329,7 @@ en:
       violation: Violation
       registry_details: Registry Details
       registry_record: Registry Record
+      prevention: Prevention
     required_field: '%{field} is a required field'
     select_label: Select
     settings: Settings

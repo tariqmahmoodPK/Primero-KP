@@ -1264,6 +1264,7 @@ pl:
       violation: Naruszenie
       registry_details: Szczegóły Rejestru
       registry_record: Rekord Rejestru
+      prevention: Zapobieganie
     required_field: '%{field} jest polem wymaganym'
     select_label: Wybierz
     settings: Ustawienia

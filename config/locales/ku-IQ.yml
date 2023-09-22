@@ -1276,6 +1276,7 @@ ku-IQ:
       violation: سەرپێچی
       registry_details: پێزانینێن هویر یێن تومارێ
       registry_record: ریکوردێن تومارێ
+      prevention: پێشگیری
     required_field: 'بوارەکێ پێدڤیە  %{field} '
     select_label: ده ستنیشان کرن
     settings: تایبەتمەندی

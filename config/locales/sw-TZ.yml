@@ -1231,6 +1231,7 @@ sw_TZ:
       violation: Ukiukaji
       registry_details: Maelezo ya Usajili
       registry_record: Rekodi za Usajili
+      prevention: Kuzuia
     required_field: '%{field}Ni eneo linalohitajika'
     select_label: Chagua
     settings: Mipangilio

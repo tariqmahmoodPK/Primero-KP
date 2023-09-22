@@ -1213,6 +1213,7 @@ id:
       violation: Pelanggaran
       registry_details: Detil Pendaftaran
       registry_record: Catatan Pendaftaran
+      prevention: Pencegahan
     required_field: '%{field} adalah kolom wajib'
     select_label: Pilih
     settings: Pengaturan
