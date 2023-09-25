@@ -1267,6 +1267,7 @@ uk:
       violation: Порушення
       registry_details: Деталі реєстру
       registry_record: Запис реєстру
+      prevention: Профілактика
     required_field: '%{field} є обов`язковим полем'
     select_label: Вибрати
     settings: Налаштування

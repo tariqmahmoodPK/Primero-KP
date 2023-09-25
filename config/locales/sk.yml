@@ -1269,6 +1269,7 @@ sk:
       violation: Porušenie
       registry_details: Podrobnosti Registra
       registry_record: Záznam v registri
+      prevention: Prevence
     required_field: '%{field} je vyžadované pole'
     select_label: Vybrať
     settings: Nastavenia

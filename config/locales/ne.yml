@@ -1283,6 +1283,7 @@ ne:
       violation: उल्लङ्घन
       registry_details: दर्ता विवरण
       registry_record: दर्ता रेकर्ड
+      prevention: रोकथाम
     required_field: '%{field}आवश्यक क्षेत्र हो।'
     select_label: छनौट गर्नुहोस्
     settings: सेटिङ्

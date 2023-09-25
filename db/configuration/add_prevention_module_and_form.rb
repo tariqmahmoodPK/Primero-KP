@@ -6,16 +6,17 @@ puts "\nCreating Prevention Form LookUp !!!!"
 
 # Create the "Prevention Forms" Form Group that woudl use Prevention Module
 Lookup.create_or_update!(
-  unique_id:          'lookup-form-group-pc-case',
-  name_en:            'Form Groups - PC Case',
+  unique_id:          'lookup-form-group-pc-prevention',
+  name_en:            'Form Groups - PC Prevention',
   lookup_values_en: [
     {
-      id:           'prevention_forms',
-      display_text: 'Prevention Forms'
+      id:           'prevention',
+      display_text: 'Prevention'
     }
   ].map(&:with_indifferent_access)
 )
 
+# May need to modify this after determining the fields this prevention module will associate with.
 # Fields Map
 field_map = {
   'fields' => [
@@ -72,7 +73,7 @@ prevention_module = PrimeroModule.create_or_update!(
   primero_program:          PrimeroProgram.find_by(unique_id: "primeroprogram-primero"),
   name:                    'PC',
   description:             'Prevention Components',
-  associated_record_types: [ 'case', 'tracing_request', 'incident', 'registry_record' ],
+  associated_record_types: [ 'prevention' ],
   core_resource:           true,
   # form_sections:         form_sections, # Can be updated later on as There are no forms for this Module yet. Sending an Empty Hash would cause an Error.
   field_map:               field_map,

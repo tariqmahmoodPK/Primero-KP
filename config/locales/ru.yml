@@ -1176,6 +1176,7 @@ ru:
       violation: Нарушение
       registry_details: Детали регистрации
       registry_record: Регистрационная запись
+      prevention: Профилактика
     required_field: '%{field}это необходимое поле'
     select_label: Выбрать
     settings: Настройки
