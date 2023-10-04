@@ -1,3 +1,6 @@
+/* TODO Update the referencing comments after properly updating the files */
+/* TODO Add Explanatory Comments */
+
 import { fromJS } from "immutable";
 
 import { DASHBOARD_NAMES } from "./constants";
@@ -145,3 +148,9 @@ export const getDashboardFlags = (state, excludeResolved = false) => {
 };
 
 export const getCasesToAssign = state => getDashboardByName(state, DASHBOARD_NAMES.CASES_TO_ASSIGN);
+
+// protection_concerns_services_stats
+// Percentage of Children who received Child Protection Services
+export const getRegisteredCasesByProtectionConcern = state => {
+  return state.getIn(["records", NAMESPACE, "registeredCasesByProtectionConcern"], fromJS({}));
+};

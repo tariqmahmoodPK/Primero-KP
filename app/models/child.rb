@@ -4,12 +4,16 @@
 # The truth of it is, this is a long class.
 # Just the same, it shouldn't exceed 300 lines (250 lines of active code).
 
+# TODO Update the referencing comments after properly updating the files
+# TODO Add Explanatory Comments
+# TODO Create Concerns so that this file does not exceed 300 lines, More or less
+
 # The central Primero model object that represents an individual's case.
 # In spite of the name, this will represent adult cases as well.
 class Child < ApplicationRecord
   RISK_LEVEL_HIGH = 'high'
   RISK_LEVEL_NONE = 'none'
-  NAME_FIELDS = %w[name name_nickname name_other].freeze
+  NAME_FIELDS     = %w[name name_nickname name_other].freeze
 
   self.table_name = 'cases'
 
@@ -43,6 +47,7 @@ class Child < ApplicationRecord
   include FollowUpable
   include LocationCacheable
 
+  # Accessors
   store_accessor(
     :data,
     :case_id, :case_id_code, :case_id_display,
@@ -64,13 +69,26 @@ class Child < ApplicationRecord
     :duplicate, :cp_case_plan_subform_case_plan_interventions, :has_case_plan
   )
 
-  has_many :incidents, foreign_key: :incident_case_id
-  has_many :matched_traces, class_name: 'Trace', foreign_key: 'matched_case_id'
-  has_many :duplicates, class_name: 'Child', foreign_key: 'duplicate_case_id'
-  belongs_to :duplicate_of, class_name: 'Child', foreign_key: 'duplicate_case_id', optional: true
-  belongs_to :registry_record, foreign_key: :registry_record_id, optional: true
+  # Associations
+  has_many   :incidents      ,                      foreign_key: :incident_case_id
+  has_many   :matched_traces , class_name: 'Trace', foreign_key: 'matched_case_id'
+  has_many   :duplicates     , class_name: 'Child', foreign_key: 'duplicate_case_id'
+  belongs_to :duplicate_of   , class_name: 'Child', foreign_key: 'duplicate_case_id', optional: true
+  belongs_to :registry_record,                      foreign_key: :registry_record_id, optional: true
 
+  # Scopes
   scope :by_date_of_birth, -> { where.not('data @> ?', { date_of_birth: nil }.to_json) }
+
+  #? What purpose does this scope have relating to Graphs
+  # Filter records from a database table based on two conditions:
+  # 1) The data column in the table must contain a key-value pair where
+    # the key is "owned_by_location," and
+    # the value matches the pattern "SIN%."
+  # 2 ) The data column must contain a JSONB object with a specific key-value pair, which is represented by
+    # the hash {'is_this_a_significant_harm_case__b343242' => 'yes_174476'} converted to JSON.
+  scope :with_province, -> (user) {
+    where( "data ->> :key LIKE :value", :key => "owned_by_location", :value => "SIN%" ).where( 'data @> ?', { is_this_a_significant_harm_case__b343242: 'yes_174476' }.to_json)
+  }
 
   def self.sortable_text_fields
     %w[name case_id_display national_id_no registry_no]
@@ -123,37 +141,45 @@ class Child < ApplicationRecord
   end
 
   searchable do
-    filterable_id_fields.each { |f| string("#{f}_filterable", as: "#{f}_filterable_sci") { data[f] } }
-    sortable_text_fields.each { |f| string("#{f}_sortable", as: "#{f}_sortable_sci") { data[f] } }
+    filterable_id_fields.each { |f| string( "#{f}_filterable", as: "#{f}_filterable_sci") { data[f] } }
+    sortable_text_fields.each { |f| string( "#{f}_sortable"  , as: "#{f}_sortable_sci"  ) { data[f] } }
+
     Child.child_matching_field_names.each { |f| text_index(f, suffix: 'matchable') }
     Child.family_matching_field_names.each do |f|
       text_index(f, suffix: 'matchable', subform_field_name: 'family_details_section')
     end
+
     quicksearch_fields.each { |f| text_index(f) }
+
     %w[registration_date date_case_plan_initiated assessment_requested_on date_closure].each { |f| date(f) }
     %w[estimated urgent_protection_concern consent_for_tracing has_case_plan].each do |f|
       boolean(f) { data[f] == true || data[f] == 'true' }
     end
     %w[day_of_birth age].each { |f| integer(f) }
     %w[id status sex current_care_arrangements_type].each { |f| string(f, as: "#{f}_sci") }
+
     string :risk_level, as: 'risk_level_sci' do
       risk_level.present? ? risk_level : RISK_LEVEL_NONE
     end
     string :protection_concerns, multiple: true
+
     date(:assessment_due_dates, multiple: true) { Tasks::AssessmentTask.from_case(self).map(&:due_date) }
-    date(:case_plan_due_dates, multiple: true) { Tasks::CasePlanTask.from_case(self).map(&:due_date) }
-    date(:followup_due_dates, multiple: true) { Tasks::FollowUpTask.from_case(self).map(&:due_date) }
+    date(:case_plan_due_dates , multiple: true) { Tasks::CasePlanTask.from_case(self).map(&:due_date) }
+    date(:followup_due_dates  , multiple: true) { Tasks::FollowUpTask.from_case(self).map(&:due_date) }
+
     boolean(:has_incidents) { incidents.size.positive? }
   end
 
+  # Validations
   validate :validate_date_of_birth
 
-  before_save :sync_protection_concerns
-  before_save :auto_populate_name
-  before_save :stamp_registry_fields
-  before_save :calculate_has_case_plan
+  # Callbacks
+  before_save   :sync_protection_concerns
+  before_save   :auto_populate_name
+  before_save   :stamp_registry_fields
+  before_save   :calculate_has_case_plan
   before_create :hide_name
-  after_save :save_incidents
+  after_save    :save_incidents
 
   class << self
     alias super_new_with_user new_with_user
@@ -174,8 +200,8 @@ class Child < ApplicationRecord
 
   def self.report_filters
     [
-      { 'attribute' => 'status', 'value' => [STATUS_OPEN] },
-      { 'attribute' => 'record_state', 'value' => ['true'] }
+      { 'attribute' => 'status'      , 'value' => [STATUS_OPEN] },
+      { 'attribute' => 'record_state', 'value' => ['true']      }
     ]
   end
 
@@ -330,5 +356,215 @@ class Child < ApplicationRecord
   def associations_as_data_keys
     %w[incident_details]
   end
+
+  # Graphs
+  # =========================================================================================================================================
+
+  # protection_concerns_services_stats
+  # Graph for 'Percentage of Childern who received Child Protection Services'
+    # (No of Cases by Protection Concern that have recieved the Service) / (Total Number of Cases by Protection Concern)
+  def self.protection_concern_stats(user)
+    name = user.role.name
+
+    # Roles allowed
+    # Social Case Worker (scw)
+      # View his own cases
+    # Psychologist (Psy)
+      # View his own cases
+    # Child Helpline Officer (cho)
+      # View his own cases
+    # Referrals
+      # View cases referred to him
+    # Child Protection Officer (cpo)
+      # View Cases of Social Case Worker, Psychologist and Child Helpline Operator working in his user group (Same District)
+    # Member CPWC
+      # View Cases of all Districts (Provincial data)
+
+    return { permission: false } unless name.in? ['CPO', 'Referral', 'CPI In-charge', 'CP Manager', 'Superuser']
+
+    # Protection Concern Lookup values
+    # [
+    #   {"id"=>"other"                       , "en"=>"Violence"            },
+    #   {"id"=>"exploitation_b9352d1"        , "en"=>"Exploitation"        },
+    #   {"id"=>"neglect_a7b48b2"             , "en"=>"Neglect"             },
+    #   {"id"=>"harmful_practice_s__d1f7955" , "en"=>"Harmful practice(s)" },
+    #   {"id"=>"other_b637c39"               , "en"=>"Abuse"               },
+    #   {"id"=>"other_7b13407"               , "en"=>"Other"               }
+    # ]
+
+    stats = {
+      violence:          { cases: 0 , percentage: 0 } , # other
+      exploitation:      { cases: 0 , percentage: 0 } , # exploitation_b9352d1
+      neglect:           { cases: 0 , percentage: 0 } , # neglect_a7b48b2
+      harmful_practices: { cases: 0 , percentage: 0 } , # harmful_practice_s__d1f7955
+      abuse:             { cases: 0 , percentage: 0 } , # other_b637c39
+      other:             { cases: 0 , percentage: 0 } , # other_7b13407
+    }
+
+    # Getting Total Number of Opened Cases
+    total_case_count = Child.get_childs(user, "high", "registered").count
+
+    # Calculate Stats
+    Child.get_childs(user, "high").each do |child|
+      #TODO Ask what's response_to_goal_cd94ee4
+        #? Is it 'response_on_referred_case_da89310' ?
+      #TODO Ask what's not_applicable_445274
+        #? Is the field still present ?
+
+        # child.data["response_on_referred_case_da89310"] is an array containing a hash
+        response_on_referred_case = child.data["response_on_referred_case_da89310"]
+        # has_the_service_been_provided__23eb99e returns a string that is either "true" or "false"
+      if response_on_referred_case && response_on_referred_case[0]["has_the_service_been_provided__23eb99e"] == "true"
+        # child.data["protection_concerns"] returns an array of strings, Each specifing a Protection Concern
+        if child.data["protection_concerns"].include?("other")
+          stats[:violence][:cases] += 1
+        end
+
+        if child.data["protection_concerns"].include?("exploitation_b9352d1")
+          stats[:exploitation][:cases] += 1
+        end
+
+        if child.data["protection_concerns"].include?("neglect_a7b48b2")
+          stats[:neglect][:cases] += 1
+        end
+
+        if child.data["protection_concerns"].include?("harmful_practice_s__d1f7955")
+          stats[:harmful_practices][:cases] += 1
+        end
+
+        if child.data["protection_concerns"].include?("other_b637c39")
+          stats[:abuse][:cases] += 1
+        end
+
+        if child.data["protection_concerns"].include?("other_b637c39")
+          stats[:other][:cases] += 1
+        end
+      end
+    end.count
+
+    # Get Percentages
+    stats.each do |key, value|
+      value[:percentage] = get_percentage(value[:cases], total_case_count) unless total_case_count.eql?(0)
+    end
+
+    total_cases =  {
+      violence:          { cases: stats[:violence          ][:cases] , percentage: stats[:violence          ][:percentage]} ,
+      exploitation:      { cases: stats[:exploitation      ][:cases] , percentage: stats[:exploitation      ][:percentage]} ,
+      neglect:           { cases: stats[:neglect           ][:cases] , percentage: stats[:neglect           ][:percentage]} ,
+      harmful_practices: { cases: stats[:harmful_practices ][:cases] , percentage: stats[:harmful_practices ][:percentage]} ,
+      abuse:             { cases: stats[:abuse             ][:cases] , percentage: stats[:abuse             ][:percentage]} ,
+      other:             { cases: stats[:other             ][:cases] , percentage: stats[:other             ][:percentage]} ,
+    }
+
+    total_cases
+  end
+
+  # =========================================================================================================================================
+
+  # Helper Methods
+  # -----------------------------------------------------------------------------------------------------------
+  # Get Cases Based on:
+    # Who's the User
+    # Risk Level
+    # Whether the Case is Registered or Not
+  def self.get_childs(user, is_risk_level_high = nil, registered = nil)
+    case user.role.name
+    #? What does this do? What purpose does this scope have?
+    when "CP Manager"
+      with_province(user)
+    # All Cases of a Particular Group and Paricular Risk Level
+    when "CPI In-charge"
+      get_cases_for_particular_user_group(user.user_groups, is_risk_level_high)
+    # All Cases of a Particular User, Particular Risk Level, and Registeration Status
+    when "CPO" || "Superuser"
+      get_cases_assigned_to_specific_user(user, is_risk_level_high, registered).results
+    # All Cases that are owned by the users under an Agency and are also owned by a particular location
+    else
+      get_cases_with_district_and_agency(user, is_risk_level_high)
+    end
+  end
+
+  # All Cases of a Particular Group and Paricular Risk Level
+  def self.get_cases_for_particular_user_group(user_groups, is_risk_level_high = nil)
+    # Returns Usernames that Own the Usergroups
+    usernames = user_groups.first.users.pluck(:user_name)
+
+    #TODO See if this can be optimized. Uses cases for cases.total and then running the same code with
+    #TODO - search variable seems not right.
+
+    # risk_level is one of the store_accessors
+    # Get Cases that are owned by given Usernames
+    cases = Child.search do
+      with(:owned_by, usernames)
+      with(:risk_level, 'high') if is_risk_level_high.present?
+    end
+
+    # Get Cases that are owned by given Usernames and Also Paginate them.
+    search = Child.search do
+      with(:owned_by, usernames)
+      with(:risk_level, 'high') if is_risk_level_high.present?
+
+      paginate :page => 1, :per_page => cases.total
+    end
+
+    search.results
+  end
+
+  # All Cases of a Particular User, Paricular Risk Level, and Registeration Status
+  def self.get_cases_assigned_to_specific_user(user, is_risk_level_high = nil, registered = nil)
+    username = user.user_name
+
+    #TODO See if this can be optimized. Uses cases for cases.total and then running the same code with
+    #TODO - search variable seems not right.
+
+    # risk_level is one of the store_accessors
+    cases = Child.search do
+      with(:owned_by, username)
+      with(:risk_level, 'high') if is_risk_level_high.present?
+    end
+
+    search = Child.search do
+      with(:owned_by, username)
+      with(:risk_level, 'high') if is_risk_level_high.present?
+
+      paginate :page => 1, :per_page => cases.total
+    end
+
+    search
+  end
+
+  # All Cases that are owned by the users under an Agency and are also owned by a particular location
+  def self.get_cases_with_district_and_agency(user, is_risk_level_high = nil)
+    # Users under an Agency that another User created.
+    usernames = user.agency.users.pluck(:user_name)
+
+    #TODO See if this can be optimized. Uses cases for cases.total and then running the same code with
+    #TODO - search variable seems not right.
+
+    cases = Child.search do
+      with(:risk_level, 'high') if is_risk_level_high.present?
+      any_of do
+        with(:owned_by, usernames)
+        with(:owned_by_location, user.location)
+      end
+    end
+
+    search = Child.search do
+      with(:risk_level, 'high') if is_risk_level_high.present?
+      any_of do
+        with(:owned_by, usernames)
+        with(:owned_by_location, user.location)
+      end
+      paginate :page => 1, :per_page => cases.total
+    end
+
+    search.results
+  end
+
+  def self.get_percentage(value, count)
+    ((value / count.to_f) * 100).round
+  end
+  # -----------------------------------------------------------------------------------------------------------
 end
+
 # rubocop:enable Metrics/ClassLength

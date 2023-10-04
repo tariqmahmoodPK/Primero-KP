@@ -1,3 +1,12 @@
+/* TODO Update the referencing comments after properly updating the files */
+/* TODO Add Explanatory Comments */
+
+// Dashboard Component that import all the Graphs on it.
+// Add Proper Comments About these later
+
+/* eslint-disable react/jsx-no-target-blank */
+/* eslint-disable global-require */
+
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Grid } from "@material-ui/core";
@@ -26,7 +35,11 @@ import {
   ViolationsCategoryRegion,
   ViolationsCategoryVerificationStatus,
   WorkflowIndividualCases,
-  WorkflowTeamCases
+  WorkflowTeamCases,
+  // protection_concerns_services_stats
+  // Percentage of Children who received Child Protection Services
+  ServicesPercentage
+  // --------------------------------------------------------------
 } from "./components";
 import NAMESPACE from "./namespace";
 import { NAME } from "./constants";
@@ -71,9 +84,7 @@ const Dashboard = () => {
       <PageContent>
         <OfflineAlert text={i18n.t("messages.dashboard_offline")} />
         <Grid container spacing={3}>
-          <Grid item xl={9} md={8} xs={12}>
-            <Overview loadingIndicator={indicatorProps} userPermissions={userPermissions} />
-            <WorkflowIndividualCases loadingIndicator={indicatorProps} />
+          <Grid item xl={12} md={12} xs={12}>
             <CasesToAssign loadingIndicator={indicatorProps} />
             <Approvals loadingIndicator={indicatorProps} />
             <SharedFromMyTeam loadingIndicator={indicatorProps} />
@@ -87,6 +98,13 @@ const Dashboard = () => {
             <ViolationsCategoryRegion loadingIndicator={indicatorProps} />
             <PerpetratorArmedForceGroupPartyNames loadingIndicator={indicatorProps} />
           </Grid>
+
+          <Grid item xl={12} md={12} xs={12}>
+            <Overview loadingIndicator={indicatorProps} userPermissions={userPermissions} />
+            <WorkflowIndividualCases loadingIndicator={indicatorProps} />
+            <ServicesPercentage /> {/* Percentage of Children who received Child Protection Services */}
+          </Grid>
+
           <Grid item xl={3} md={4} xs={12}>
             <Flags loadingIndicator={flagsIndicators} />
           </Grid>

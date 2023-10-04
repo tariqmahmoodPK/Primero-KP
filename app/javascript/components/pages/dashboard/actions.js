@@ -1,3 +1,6 @@
+/* TODO Update the referencing comments after properly updating the files */
+/* TODO Add Explanatory Comments */
+
 import { namespaceActions } from "../../../libs";
 
 import NAMESPACE from "./namespace";
@@ -18,5 +21,10 @@ export default namespaceActions(NAMESPACE, [
   "DASHBOARD_FLAGS_FINISHED",
   "DASHBOARD_FLAGS_FAILURE",
   "OPEN_PAGE_ACTIONS",
-  "SERVICES_STATUS"
+  "SERVICES_STATUS",
+  // 'Percentage of Children who received Child Protection Services'
+  // protection_concerns_services_stats
+  "REGISTERED_CASES_BY_PROTECTION_CONCERN",
+  "REGISTERED_CASES_BY_PROTECTION_CONCERN_SUCCESS"
+  // -------------------------------------------------------------------
 ]);

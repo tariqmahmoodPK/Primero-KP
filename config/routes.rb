@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# TODO Update the referencing comments after properly updating the files
+# TODO Add Explanatory Comments
+
 Rails.application.routes.draw do
   root to: 'home#v2'
 
@@ -83,6 +86,7 @@ Rails.application.routes.draw do
           get :export, to: 'form_sections#export'
         end
       end
+
       resources :users do
         post :'password-reset-request', to: 'password_reset#user_password_reset_request'
         collection do
@@ -93,8 +97,16 @@ Rails.application.routes.draw do
           post :'password-reset', to: 'password_reset#password_reset'
         end
       end
+
       resources :identity_providers, only: [:index]
-      resources :dashboards, only: [:index]
+
+      resources :dashboards, only: [:index] do
+        collection do
+          # Percentage of Children who received Child Protection Services
+          get :protection_concerns_services_stats
+        end
+      end
+
       resource :contact_information, only: %i[show update], controller: 'contact_information'
       resources :system_settings, only: [:index]
       resources :tasks, only: [:index]
