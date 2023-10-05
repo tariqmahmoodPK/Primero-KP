@@ -160,3 +160,9 @@ export const getRegisteredCasesByProtectionConcern = state => {
 export const getResCasesByGender = state => {
   return state.getIn(["records", NAMESPACE, "resCasesByGender"], fromJS({}));
 };
+
+// cases_referral_to_agency_stats
+// Cases Referral (To Agency )
+export const getCasesReferralToAgency = state => {
+  return state.getIn(["records", NAMESPACE, "casesReferralToAgency"], fromJS({}));
+};

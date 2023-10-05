@@ -31,4 +31,9 @@ class Api::V2::DashboardsController < ApplicationApiController
 
     @stats = Child.resolved_cases_by_gender_and_types_of_violence(current_user)
   end
+
+  # Cases Referral (To Agency )
+  def cases_referral_to_agency_stats
+    @stats = Child.cases_referral_to_agency(current_user)
+  end
 end

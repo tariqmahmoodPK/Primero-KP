@@ -24,3 +24,7 @@ export { default as ServicesPercentage } from "./services-percentage";
 // Closed Cases by Sex and Protection Concern
 export { default as RegResCasesGender } from "./reg-res-cases-gender";
 // --------------------------------------------------------------------
+// cases_referral_to_agency_stats
+// Cases Referral (To Agency )
+export { default as CasesReferralToAgency } from "./cases-referral-to-agency";
+// --------------------------------------------------------------------

@@ -30,6 +30,11 @@ export default namespaceActions(NAMESPACE, [
   // resolved_cases_by_gender_and_types_of_violence_stats
   // Closed Cases by Sex and Protection Concern
   "RES_CASES_BY_GENDER",
-  "RES_CASES_BY_GENDER_SUCCESS"
+  "RES_CASES_BY_GENDER_SUCCESS",
+  // -------------------------------------------------------------------
+  // cases_referral_to_agency_stats
+  // Cases Referral (To Agency )
+  "CASES_REFERRAL_TO_AGENCY",
+  "CASES_REFERRAL_TO_AGENCY_SUCCESS"
   // -------------------------------------------------------------------
 ]);

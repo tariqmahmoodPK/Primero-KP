@@ -143,3 +143,11 @@ export const fetchResCasesByGender = () => ({
     path: "dashboards/resolved_cases_by_gender_and_types_of_violence_stats"
   }
 });
+// cases_referral_to_agency_stats
+// Cases Referral (To Agency )
+export const fetchCasesReferralToAgency = () => ({
+  type: actions.CASES_REFERRAL_TO_AGENCY,
+  api: {
+    path: "dashboards/cases_referral_to_agency_stats"
+  }
+});
