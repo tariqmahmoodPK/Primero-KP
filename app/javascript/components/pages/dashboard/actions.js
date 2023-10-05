@@ -25,6 +25,11 @@ export default namespaceActions(NAMESPACE, [
   // 'Percentage of Children who received Child Protection Services'
   // protection_concerns_services_stats
   "REGISTERED_CASES_BY_PROTECTION_CONCERN",
-  "REGISTERED_CASES_BY_PROTECTION_CONCERN_SUCCESS"
+  "REGISTERED_CASES_BY_PROTECTION_CONCERN_SUCCESS",
+  // -------------------------------------------------------------------
+  // resolved_cases_by_gender_and_types_of_violence_stats
+  // Closed Cases by Sex and Protection Concern
+  "RES_CASES_BY_GENDER",
+  "RES_CASES_BY_GENDER_SUCCESS"
   // -------------------------------------------------------------------
 ]);

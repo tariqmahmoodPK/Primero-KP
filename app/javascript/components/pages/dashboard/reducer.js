@@ -17,6 +17,11 @@ const reducer = (state = DEFAULT_STATE, { type, payload }) => {
     case actions.REGISTERED_CASES_BY_PROTECTION_CONCERN_SUCCESS:
       return state.set("registeredCasesByProtectionConcern", fromJS(payload));
     // ------------------------------------------------------------------------
+    // resolved_cases_by_gender_and_types_of_violence_stats
+    // Closed Cases by Sex and Protection Concern
+    case actions.RES_CASES_BY_GENDER_SUCCESS:
+      return state.set("resCasesByGender", fromJS(payload));
+    // ------------------------------------------------------------------------
     case actions.DASHBOARD_FLAGS:
       return state.set("flags", fromJS(payload));
     case actions.CASES_BY_STATUS:

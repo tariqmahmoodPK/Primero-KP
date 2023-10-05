@@ -87,7 +87,7 @@ class Child < ApplicationRecord
   # 2 ) The data column must contain a JSONB object with a specific key-value pair, which is represented by
     # the hash {'is_this_a_significant_harm_case__b343242' => 'yes_174476'} converted to JSON.
   scope :with_province, -> (user) {
-    where( "data ->> :key LIKE :value", :key => "owned_by_location", :value => "SIN%" ).where( 'data @> ?', { is_this_a_significant_harm_case__b343242: 'yes_174476' }.to_json)
+    where( "data ->> :key LIKE :value", :key => "owned_by_location", :value => "SIN%" ).where('risk_level', 'high')
   }
 
   def self.sortable_text_fields
@@ -168,6 +168,10 @@ class Child < ApplicationRecord
     date(:followup_due_dates  , multiple: true) { Tasks::FollowUpTask.from_case(self).map(&:due_date) }
 
     boolean(:has_incidents) { incidents.size.positive? }
+
+    string :data do
+      data
+    end
   end
 
   # Validations
@@ -459,14 +463,90 @@ class Child < ApplicationRecord
     total_cases
   end
 
+
+  # resolved_cases_by_gender_and_types_of_violence_stats
+  # Graph for 'Closed Cases by Sex and Protection Concern'
+    # Total Number of Closed Cases by Sex, Where the "What is reason for closing this case" contains dropdown values (Each Reason Separate bar).
+  def self.resolved_cases_by_gender_and_types_of_violence(user)
+    return { permission: false } unless user.role.name.in? ['CPI In-charge', 'CPO', 'CP Manager', 'Superuser']
+
+      # What is reason for closing this case? Lookup Values
+      # {"id"=> "case_goals_all_met_811860"      , "en"=> "Case goals all met"      },
+      # {
+      #   "id" => "case_goals_substantially_met_and_there_is_no_further_child_protection_concern_376876",
+      #   "en" => "Case goals substantially met and there is no further child protection concern"
+      # },
+      # {"id"=> "child_reached_adulthood_490887" , "en"=> "Child reached adulthood" },
+      # {"id"=> "child_refuses_services_181533"  , "en"=> "Child refuses services"  },
+      # {"id"=> "safety_of_child_362513"         , "en"=> "Safety of child"         },
+      # {"id"=> "death_of_child_285462"          , "en"=> "Death of child"          },
+      # {"id"=> "other_100182"                   , "en"=> "Other"                   }
+
+    result = {}
+
+    #TODO May need to modify this to make the stats keys simple without the numbers at the end.
+    #TODO Will have to modify the jbuilder view code if I do that.
+    result["stats"] =  {
+      case_goals_all_met_811860:           { male: 0, female: 0, transgender: 0 }, # case_goals_all_met
+
+      case_goals_substantially_met_and_there_is_no_further_child_protection_concern_376876: {
+        male: 0, female: 0, transgender: 0
+      }, # case_goals_substantially_met
+
+      child_reached_adulthood_490887:      { male: 0, female: 0, transgender: 0 }, # child_reached_adulthood
+      child_refuses_services_181533:       { male: 0, female: 0, transgender: 0 }, # child_refuses_services
+      safety_of_child_362513:              { male: 0, female: 0, transgender: 0 }, # safety_of_child
+      death_of_child_285462:               { male: 0, female: 0, transgender: 0 }, # death_of_child
+      other_100182:                        { male: 0, female: 0, transgender: 0 }, # other
+    }
+
+    get_resolved_cases_for_role(user, "high").each do |child|
+      gender = child.data["sex"]
+      next unless gender
+
+      if child.data["case_goals_all_met_811860"].present?
+        result["stats"][:case_goals_all_met_811860][gender.to_sym] += 1
+      end
+
+      if child.data["case_goals_substantially_met_and_there_is_no_further_child_protection_concern_376876"].present?
+        result["stats"][:case_goals_substantially_met_and_there_is_no_further_child_protection_concern_376876][gender.to_sym] += 1
+      end
+
+      if child.data["child_reached_adulthood_490887"].present?
+        result["stats"][:child_reached_adulthood_490887][gender.to_sym] += 1
+      end
+
+      if child.data["child_refuses_services_181533"].present?
+        result["stats"][:child_refuses_services_181533][gender.to_sym] += 1
+      end
+
+      if child.data["safety_of_child_362513"].present?
+        result["stats"][:safety_of_child_362513][gender.to_sym] += 1
+      end
+
+      if child.data["death_of_child_285462"].present?
+        result["stats"][:death_of_child_285462][gender.to_sym] += 1
+      end
+
+      if child.data["other_100182"].present?
+        result["stats"][:other_100182][gender.to_sym] += 1
+      end
+    end
+
+    result
+  end
+
   # =========================================================================================================================================
 
   # Helper Methods
   # -----------------------------------------------------------------------------------------------------------
+  # Used By:
+    # protection_concern_stats
   # Get Cases Based on:
     # Who's the User
     # Risk Level
     # Whether the Case is Registered or Not
+  #TODO Need get Records based on Graph Roles
   def self.get_childs(user, is_risk_level_high = nil, registered = nil)
     case user.role.name
     #? What does this do? What purpose does this scope have?
@@ -555,6 +635,133 @@ class Child < ApplicationRecord
         with(:owned_by, usernames)
         with(:owned_by_location, user.location)
       end
+      paginate :page => 1, :per_page => cases.total
+    end
+
+    search.results
+  end
+
+  # Used By:
+    # resolved_cases_by_gender_and_types_of_violence
+  # Closed Cases by Sex and Protection Concern
+  #TODO Need get Records based on Graph Roles
+  def self.get_resolved_cases_for_role(user, is_risk_level_high = nil)
+    case user.role.name
+    when "CP Manager" || "Superuser"
+      get_resolved_cases_by_province_and_agency(user, is_risk_level_high)
+    when "CPI In-charge" || "Superuser"
+      get_resolved_cases_for_particular_user_group(user.user_groups, is_risk_level_high).results
+    when "CPO" || "Superuser"
+      get_resolved_cases_with_user(user.user_name, is_risk_level_high).results
+    else
+      get_resolved_cases_with_district_and_agency(user, is_risk_level_high)
+    end
+  end
+
+  #TODO Check if all possible value for case closure need to be searched against in any_of block
+  # Closed Cases by Sex and Protection Concern
+  def self.get_resolved_cases_by_province_and_agency(user, is_risk_level_high = nil)
+    # Users under an Agency that another User created.
+    usernames = user.agency.users.pluck(:user_name)
+    # User's Province
+    province = with_province(user)
+
+    # Get Cases that are Closed and have are of High Risk Level
+    search = Child.search do
+      with(:status, "closed")
+      with(:risk_level, 'high') if is_risk_level_high.present?
+
+      # Gets any record that matches either condition
+      any_of do
+        with(:owned_by, usernames)
+        with(:owned_by_location, province)
+      end
+
+      #? Do I even need this ? I am getting all cases that are closed regardless
+      # Gets any record that matches either condition
+      any_of do
+        with(:data, { 'what_is_the_reason_for_closing_this_case__d2d2ce8' => "case_goals_all_met_811860" })
+        with(:data, { 'what_is_the_reason_for_closing_this_case__d2d2ce8' => "case_goals_substantially_met_and_there_is_no_child_protection_concern_b0f5a44" })
+      end
+    end
+
+    search.results
+  end
+
+  #TODO Check if all possible value for case closure need to be searched against in any_of block
+  # Closed Cases by Sex and Protection Concern
+  def self.get_resolved_cases_for_particular_user_group(user_groups, is_risk_level_high = nil)
+    usernames = user_groups.first.users.pluck(:user_name)
+    search = Child.search do
+      with(:owned_by, usernames)
+      with(:status, "closed")
+      with(:risk_level, 'high') if is_risk_level_high.present?
+
+
+      any_of do
+        with(:data, { 'what_is_the_reason_for_closing_this_case__d2d2ce8' => "case_goals_all_met_811860" })
+        with(:data, { 'what_is_the_reason_for_closing_this_case__d2d2ce8' => "case_goals_substantially_met_and_there_is_no_child_protection_concern_b0f5a44" })
+      end
+    end
+
+    search
+  end
+
+  #TODO Check if all possible value for case closure need to be searched against in any_of block
+  # Closed Cases by Sex and Protection Concern
+  def self.get_resolved_cases_with_user(username , is_risk_level_high = nil)
+    cases = Child.search do
+      with(:owned_by, username)
+      with(:status, "closed")
+      with(:risk_level, 'high') if is_risk_level_high.present?
+    end
+
+    search = Child.search do
+      with(:owned_by, username)
+      with(:status, "closed")
+      with(:risk_level, 'high') if is_risk_level_high.present?
+
+      paginate :page => 1, :per_page => cases.total
+    end
+
+    search
+  end
+
+  #TODO Check if all possible value for case closure need to be searched against in any_of block
+  # Closed Cases by Sex and Protection Concern
+  def self.get_resolved_cases_with_district_and_agency(user, is_risk_level_high = nil)
+    # Users under an Agency that another User created.
+    usernames = user.agency.users.pluck(:user_name)
+
+    cases = Child.search do
+      with(:status, "closed")
+      with(:risk_level, 'high') if is_risk_level_high.present?
+
+      any_of do
+        with(:owned_by, usernames)
+        with(:owned_by_location, user.location)
+      end
+
+      any_of do
+        with(:data, { 'what_is_the_reason_for_closing_this_case__d2d2ce8' => 'case_goals_all_met_811860' })
+        with(:data, { 'what_is_the_reason_for_closing_this_case__d2d2ce8' => "case_goals_substantially_met_and_there_is_no_child_protection_concern_b0f5a44" })
+      end
+    end
+
+    search = Child.search do
+      with(:status, "closed")
+      with(:risk_level, 'high') if is_risk_level_high.present?
+
+      any_of do
+        with(:owned_by, usernames)
+        with(:owned_by_location, user.location)
+      end
+
+      any_of do
+        with(:data, { 'what_is_the_reason_for_closing_this_case__d2d2ce8' => "case_goals_all_met_811860" })
+        with(:data, { 'what_is_the_reason_for_closing_this_case__d2d2ce8' => "case_goals_substantially_met_and_there_is_no_child_protection_concern_b0f5a44" })
+      end
+
       paginate :page => 1, :per_page => cases.total
     end
 

@@ -134,3 +134,12 @@ export const fetchRegisteredCasesByProtectionConcern = () => ({
     path: "dashboards/protection_concerns_services_stats"
   }
 });
+
+// resolved_cases_by_gender_and_types_of_violence_stats
+// Closed Cases by Sex and Protection Concern
+export const fetchResCasesByGender = () => ({
+  type: actions.RES_CASES_BY_GENDER,
+  api: {
+    path: "dashboards/resolved_cases_by_gender_and_types_of_violence_stats"
+  }
+});

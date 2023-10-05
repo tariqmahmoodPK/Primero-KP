@@ -104,6 +104,8 @@ Rails.application.routes.draw do
         collection do
           # Percentage of Children who received Child Protection Services
           get :protection_concerns_services_stats
+          # Closed Cases by Sex and Protection Concern
+          get :resolved_cases_by_gender_and_types_of_violence_stats
         end
       end
 

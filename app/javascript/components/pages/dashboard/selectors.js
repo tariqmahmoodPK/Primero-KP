@@ -154,3 +154,9 @@ export const getCasesToAssign = state => getDashboardByName(state, DASHBOARD_NAM
 export const getRegisteredCasesByProtectionConcern = state => {
   return state.getIn(["records", NAMESPACE, "registeredCasesByProtectionConcern"], fromJS({}));
 };
+
+// resolved_cases_by_gender_and_types_of_violence_stats
+// Closed Cases by Sex and Protection Concern
+export const getResCasesByGender = state => {
+  return state.getIn(["records", NAMESPACE, "resCasesByGender"], fromJS({}));
+};

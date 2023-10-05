@@ -38,7 +38,11 @@ import {
   WorkflowTeamCases,
   // protection_concerns_services_stats
   // Percentage of Children who received Child Protection Services
-  ServicesPercentage
+  ServicesPercentage,
+  // --------------------------------------------------------------
+  // resolved_cases_by_gender_and_types_of_violence_stats
+  // Closed Cases by Sex and Protection Concern
+  RegResCasesGender
   // --------------------------------------------------------------
 } from "./components";
 import NAMESPACE from "./namespace";
@@ -103,6 +107,7 @@ const Dashboard = () => {
             <Overview loadingIndicator={indicatorProps} userPermissions={userPermissions} />
             <WorkflowIndividualCases loadingIndicator={indicatorProps} />
             <ServicesPercentage /> {/* Percentage of Children who received Child Protection Services */}
+            <RegResCasesGender /> {/* Closed Cases by Sex and Protection Concern */}
           </Grid>
 
           <Grid item xl={3} md={4} xs={12}>
