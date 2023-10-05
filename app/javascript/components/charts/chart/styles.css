@@ -1,0 +1,14 @@
+/* Used by: */
+/* alternative_care_placement_by_gender */
+/* Cases requiring Alternative Care Placement Services */
+
+/* TODO Fix these CSS later or Don't May be it will work with out it. */
+.description {
+  /* font-size: $(theme.typography.pxToRem(14)); */
+  /* color: $(theme.primero.colors.darkGrey); */
+  font-size: large;
+  line-height: 1em;
+  color: red;
+  padding: 0 16px;
+  margin: 0 10px 15px 0;
+}

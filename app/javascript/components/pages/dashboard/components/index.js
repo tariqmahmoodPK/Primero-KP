@@ -28,3 +28,7 @@ export { default as RegResCasesGender } from "./reg-res-cases-gender";
 // Cases Referral (To Agency )
 export { default as CasesReferralToAgency } from "./cases-referral-to-agency";
 // --------------------------------------------------------------------
+// alternative_care_placement_by_gender
+// Cases requiring Alternative Care Placement Services
+export { default as GraphFour } from "./graph-four";
+// --------------------------------------------------------------------

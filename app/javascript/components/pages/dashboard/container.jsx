@@ -46,7 +46,11 @@ import {
   // --------------------------------------------------------------
   // cases_referral_to_agency_stats
   // Cases Referral (To Agency )
-  CasesReferralToAgency
+  CasesReferralToAgency,
+  // --------------------------------------------------------------
+  // alternative_care_placement_by_gender
+  // Cases requiring Alternative Care Placement Services
+  GraphFour
   // --------------------------------------------------------------
 } from "./components";
 import NAMESPACE from "./namespace";
@@ -113,6 +117,7 @@ const Dashboard = () => {
             <ServicesPercentage /> {/* Percentage of Children who received Child Protection Services */}
             <RegResCasesGender /> {/* Closed Cases by Sex and Protection Concern */}
             <CasesReferralToAgency /> {/* Cases Referral (To Agency ) */}
+            <GraphFour /> {/* Cases requiring Alternative Care Placement Services */}
           </Grid>
 
           <Grid item xl={3} md={4} xs={12}>

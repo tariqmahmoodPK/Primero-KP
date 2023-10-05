@@ -108,6 +108,8 @@ Rails.application.routes.draw do
           get :resolved_cases_by_gender_and_types_of_violence_stats
           # Cases Referral (To Agency )
           get :cases_referral_to_agency_stats
+          # Cases requiring Alternative Care Placement Services
+          get :alternative_care_placement_by_gender
         end
       end
 

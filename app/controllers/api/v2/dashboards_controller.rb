@@ -36,4 +36,10 @@ class Api::V2::DashboardsController < ApplicationApiController
   def cases_referral_to_agency_stats
     @stats = Child.cases_referral_to_agency(current_user)
   end
+
+  # Cases requiring Alternative Care Placement Services
+  #TODO Rename All of it's relevant methods, and files to reflect the proper name.
+  def alternative_care_placement_by_gender
+    @stats = Child.alternative_care_placement_by_gender(current_user)
+  end
 end

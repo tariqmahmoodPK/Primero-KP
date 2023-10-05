@@ -27,6 +27,11 @@ const reducer = (state = DEFAULT_STATE, { type, payload }) => {
     case actions.CASES_REFERRAL_TO_AGENCY_SUCCESS:
       return state.set("casesReferralToAgency", fromJS(payload));
     // ------------------------------------------------------------------------
+    // alternative_care_placement_by_gender
+    // Cases requiring Alternative Care Placement Services
+    case actions.GRAPH_FOUR_SUCCESS:
+      return state.set("graphFour", fromJS(payload));
+    // ------------------------------------------------------------------------
     case actions.DASHBOARD_FLAGS:
       return state.set("flags", fromJS(payload));
     case actions.CASES_BY_STATUS:

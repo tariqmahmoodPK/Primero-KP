@@ -35,6 +35,11 @@ export default namespaceActions(NAMESPACE, [
   // cases_referral_to_agency_stats
   // Cases Referral (To Agency )
   "CASES_REFERRAL_TO_AGENCY",
-  "CASES_REFERRAL_TO_AGENCY_SUCCESS"
+  "CASES_REFERRAL_TO_AGENCY_SUCCESS",
+  // -------------------------------------------------------------------
+  // alternative_care_placement_by_gender
+  // Cases requiring Alternative Care Placement Services
+  "GRAPH_THREE_SUCCESS",
+  "GRAPH_FOUR"
   // -------------------------------------------------------------------
 ]);
