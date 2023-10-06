@@ -112,6 +112,8 @@ Rails.application.routes.draw do
           get :alternative_care_placement_by_gender
           #  Registered and Closed Cases by Month
           get :month_wise_registered_and_resolved_cases_stats
+          # Significant Harm Cases by Protection Concern
+          get :significant_harm_cases_registered_by_age_and_gender_stats
         end
       end
 

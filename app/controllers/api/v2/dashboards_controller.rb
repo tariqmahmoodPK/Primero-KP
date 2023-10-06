@@ -50,4 +50,10 @@ class Api::V2::DashboardsController < ApplicationApiController
   def month_wise_registered_and_resolved_cases_stats
     @stats = Child.month_wise_registered_and_resolved_cases(current_user)
   end
+
+  #TODO Rename All of it's relevant methods, and files to reflect the proper name.
+  # Significant Harm Cases by Protection Concern
+  def significant_harm_cases_registered_by_age_and_gender_stats
+    @stats = Child.significant_harm_cases_registered_by_age_and_gender(current_user)
+  end
 end

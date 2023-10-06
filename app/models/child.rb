@@ -476,7 +476,6 @@ class Child < ApplicationRecord
     total_cases
   end
 
-
   # resolved_cases_by_gender_and_types_of_violence_stats
   # Graph for 'Closed Cases by Sex and Protection Concern'
     # Total Number of Closed Cases by Sex, Where the "What is reason for closing this case" contains dropdown values (Each Reason Separate bar).
@@ -709,13 +708,84 @@ class Child < ApplicationRecord
     stats
   end
 
+  #TODO Can't get any records or stats, May be issue with not having enough records
+  #TODO Need get Records based on Graph Roles
+  # Graph for 'Significant Harm Cases by Protection Concern'
+    # Total No of Open Cases by Protection Concern Where the Risk Level = High
+  def self.significant_harm_cases_registered_by_age_and_gender(user)
+    name = user.role.name
+
+    # Social Case Worker (scw)
+      # View his own cases
+    #  Psychologist (Psy)
+      # View his own cases
+    # Child Helpline Officer (cho)
+      # View his own cases
+    # Referrals
+      # View cases referred to him
+    # Child Protection Officer (cpo)
+      # View Cases of Social Case Worker, Psychologist and Child Helpline Operator working in  his user group (Same District)
+    # Member CPWC
+      # View Cases of all Districts (Provincial data)
+
+    return { permission: false } unless name.in? ['CPO', 'CPI In-charge', 'Superuser']
+
+    stats = {
+      violence:          { cases: 0 , percentage: 0 } , # other
+      exploitation:      { cases: 0 , percentage: 0 } , # exploitation_b9352d1
+      neglect:           { cases: 0 , percentage: 0 } , # neglect_a7b48b2
+      harmful_practices: { cases: 0 , percentage: 0 } , # harmful_practice_s__d1f7955
+      abuse:             { cases: 0 , percentage: 0 } , # other_b637c39
+      other:             { cases: 0 , percentage: 0 } , # other_7b13407
+    }
+
+    Child.get_childs(user, "high").each do |child|
+        # child.data["protection_concerns"] returns an array of strings, Each specifing a Protection Concern
+        if child.data["protection_concerns"].include?("other")
+          stats[:violence][:cases] += 1
+        end
+
+        if child.data["protection_concerns"].include?("exploitation_b9352d1")
+          stats[:exploitation][:cases] += 1
+        end
+
+        if child.data["protection_concerns"].include?("neglect_a7b48b2")
+          stats[:neglect][:cases] += 1
+        end
+
+        if child.data["protection_concerns"].include?("harmful_practice_s__d1f7955")
+          stats[:harmful_practices][:cases] += 1
+        end
+
+        if child.data["protection_concerns"].include?("other_b637c39")
+          stats[:abuse][:cases] += 1
+        end
+
+        if child.data["protection_concerns"].include?("other_b637c39")
+          stats[:other][:cases] += 1
+        end
+    end
+
+    total_cases =  {
+      violence:          { cases: stats[:violence          ][:cases] , percentage: stats[:violence          ][:percentage]} ,
+      exploitation:      { cases: stats[:exploitation      ][:cases] , percentage: stats[:exploitation      ][:percentage]} ,
+      neglect:           { cases: stats[:neglect           ][:cases] , percentage: stats[:neglect           ][:percentage]} ,
+      harmful_practices: { cases: stats[:harmful_practices ][:cases] , percentage: stats[:harmful_practices ][:percentage]} ,
+      abuse:             { cases: stats[:abuse             ][:cases] , percentage: stats[:abuse             ][:percentage]} ,
+      other:             { cases: stats[:other             ][:cases] , percentage: stats[:other             ][:percentage]} ,
+    }
+
+    total_cases
+  end
+
   # =========================================================================================================================================
 
   # Helper Methods
   # -----------------------------------------------------------------------------------------------------------
   # Used By:
-    # protection_concern_stats
-    # month_wise_registered_and_resolved_cases_stats
+    # 'Percentage of Children who received Child Protection Services'
+    # 'Registered and Closed Cases by Month'
+    # 'Significant Harm Cases by Protection Concern'
   # Get Cases Based on:
     # Who's the User
     # Risk Level

@@ -33,7 +33,7 @@ export default namespaceActions(NAMESPACE, [
   "RES_CASES_BY_GENDER_SUCCESS",
   // -------------------------------------------------------------------
   // cases_referral_to_agency_stats
-  // Cases Referral (To Agency )
+  // Cases Referral ( To Agency )
   "CASES_REFERRAL_TO_AGENCY",
   "CASES_REFERRAL_TO_AGENCY_SUCCESS",
   // -------------------------------------------------------------------
@@ -45,6 +45,11 @@ export default namespaceActions(NAMESPACE, [
   // month_wise_registered_and_resolved_cases_stats
   // Registered and Closed Cases by Month
   "MONTHLY_REGISTERED_AND_RESOLVED_CASES",
-  "MONTHLY_REGISTERED_AND_RESOLVED_CASES_SUCCESS"
+  "MONTHLY_REGISTERED_AND_RESOLVED_CASES_SUCCESS",
+  // -------------------------------------------------------------------
+  // significant_harm_cases_registered_by_age_and_gender_stats
+  // Significant Harm Cases by Protection Concern
+  "HARM_CASES",
+  "HARM_CASES_SUCCESS"
   // -------------------------------------------------------------------
 ]);

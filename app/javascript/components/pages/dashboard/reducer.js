@@ -37,6 +37,11 @@ const reducer = (state = DEFAULT_STATE, { type, payload }) => {
     case actions.MONTHLY_REGISTERED_AND_RESOLVED_CASES_SUCCESS:
       return state.set("monthlyRegisteredAndResolvedCases", fromJS(payload));
     // ------------------------------------------------------------------------
+    // significant_harm_cases_registered_by_age_and_gender_stats
+    // Significant Harm Cases by Protection Concern
+    case actions.HARM_CASES_SUCCESS:
+      return state.set("harmCases", fromJS(payload));
+    // ------------------------------------------------------------------------
     case actions.DASHBOARD_FLAGS:
       return state.set("flags", fromJS(payload));
     case actions.CASES_BY_STATUS:

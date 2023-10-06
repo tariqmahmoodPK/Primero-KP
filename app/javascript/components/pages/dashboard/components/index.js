@@ -36,3 +36,7 @@ export { default as GraphFour } from "./graph-four";
 //  Registered and Closed Cases by Month
 export { default as MonthlyRegResCases } from "./monthly-reg-res-cases";
 // --------------------------------------------------------------------
+// significant_harm_cases_registered_by_age_and_gender_stats
+// Significant Harm Cases by Protection Concern
+export { default as HarmCases } from "./harm-cases";
+// --------------------------------------------------------------------

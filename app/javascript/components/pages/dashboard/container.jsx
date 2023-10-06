@@ -54,7 +54,11 @@ import {
   // --------------------------------------------------------------
   // month_wise_registered_and_resolved_cases_stats
   // Registered and Closed Cases by Month
-  MonthlyRegResCases
+  MonthlyRegResCases,
+  // --------------------------------------------------------------
+  // significant_harm_cases_registered_by_age_and_gender_stats
+  // Significant Harm Cases by Protection Concern
+  HarmCases
   // --------------------------------------------------------------
 } from "./components";
 import NAMESPACE from "./namespace";
@@ -122,9 +126,8 @@ const Dashboard = () => {
             <RegResCasesGender /> {/* Closed Cases by Sex and Protection Concern */}
             <CasesReferralToAgency /> {/* Cases Referral (To Agency ) */}
             <GraphFour /> {/* Cases requiring Alternative Care Placement Services */}
-            {/* month_wise_registered_and_resolved_cases_stats */}
-            {/* Registered and Closed Cases by Month */}
-            <MonthlyRegResCases />
+            <MonthlyRegResCases /> {/* Registered and Closed Cases by Month */}
+            <HarmCases /> {/* Significant Harm Cases by Protection Concern */}
           </Grid>
 
           <Grid item xl={3} md={4} xs={12}>
