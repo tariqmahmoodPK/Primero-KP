@@ -184,3 +184,9 @@ export const getMonthlyRegisteredAndResolvedCases = state => {
 export const getHarmCases = state => {
   return state.getIn(["records", NAMESPACE, "harmCases"], fromJS({}));
 };
+
+// registered_cases_by_protection_concern
+// Registered Cases by Protection Concern
+export const getRegisteredCasesByProtectionConcernReal = state => {
+  return state.getIn(["records", NAMESPACE, "registeredCasesByProtectionConcernReal"], fromJS({}));
+};

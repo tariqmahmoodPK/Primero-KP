@@ -50,6 +50,9 @@ export default namespaceActions(NAMESPACE, [
   // significant_harm_cases_registered_by_age_and_gender_stats
   // Significant Harm Cases by Protection Concern
   "HARM_CASES",
-  "HARM_CASES_SUCCESS"
+  "HARM_CASES_SUCCESS",
+  // -------------------------------------------------------------------
+  "REGISTERED_CASES_BY_PROTECTION_CONCERN_REAL",
+  "REGISTERED_CASES_BY_PROTECTION_CONCERN_REAL_SUCCESS"
   // -------------------------------------------------------------------
 ]);

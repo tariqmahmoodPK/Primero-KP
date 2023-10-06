@@ -23,7 +23,7 @@ class Api::V2::DashboardsController < ApplicationApiController
   #TODO Rename All of it's relevant methods, and files to reflect the proper name.
   def resolved_cases_by_gender_and_types_of_violence_stats
     #TODO Create a method for this later on.
-    #TODO had to do this as there is no lookup create for Closure form's what_is_the_reason_for_closing_this_case__d2d2ce8 field
+    #TODO had to do this as there is no lookup created for Closure form's what_is_the_reason_for_closing_this_case__d2d2ce8 field
     #TODO the lookups are hardcoded into the field itself.
     form_to_work_with = FormSection.where("name_i18n->>'en' = ? AND form_group_id = ?", "Closure", "closure").first
     form_field = form_to_work_with.fields.find_by(name: "what_is_the_reason_for_closing_this_case__d2d2ce8")
@@ -55,5 +55,11 @@ class Api::V2::DashboardsController < ApplicationApiController
   # Significant Harm Cases by Protection Concern
   def significant_harm_cases_registered_by_age_and_gender_stats
     @stats = Child.significant_harm_cases_registered_by_age_and_gender(current_user)
+  end
+
+  #TODO Rename All of it's relevant methods, and files to reflect the proper name.
+  # Registered Cases by Protection Concern
+  def registered_cases_by_protection_concern
+    @stats = Child.registered_cases_by_protection_concern_stats(current_user)
   end
 end

@@ -219,5 +219,9 @@ class Lookup < ApplicationRecord
     options = (send("lookup_values_#{locale}").present? ? send("lookup_values_#{locale}") : [])
     send_update_lookup_options(lookup_values_hash, locale, default_ids, options)
   end
+
+  def self.protection_concerns_values
+    find_by(unique_id: "lookup-protection-concerns").lookup_values_i18n
+  end
 end
 # rubocop:enable Metrics/ClassLength

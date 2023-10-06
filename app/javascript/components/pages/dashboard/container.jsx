@@ -58,7 +58,11 @@ import {
   // --------------------------------------------------------------
   // significant_harm_cases_registered_by_age_and_gender_stats
   // Significant Harm Cases by Protection Concern
-  HarmCases
+  HarmCases,
+  // --------------------------------------------------------------
+  // registered_cases_by_protection_concern
+  // Registered Cases by Protection Concern
+  RegisteredCasesByProtectionConcern
   // --------------------------------------------------------------
 } from "./components";
 import NAMESPACE from "./namespace";
@@ -128,6 +132,7 @@ const Dashboard = () => {
             <GraphFour /> {/* Cases requiring Alternative Care Placement Services */}
             <MonthlyRegResCases /> {/* Registered and Closed Cases by Month */}
             <HarmCases /> {/* Significant Harm Cases by Protection Concern */}
+            <RegisteredCasesByProtectionConcern /> {/* Registered Cases by Protection Concern */}
           </Grid>
 
           <Grid item xl={3} md={4} xs={12}>

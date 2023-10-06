@@ -730,6 +730,7 @@ class Child < ApplicationRecord
 
     return { permission: false } unless name.in? ['CPO', 'CPI In-charge', 'Superuser']
 
+    # TODO May be add this { male: 0, female: 0, transgender: 0 }
     stats = {
       violence:          { cases: 0 , percentage: 0 } , # other
       exploitation:      { cases: 0 , percentage: 0 } , # exploitation_b9352d1
@@ -766,6 +767,7 @@ class Child < ApplicationRecord
         end
     end
 
+    #TODO May be there is no use for percentages
     total_cases =  {
       violence:          { cases: stats[:violence          ][:cases] , percentage: stats[:violence          ][:percentage]} ,
       exploitation:      { cases: stats[:exploitation      ][:cases] , percentage: stats[:exploitation      ][:percentage]} ,
@@ -776,6 +778,82 @@ class Child < ApplicationRecord
     }
 
     total_cases
+  end
+
+  # Graph for 'Registered Cases by Protection Concern'
+    # Total No of Open Cases by Protection Concern desegregated by Sex (by User)
+  def self.registered_cases_by_protection_concern_stats(user)
+    # Roles Allowed
+    # Social Case Worker (scw)
+      # View his own cases
+    # Psychologist (Psy)
+      # View his own cases
+    # Child Helpline Officer (cho)
+      # View his own cases
+    # Referrals
+      # View cases referred to him
+    # Child Protection Officer (cpo)
+      # View Cases of Social Case Worker, Psychologist and Child Helpline Operator working in  his user group (Same District)
+    # Member CPWC
+      # View Cases of all Districts (Provincial data)
+
+    name = user.role.name
+
+    return { permission: false } unless name.in? ['CPO', 'Referral', 'CPI In-charge', 'CP Manager', 'Superuser']
+
+    # Protection Concern Lookup values
+    # [
+    #   {"id"=>"other"                       , "en"=>"Violence"            },
+    #   {"id"=>"exploitation_b9352d1"        , "en"=>"Exploitation"        },
+    #   {"id"=>"neglect_a7b48b2"             , "en"=>"Neglect"             },
+    #   {"id"=>"harmful_practice_s__d1f7955" , "en"=>"Harmful practice(s)" },
+    #   {"id"=>"other_b637c39"               , "en"=>"Abuse"               },
+    #   {"id"=>"other_7b13407"               , "en"=>"Other"               }
+    # ]
+
+    result = {}
+
+    result["stats"] = {
+      other:                       { male: 0, female: 0, transgender: 0 } , # other
+      exploitation_b9352d1:        { male: 0, female: 0, transgender: 0 } , # exploitation_b9352d1
+      neglect_a7b48b2:             { male: 0, female: 0, transgender: 0 } , # neglect_a7b48b2
+      harmful_practice_s__d1f7955: { male: 0, female: 0, transgender: 0 } , # harmful_practice_s__d1f7955
+      other_b637c39:               { male: 0, female: 0, transgender: 0 } , # other_b637c39
+      other_7b13407:               { male: 0, female: 0, transgender: 0 } , # other_7b13407
+    }
+
+    # Calculate Stats
+    Child.get_childs(user, "high").each do |child|
+      gender = child.data["sex"]
+      next unless gender
+
+      # child.data["protection_concerns"] returns an array of strings, Each specifing a Protection Concern
+      if child.data["protection_concerns"].include?("other")
+        result["stats"][:other][gender.to_sym] += 1
+      end
+
+      if child.data["protection_concerns"].include?("exploitation_b9352d1")
+        result["stats"][:exploitation_b9352d1][gender.to_sym] += 1
+      end
+
+      if child.data["protection_concerns"].include?("neglect_a7b48b2")
+        result["stats"][:neglect_a7b48b2][gender.to_sym] += 1
+      end
+
+      if child.data["protection_concerns"].include?("harmful_practice_s__d1f7955")
+        result["stats"][:harmful_practice_s__d1f7955][gender.to_sym] += 1
+      end
+
+      if child.data["protection_concerns"].include?("other_b637c39")
+        result["stats"][:other_b637c39][gender.to_sym] += 1
+      end
+
+      if child.data["protection_concerns"].include?("other_b637c39")
+        result["stats"][:other_7b13407][gender.to_sym] += 1
+      end
+    end
+
+    result
   end
 
   # =========================================================================================================================================

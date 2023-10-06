@@ -40,3 +40,7 @@ export { default as MonthlyRegResCases } from "./monthly-reg-res-cases";
 // Significant Harm Cases by Protection Concern
 export { default as HarmCases } from "./harm-cases";
 // --------------------------------------------------------------------
+// registered_cases_by_protection_concern
+// Registered Cases by Protection Concern
+export { default as RegisteredCasesByProtectionConcern } from "./registered-cases-by-protection-concern";
+// --------------------------------------------------------------------

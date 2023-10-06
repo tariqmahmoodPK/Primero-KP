@@ -178,3 +178,12 @@ export const fetchHarmCases = () => ({
     path: "dashboards/significant_harm_cases_registered_by_age_and_gender_stats"
   }
 });
+
+// registered_cases_by_protection_concern
+// Registered Cases by Protection Concern
+export const fetchRegisteredCasesByProtectionConcernReal = () => ({
+  type: actions.REGISTERED_CASES_BY_PROTECTION_CONCERN_REAL,
+  api: {
+    path: "dashboards/registered_cases_by_protection_concern"
+  }
+});

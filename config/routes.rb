@@ -114,6 +114,8 @@ Rails.application.routes.draw do
           get :month_wise_registered_and_resolved_cases_stats
           # Significant Harm Cases by Protection Concern
           get :significant_harm_cases_registered_by_age_and_gender_stats
+          # Registered Cases by Protection Concern
+          get :registered_cases_by_protection_concern
         end
       end
 
