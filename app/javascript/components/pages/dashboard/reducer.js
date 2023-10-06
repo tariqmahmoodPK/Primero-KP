@@ -32,6 +32,11 @@ const reducer = (state = DEFAULT_STATE, { type, payload }) => {
     case actions.GRAPH_FOUR_SUCCESS:
       return state.set("graphFour", fromJS(payload));
     // ------------------------------------------------------------------------
+    // month_wise_registered_and_resolved_cases_stats
+    // Registered and Closed Cases by Month
+    case actions.MONTHLY_REGISTERED_AND_RESOLVED_CASES_SUCCESS:
+      return state.set("monthlyRegisteredAndResolvedCases", fromJS(payload));
+    // ------------------------------------------------------------------------
     case actions.DASHBOARD_FLAGS:
       return state.set("flags", fromJS(payload));
     case actions.CASES_BY_STATUS:

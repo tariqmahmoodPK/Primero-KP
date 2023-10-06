@@ -50,7 +50,11 @@ import {
   // --------------------------------------------------------------
   // alternative_care_placement_by_gender
   // Cases requiring Alternative Care Placement Services
-  GraphFour
+  GraphFour,
+  // --------------------------------------------------------------
+  // month_wise_registered_and_resolved_cases_stats
+  // Registered and Closed Cases by Month
+  MonthlyRegResCases
   // --------------------------------------------------------------
 } from "./components";
 import NAMESPACE from "./namespace";
@@ -118,6 +122,9 @@ const Dashboard = () => {
             <RegResCasesGender /> {/* Closed Cases by Sex and Protection Concern */}
             <CasesReferralToAgency /> {/* Cases Referral (To Agency ) */}
             <GraphFour /> {/* Cases requiring Alternative Care Placement Services */}
+            {/* month_wise_registered_and_resolved_cases_stats */}
+            {/* Registered and Closed Cases by Month */}
+            <MonthlyRegResCases />
           </Grid>
 
           <Grid item xl={3} md={4} xs={12}>

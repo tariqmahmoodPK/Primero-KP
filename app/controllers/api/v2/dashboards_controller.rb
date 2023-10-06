@@ -32,6 +32,8 @@ class Api::V2::DashboardsController < ApplicationApiController
     @stats = Child.resolved_cases_by_gender_and_types_of_violence(current_user)
   end
 
+  # TODO Need to Modify logic
+  # TODO The form field for are not present in the current dump
   # Cases Referral (To Agency )
   def cases_referral_to_agency_stats
     @stats = Child.cases_referral_to_agency(current_user)
@@ -41,5 +43,11 @@ class Api::V2::DashboardsController < ApplicationApiController
   #TODO Rename All of it's relevant methods, and files to reflect the proper name.
   def alternative_care_placement_by_gender
     @stats = Child.alternative_care_placement_by_gender(current_user)
+  end
+
+  # Registered and Closed Cases by Month
+  #TODO Rename All of it's relevant methods, and files to reflect the proper name.
+  def month_wise_registered_and_resolved_cases_stats
+    @stats = Child.month_wise_registered_and_resolved_cases(current_user)
   end
 end

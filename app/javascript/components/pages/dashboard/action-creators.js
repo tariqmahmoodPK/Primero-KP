@@ -160,3 +160,12 @@ export const fetchGraphFour = () => ({
     path: "dashboards/alternative_care_placement_by_gender"
   }
 });
+
+// month_wise_registered_and_resolved_cases_stats
+// Registered and Closed Cases by Month
+export const fetchMonthlyRegisteredAndResolvedCases = () => ({
+  type: actions.MONTHLY_REGISTERED_AND_RESOLVED_CASES,
+  api: {
+    path: "dashboards/month_wise_registered_and_resolved_cases_stats"
+  }
+});

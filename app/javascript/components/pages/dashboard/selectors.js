@@ -172,3 +172,9 @@ export const getCasesReferralToAgency = state => {
 export const getGraphFour = state => {
   return state.getIn(["records", NAMESPACE, "graphFour"], fromJS({}));
 };
+
+// month_wise_registered_and_resolved_cases_stats
+// Registered and Closed Cases by Month
+export const getMonthlyRegisteredAndResolvedCases = state => {
+  return state.getIn(["records", NAMESPACE, "monthlyRegisteredAndResolvedCases"], fromJS({}));
+};

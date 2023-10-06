@@ -110,6 +110,8 @@ Rails.application.routes.draw do
           get :cases_referral_to_agency_stats
           # Cases requiring Alternative Care Placement Services
           get :alternative_care_placement_by_gender
+          #  Registered and Closed Cases by Month
+          get :month_wise_registered_and_resolved_cases_stats
         end
       end
 

@@ -32,3 +32,7 @@ export { default as CasesReferralToAgency } from "./cases-referral-to-agency";
 // Cases requiring Alternative Care Placement Services
 export { default as GraphFour } from "./graph-four";
 // --------------------------------------------------------------------
+// month_wise_registered_and_resolved_cases_stats
+//  Registered and Closed Cases by Month
+export { default as MonthlyRegResCases } from "./monthly-reg-res-cases";
+// --------------------------------------------------------------------

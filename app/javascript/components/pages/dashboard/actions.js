@@ -22,8 +22,8 @@ export default namespaceActions(NAMESPACE, [
   "DASHBOARD_FLAGS_FAILURE",
   "OPEN_PAGE_ACTIONS",
   "SERVICES_STATUS",
-  // 'Percentage of Children who received Child Protection Services'
   // protection_concerns_services_stats
+  // 'Percentage of Children who received Child Protection Services'
   "REGISTERED_CASES_BY_PROTECTION_CONCERN",
   "REGISTERED_CASES_BY_PROTECTION_CONCERN_SUCCESS",
   // -------------------------------------------------------------------
@@ -40,6 +40,11 @@ export default namespaceActions(NAMESPACE, [
   // alternative_care_placement_by_gender
   // Cases requiring Alternative Care Placement Services
   "GRAPH_THREE_SUCCESS",
-  "GRAPH_FOUR"
+  "GRAPH_FOUR",
+  // -------------------------------------------------------------------
+  // month_wise_registered_and_resolved_cases_stats
+  // Registered and Closed Cases by Month
+  "MONTHLY_REGISTERED_AND_RESOLVED_CASES",
+  "MONTHLY_REGISTERED_AND_RESOLVED_CASES_SUCCESS"
   // -------------------------------------------------------------------
 ]);

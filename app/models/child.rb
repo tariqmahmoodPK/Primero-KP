@@ -611,6 +611,7 @@ class Child < ApplicationRecord
       # Pakistani || Afghani || Irani
     # Desegregated by Sex
   def self.alternative_care_placement_by_gender(user)
+    # Roles allowed
     #  Social Case Worker (scw)
       # View his own cases
     # Psychologist (Psy)
@@ -653,6 +654,60 @@ class Child < ApplicationRecord
     stats_final
   end
 
+  #TODO Need get Records based on Graph Roles
+  #TODO May need to modify the logic a bit
+  # Form: Basic Information,
+    # Field: Sex Database: sex
+  # Field: registration_date
+    # Database Name: registration_date
+  # Form: Closure
+    # Field: date_closure
+      # Database Name: date_closure
+
+  # Graph for 'Registered and Closed Cases by Month'
+    # Total Number of Registered and Closed Cases Gender wise (by User) – Last 12 months
+  def self.month_wise_registered_and_resolved_cases(user)
+    # Roles allowed
+    # Social Case Worker (scw)
+      # View his own cases
+    # Psychologist (Psy)
+      # View his own cases
+    # Child Helpline Officer (cho)
+      # View his own cases
+    # Referrals
+      # View cases referred to him
+    # Child Protection Officer (cpo)
+      # View Cases of Social Case Worker, Psychologist and Child Helpline Operator working in his user group (Same District)
+    # Member CPWC
+      # View Cases of all Districts (Provincial data)
+
+    name = user.role.name
+
+    return { permission: false } unless name.in? ['CPO', 'Referral', 'CPI In-charge', 'CP Manager', 'Superuser']
+
+    stats = {
+      "Resolved" => hash_return_for_month_wise_api,
+      "Registered" => hash_return_for_month_wise_api
+    }
+
+    Child.get_childs(user).each do |child|
+      day = child.created_at
+      next unless day.to_date.in? (Date.today.prev_year..Date.today)
+
+      key = day.strftime("%B")[0,3]
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
+
+      if child.age.present? && child.data["status"].eql?("open")
+        stats["Registered"][key][gender] += 1
+        stats["Registered"][key]["total"] += 1
+      elsif child.data["status"].eql?("closed")
+        stats["Resolved"][key][gender] += 1
+        stats["Resolved"][key]["total"] += 1
+      end
+    end
+
+    stats
+  end
 
   # =========================================================================================================================================
 
@@ -660,6 +715,7 @@ class Child < ApplicationRecord
   # -----------------------------------------------------------------------------------------------------------
   # Used By:
     # protection_concern_stats
+    # month_wise_registered_and_resolved_cases_stats
   # Get Cases Based on:
     # Who's the User
     # Risk Level
@@ -894,6 +950,40 @@ class Child < ApplicationRecord
     end
 
     search.results
+  end
+
+  # TODO Seem quite simple, May need to modfy this.
+  #  Registered and Closed Cases by Month
+  def self.hash_return_for_month_wise_api
+    month_list = {
+      "Jan" => get_gender_hash,
+      "Feb" => get_gender_hash,
+      "Mar" => get_gender_hash,
+      "Apr" => get_gender_hash,
+      "May" => get_gender_hash,
+      "Jun" => get_gender_hash,
+      "Jul" => get_gender_hash,
+      "Aug" => get_gender_hash,
+      "Sep" => get_gender_hash,
+      "Oct" => get_gender_hash,
+      "Nov" => get_gender_hash,
+      "Dec" => get_gender_hash,
+    }
+
+    month_list
+  end
+
+  # TODO Seem quite simple, May need to modfy this.
+  #  Registered and Closed Cases by Month
+  def self.get_gender_hash
+    gender_list = {
+      "male" => 0,
+      "female" => 0,
+      "transgender" => 0,
+      "total" => 0
+    }
+
+    gender_list
   end
 
   def self.get_percentage(value, count)
