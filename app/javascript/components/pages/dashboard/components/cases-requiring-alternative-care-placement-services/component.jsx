@@ -1,4 +1,4 @@
-// 'Closed Cases by Sex and Reason'
+// 'Cases requiring Alternative Care Placement Services'
 
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
@@ -15,9 +15,9 @@ import { Grid } from "@material-ui/core";
 
 import { BarChart } from "../../../../charts";
 // Import functions for fetching data.
-import { fetchResolvedCasesByGenderAndReason } from "../../action-creators";
+import { fetchCasesRequiringAlternativeCarePlacementServices } from "../../action-creators";
 // Import functions for selecting data.
-import { getResolvedCasesByGenderAndReason } from "../../selectors";
+import { getCasesRequiringAlternativeCarePlacementServices } from "../../selectors";
 // Import a custom library function.
 import { useMemoizedSelector } from "../../../../../libs";
 
@@ -34,14 +34,14 @@ const Component = () => {
   // Get access to Redux's dispatch function to trigger actions.
   const dispatch = useDispatch();
   // Use the useMemoizedSelector function to get data from the Redux store.
-  const data = useMemoizedSelector(state => getResolvedCasesByGenderAndReason(state));
+  const data = useMemoizedSelector(state => getCasesRequiringAlternativeCarePlacementServices(state));
   // Extract statistics from the data if it exists, otherwise set it to null.
   const stats = data.getIn(["data", "stats"]) ? data.getIn(["data", "stats"]).toJS() : null;
 
   // Use the useEffect hook to perform an action when the component is mounted.
   useEffect(() => {
     // Dispatch an action to fetch ResolvedCasesByGenderAndReason
-    dispatch(fetchResolvedCasesByGenderAndReason());
+    dispatch(fetchCasesRequiringAlternativeCarePlacementServices());
   }, []);
 
   let graphData;
@@ -51,7 +51,7 @@ const Component = () => {
         {
           scaleLabel: {
             display: true,
-            labelString: "Closing Reason",
+            labelString: "Countries",
             fontColor: "red"
           }
         }
@@ -118,7 +118,7 @@ const Component = () => {
           {/* Create a container for displaying statistics */}
           <div className={css.container}>
             {/* Display a heading */}
-            <h2>Closed Cases by Sex and Reason</h2>
+            <h2>Cases Requiring Alternative Care Placement</h2>
             <div className={css.card} flat>
               <BarChart options={chartOptions} data={graphData} showDetails />
             </div>
@@ -130,7 +130,7 @@ const Component = () => {
 };
 
 // Set a display name for the Component
-Component.displayName = `ResolvedCasesByGenderAndReason`;
+Component.displayName = `GraphFour`;
 
 // Export the Component so it can be used in other parts of the application.
 export default Component;

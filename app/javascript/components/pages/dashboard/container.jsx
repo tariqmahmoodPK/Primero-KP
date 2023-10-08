@@ -42,9 +42,8 @@ import {
   // Cases Referral (To Agency )
   CasesReferralToAgency,
   // --------------------------------------------------------------
-  // alternative_care_placement_by_gender
-  // Cases requiring Alternative Care Placement Services
-  GraphFour,
+  // 'Cases requiring Alternative Care Placement Services'
+  CasesRequiringAlternativeCarePlacementServices,
   // --------------------------------------------------------------
   // month_wise_registered_and_resolved_cases_stats
   // Registered and Closed Cases by Month
@@ -124,7 +123,8 @@ const Dashboard = () => {
             <PercentageChildrenReceivedChildProtectionServices />
             <ResolvedCasesByGenderAndReason /> {/* 'Closed Cases by Sex and Reason' */}
             <CasesReferralToAgency /> {/* Cases Referral (To Agency ) */}
-            <GraphFour /> {/* Cases requiring Alternative Care Placement Services */}
+            {/* 'Cases requiring Alternative Care Placement Services' */}
+            <CasesRequiringAlternativeCarePlacementServices />
             <MonthlyRegResCases /> {/* Registered and Closed Cases by Month */}
             <HarmCases /> {/* Significant Harm Cases by Protection Concern */}
             <RegisteredCasesByProtectionConcern /> {/* Registered Cases by Protection Concern */}

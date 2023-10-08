@@ -56,10 +56,36 @@ class Api::V2::DashboardsController < ApplicationApiController
     @stats = Child.cases_referral_to_agency(current_user)
   end
 
-  # Cases requiring Alternative Care Placement Services
-  #TODO Rename All of it's relevant methods, and files to reflect the proper name.
+  # 'Cases requiring Alternative Care Placement Services'
   def alternative_care_placement_by_gender
     @stats = Child.alternative_care_placement_by_gender(current_user)
+
+    # Properly format the stats to use on the React Component
+    lookup_values = Lookup.nationality_lookup_values
+
+    nationalities = {}
+
+    @stats.each do |key, value|
+      # Find the corresponding entry in the lookup_values array
+      lookup_entry = lookup_values.find { |entry| entry["id"] == key.to_s }
+
+      if lookup_entry
+        # Get the English label from the lookup entry
+        english_label = lookup_entry["display_text"]["en"]
+        # Add the English label as a new key in the nationalities hash
+        nationalities[english_label] = value
+      end
+    end
+
+    # The new stats format is like this:
+    # {
+    #   "Pakistani" => {:male=>0, :female=>0, :transgender=>0},
+    #   "Afghan"    => {:male=>0, :female=>0, :transgender=>0},
+    #   "Iranian"   => {:male=>0, :female=>0, :transgender=>0},
+    #   "Other"     => {:male=>0, :female=>0, :transgender=>0},
+    # }
+
+    @stats = nationalities
   end
 
   # Registered and Closed Cases by Month

@@ -29,9 +29,8 @@ export { default as ResolvedCasesByGenderAndReason } from "./resolved-cases-by-g
 // Cases Referral (To Agency )
 export { default as CasesReferralToAgency } from "./cases-referral-to-agency";
 // --------------------------------------------------------------------
-// alternative_care_placement_by_gender
-// Cases requiring Alternative Care Placement Services
-export { default as GraphFour } from "./graph-four";
+// 'Cases requiring Alternative Care Placement Services'
+export { default as CasesRequiringAlternativeCarePlacementServices } from "./cases-requiring-alternative-care-placement-services";
 // --------------------------------------------------------------------
 // month_wise_registered_and_resolved_cases_stats
 //  Registered and Closed Cases by Month

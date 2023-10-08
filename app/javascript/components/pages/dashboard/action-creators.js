@@ -153,10 +153,9 @@ export const fetchCasesReferralToAgency = () => ({
   }
 });
 
-// alternative_care_placement_by_gender
-// Cases requiring Alternative Care Placement Services
-export const fetchGraphFour = () => ({
-  type: actions.GRAPH_FOUR,
+// 'Cases requiring Alternative Care Placement Services'
+export const fetchCasesRequiringAlternativeCarePlacementServices = () => ({
+  type: actions.CASES_REQUIRING_ALTERNATIVE_CARE_PLACEMENT_SERVICES,
   api: {
     path: "dashboards/alternative_care_placement_by_gender"
   }

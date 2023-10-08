@@ -1,9 +1,22 @@
-# alternative_care_placement_by_gender
-# Cases requiring Alternative Care Placement Services
+# 'Cases requiring Alternative Care Placement Services'
 
-if @stats.class.eql?(Hash)
-  json.set!(@stats.keys[0], @stats.values[0])
-else
-  json.data @stats
-  json.labels ["Male", "Female", "Transgender"]
+# Received Stats Format
+# {
+#   "Pakistani" => {:male=>0, :female=>0, :transgender=>0},
+#   "Afghan"    => {:male=>0, :female=>0, :transgender=>0},
+#   "Iranian"   => {:male=>0, :female=>0, :transgender=>0},
+#   "Other"     => {:male=>0, :female=>0, :transgender=>0},
+# }
+
+json.data do
+  @stats.each do |key, value|
+    #? Why did we use this? What purpose does this check serve?
+    if key.to_s.eql?("permission")
+      json.set!(key, value)
+    else
+      json.stats do
+        json.set!(key, value)
+      end
+    end
+  end
 end

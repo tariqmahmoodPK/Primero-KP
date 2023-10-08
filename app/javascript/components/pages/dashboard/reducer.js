@@ -23,10 +23,9 @@ const reducer = (state = DEFAULT_STATE, { type, payload }) => {
     case actions.CASES_REFERRAL_TO_AGENCY_SUCCESS:
       return state.set("casesReferralToAgency", fromJS(payload));
     // ------------------------------------------------------------------------
-    // alternative_care_placement_by_gender
-    // Cases requiring Alternative Care Placement Services
-    case actions.GRAPH_FOUR_SUCCESS:
-      return state.set("graphFour", fromJS(payload));
+    // 'Cases requiring Alternative Care Placement Services'
+    case actions.CASES_REQUIRING_ALTERNATIVE_CARE_PLACEMENT_SERVICES_SUCCESS:
+      return state.set("casesRequiringAlternativeCarePlacementServices", fromJS(payload));
     // ------------------------------------------------------------------------
     // month_wise_registered_and_resolved_cases_stats
     // Registered and Closed Cases by Month

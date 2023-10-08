@@ -222,7 +222,7 @@ module Graphs
       end
     end
 
-    # NOTE Needed to do it for simplicity with the code in the json.jbuilder file
+    # NOTE Needed to do it for properly get the 'Display Text' Values of these records, To Display on the Graph
     formatted_stats = {
       case_goals_all_met_811860:      stats[:case_goals_all_met],
       case_goals_substantially_met_and_there_is_no_further_child_protection_concern_376876: stats[:case_goals_substantially_met],
@@ -231,6 +231,72 @@ module Graphs
       safety_of_child_362513:         stats[:safety_of_child],
       death_of_child_285462:          stats[:death_of_child],
       other_100182:                   stats[:other]
+    }
+
+    formatted_stats
+  end
+
+  # 'Cases requiring Alternative Care Placement Services'
+  def alternative_care_placement_by_gender(user)
+    # Stats Calculation Formula:
+      # Total Number of Open Cases Open Where Nationality is 'Pakistani' or 'Afghani' or 'Irani'
+      # Desegregated by Sex
+
+    # Getting User's Role to check if they are allowed to view the graph.
+    name = user.role.name
+
+    # User Roles allowed
+    return { permission: false } unless name.in? [
+      'Social Case Worker'    ,
+      'Psychologist'          ,
+      'Child Helpline Officer',
+      'Referral'              ,
+      'CPO'                   ,
+      'CPWC'
+    ]
+
+    # Each key represents a specific country, and the corresponding value is a nested hash
+      # that keeps track of counts for different genders (male, female, transgender).
+    # The number of Male, Female, and Transgender counts make up the total number of cases that
+      # have one of the 'Nationality' options.
+
+    stats = {
+      pakistani: { male: 0, female: 0, transgender: 0 }, # Lookup id: nationality1
+      afgani:    { male: 0, female: 0, transgender: 0 }, # Lookup id: nationality2
+      irani:     { male: 0, female: 0, transgender: 0 }, # Lookup id: nationality3
+      other:     { male: 0, female: 0, transgender: 0 }, # Lookup id: nationality10
+    }
+
+    # TODO Ask if this search query should also include cases with High Risk
+    cases_requiring_alternative_care = get_cases_requiring_alternative_care(user)
+
+    cases_requiring_alternative_care.each do |child|
+      gender = child.data["sex"]
+      next unless gender
+
+      if child.data["nationality_b80911e"].include?("nationality1")
+        stats[:pakistani][gender.to_sym] += 1
+      end
+
+      if child.data["nationality_b80911e"].include?("nationality2")
+        stats[:afgani][gender.to_sym] += 1
+      end
+
+      if child.data["nationality_b80911e"].include?("nationality3")
+        stats[:irani][gender.to_sym] += 1
+      end
+
+      if child.data["nationality_b80911e"].include?("nationality10")
+        stats[:other][gender.to_sym] += 1
+      end
+    end
+
+    # NOTE Needed to do it for properly get the 'Display Text' Values of these records, To Display on the Graph
+    formatted_stats = {
+      nationality1:  stats[:pakistani],
+      nationality2:  stats[:afgani],
+      nationality3:  stats[:irani],
+      nationality10: stats[:other]
     }
 
     formatted_stats

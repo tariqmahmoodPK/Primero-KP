@@ -82,23 +82,10 @@ class Child < ApplicationRecord
 
   # Scopes
   scope :by_date_of_birth, -> { where.not('data @> ?', { date_of_birth: nil }.to_json) }
-
   #! Assumming this is how to search for records in KPK Province, Since there is no longer a owned_by_location attribute
   scope :with_province, -> {
     where("location_current LIKE ?", "KPK%").where('risk_level = ?', 'high')
   }
-
-  #TODO see if these scopes are work correctly
-  # Cases requiring Alternative Care Placement Services
-  scope :with_department, ->(agency) { where("data @> ?", { owned_by_agency_id: agency }.to_json) }
-  #TODO see if these scopes are still requreid. or are They used correctly with this nationality_b80911e attribute
-  # Cases requiring Alternative Care Placement Services
-  scope :check_for_alternate_care_placement_with_user, -> (username) { find_by_sql("SELECT * FROM cases
-    WHERE data->>'nationality_b80911e' IS NOT NULL AND
-    (data->>'owned_by' = '#{username}')::boolean is true") }
-  #TODO see if these scopes are still requreid. or are They used correctly with this nationality_b80911e attribute
-  # Cases requiring Alternative Care Placement Services
-  scope :check_for_alternate_care_placement, -> { find_by_sql("SELECT * FROM cases WHERE data->>'nationality_b80911e' IS NOT NULL") }
 
   def self.sortable_text_fields
     %w[name case_id_display national_id_no registry_no]
@@ -179,8 +166,10 @@ class Child < ApplicationRecord
 
     boolean(:has_incidents) { incidents.size.positive? }
 
-    string :data do
-      data
+    # Define a 'text' field for Sunspot indexing.
+    # This field extracts the value associated with the 'nationality_b80911e' key from the 'data' JSON object.
+    text :nationality_b80911e do
+      data["nationality_b80911e"]
     end
   end
 
@@ -411,57 +400,6 @@ class Child < ApplicationRecord
     end
 
     stats
-  end
-
-  #TODO Can't get any records or stats, May be issue with not having enough records
-  #TODO Need get Records based on Graph Roles
-  # alternative_care_placement_by_gender
-  # Graph for 'Cases requiring Alternative Care Placement Services'
-    # Total Number of Open Cases Open Where Nationality =
-      # Pakistani || Afghani || Irani
-    # Desegregated by Sex
-  def self.alternative_care_placement_by_gender(user)
-    # Roles allowed
-    #  Social Case Worker (scw)
-      # View his own cases
-    # Psychologist (Psy)
-      # View his own cases
-    # Child Helpline Officer (cho)
-      # View his own cases
-    # Referrals
-      # View cases referred to him
-    # Child Protection Officer (cpo)
-      # View Cases of Social Case Worker, Psychologist and Child Helpline Operator working in his user group (Same District)
-    # Member CPWC
-      # View Cases of all Districts (Provincial data)
-
-    role_name = user.role.name
-
-    return { permission: false } unless role_name.in? ['CPO', 'CPI In-charge', 'Superuser']
-
-    stats = {
-      male: 0,
-      female: 0,
-      transgender: 0
-    }
-
-    alternate_cases = role_name.eql?("Superuser") ? check_for_alternate_care_placement_with_user(user.user_name) : with_department(user.agency.unique_id).check_for_alternate_care_placement
-
-    alternate_cases.each do |child|
-      gender = child.data["sex"]
-
-      case gender
-      when "male"
-        stats[:male] += 1
-      when "female"
-        stats[:female] += 1
-      else
-        stats[:transgender] += 1
-      end
-    end
-
-    stats_final = [stats[:male], stats[:female], stats[:transgender]]
-    stats_final
   end
 
   #TODO Need get Records based on Graph Roles

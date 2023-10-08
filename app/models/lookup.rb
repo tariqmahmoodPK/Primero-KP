@@ -224,6 +224,10 @@ class Lookup < ApplicationRecord
     find_by(unique_id: "lookup-protection-concerns").lookup_values_i18n
   end
 
+  def self.nationality_lookup_values
+    find_by(unique_id: "lookup-nationality").lookup_values_i18n
+  end
+
   # Lookup Values for the Closure Form's 'What is reason for closing this case' Field
   def self.reason_for_closing_case_values
     # NOTE Had to do this as there is no lookup created for Closure form's what_is_the_reason_for_closing_this_case__d2d2ce8 field the lookups are hardcoded into the field itself.

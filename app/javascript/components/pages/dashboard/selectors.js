@@ -168,10 +168,9 @@ export const getCasesReferralToAgency = state => {
   return state.getIn(["records", NAMESPACE, "casesReferralToAgency"], fromJS({}));
 };
 
-// alternative_care_placement_by_gender
-// Cases requiring Alternative Care Placement Services
-export const getGraphFour = state => {
-  return state.getIn(["records", NAMESPACE, "graphFour"], fromJS({}));
+// 'Cases requiring Alternative Care Placement Services'
+export const getCasesRequiringAlternativeCarePlacementServices = state => {
+  return state.getIn(["records", NAMESPACE, "casesRequiringAlternativeCarePlacementServices"], fromJS({}));
 };
 
 // month_wise_registered_and_resolved_cases_stats
