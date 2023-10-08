@@ -1,5 +1,4 @@
 /* TODO Update the referencing comments after properly updating the files */
-/* TODO Add Explanatory Comments */
 
 import { fromJS, Map } from "immutable";
 import orderBy from "lodash/orderBy";
@@ -12,11 +11,9 @@ const DEFAULT_STATE = Map({});
 
 const reducer = (state = DEFAULT_STATE, { type, payload }) => {
   switch (type) {
-    // protection_concerns_services_stats
-    // Percentage of Children who received Child Protection Services
-    case actions.REGISTERED_CASES_BY_PROTECTION_CONCERN_SUCCESS:
-      return state.set("registeredCasesByProtectionConcern", fromJS(payload));
-    // ------------------------------------------------------------------------
+    // 'Percentage of Children who received Child Protection Services'
+    case actions.PERCENTAGE_OF_CHILDREN_WHO_RECEIVED_CHILD_PROTECTION_SERVICES_SUCCESS:
+      return state.set("percentageChildrenReceivedChildProtectionServices", fromJS(payload));
     // resolved_cases_by_gender_and_types_of_violence_stats
     // Closed Cases by Sex and Protection Concern
     case actions.RES_CASES_BY_GENDER_SUCCESS:

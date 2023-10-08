@@ -1,5 +1,4 @@
 /* TODO Update the referencing comments after properly updating the files */
-/* TODO Add Explanatory Comments */
 
 import { fromJS } from "immutable";
 
@@ -149,10 +148,13 @@ export const getDashboardFlags = (state, excludeResolved = false) => {
 
 export const getCasesToAssign = state => getDashboardByName(state, DASHBOARD_NAMES.CASES_TO_ASSIGN);
 
-// protection_concerns_services_stats
-// Percentage of Children who received Child Protection Services
-export const getRegisteredCasesByProtectionConcern = state => {
-  return state.getIn(["records", NAMESPACE, "registeredCasesByProtectionConcern"], fromJS({}));
+/* ====================================== */
+/*                 Graphs                 */
+/* ====================================== */
+
+// 'Percentage of Children who received Child Protection Services'
+export const getPercentageChildrenReceivedChildProtectionServices = state => {
+  return state.getIn(["records", NAMESPACE, "percentageChildrenReceivedChildProtectionServices"], fromJS({}));
 };
 
 // resolved_cases_by_gender_and_types_of_violence_stats

@@ -46,6 +46,10 @@ class Child < ApplicationRecord
   include DuplicateIdAlertable
   include FollowUpable
   include LocationCacheable
+  # Helper Methods for the Graphs
+  extend GraphHelpers
+  # Methods to Calculate Stats for Graphs
+  extend Graphs
 
   # Accessors
   store_accessor(
@@ -79,15 +83,9 @@ class Child < ApplicationRecord
   # Scopes
   scope :by_date_of_birth, -> { where.not('data @> ?', { date_of_birth: nil }.to_json) }
 
-  #? What purpose does this scope have relating to Graphs
-  # Filter records from a database table based on two conditions:
-  # 1) The data column in the table must contain a key-value pair where
-    # the key is "owned_by_location," and
-    # the value matches the pattern "SIN%."
-  # 2 ) The data column must contain a JSONB object with a specific key-value pair, which is represented by
-    # the hash {'is_this_a_significant_harm_case__b343242' => 'yes_174476'} converted to JSON.
-  scope :with_province, -> (user) {
-    where( "data ->> :key LIKE :value", :key => "owned_by_location", :value => "SIN%" ).where('risk_level', 'high')
+  #! Assumming this is how to search for records in KPK Province, Since there is no longer a owned_by_location attribute
+  scope :with_province, -> {
+    where("location_current LIKE ?", "KPK%").where('risk_level = ?', 'high')
   }
 
   #TODO see if these scopes are work correctly
@@ -373,108 +371,9 @@ class Child < ApplicationRecord
     %w[incident_details]
   end
 
-  # Graphs
-  # =========================================================================================================================================
-
-  # protection_concerns_services_stats
-  # Graph for 'Percentage of Childern who received Child Protection Services'
-    # (No of Cases by Protection Concern that have recieved the Service) / (Total Number of Cases by Protection Concern)
-  #TODO Need get Records based on Graph Roles
-  def self.protection_concern_stats(user)
-    name = user.role.name
-
-    # Roles allowed
-    # Social Case Worker (scw)
-      # View his own cases
-    # Psychologist (Psy)
-      # View his own cases
-    # Child Helpline Officer (cho)
-      # View his own cases
-    # Referrals
-      # View cases referred to him
-    # Child Protection Officer (cpo)
-      # View Cases of Social Case Worker, Psychologist and Child Helpline Operator working in his user group (Same District)
-    # Member CPWC
-      # View Cases of all Districts (Provincial data)
-
-    return { permission: false } unless name.in? ['CPO', 'Referral', 'CPI In-charge', 'CP Manager', 'Superuser']
-
-    # Protection Concern Lookup values
-    # [
-    #   {"id"=>"other"                       , "en"=>"Violence"            },
-    #   {"id"=>"exploitation_b9352d1"        , "en"=>"Exploitation"        },
-    #   {"id"=>"neglect_a7b48b2"             , "en"=>"Neglect"             },
-    #   {"id"=>"harmful_practice_s__d1f7955" , "en"=>"Harmful practice(s)" },
-    #   {"id"=>"other_b637c39"               , "en"=>"Abuse"               },
-    #   {"id"=>"other_7b13407"               , "en"=>"Other"               }
-    # ]
-
-    stats = {
-      violence:          { cases: 0 , percentage: 0 } , # other
-      exploitation:      { cases: 0 , percentage: 0 } , # exploitation_b9352d1
-      neglect:           { cases: 0 , percentage: 0 } , # neglect_a7b48b2
-      harmful_practices: { cases: 0 , percentage: 0 } , # harmful_practice_s__d1f7955
-      abuse:             { cases: 0 , percentage: 0 } , # other_b637c39
-      other:             { cases: 0 , percentage: 0 } , # other_7b13407
-    }
-
-    # Getting Total Number of Opened Cases
-    total_case_count = Child.get_childs(user, "high", "registered").count
-
-    # Calculate Stats
-    Child.get_childs(user, "high").each do |child|
-      #TODO Ask what's response_to_goal_cd94ee4
-        #? Is it 'response_on_referred_case_da89310' ?
-      #TODO Ask what's not_applicable_445274
-        #? Is the field still present ?
-
-        # child.data["response_on_referred_case_da89310"] is an array containing a hash
-        response_on_referred_case = child.data["response_on_referred_case_da89310"]
-        # has_the_service_been_provided__23eb99e returns a string that is either "true" or "false"
-      if response_on_referred_case && response_on_referred_case[0]["has_the_service_been_provided__23eb99e"] == "true"
-        # child.data["protection_concerns"] returns an array of strings, Each specifing a Protection Concern
-        if child.data["protection_concerns"].include?("other")
-          stats[:violence][:cases] += 1
-        end
-
-        if child.data["protection_concerns"].include?("exploitation_b9352d1")
-          stats[:exploitation][:cases] += 1
-        end
-
-        if child.data["protection_concerns"].include?("neglect_a7b48b2")
-          stats[:neglect][:cases] += 1
-        end
-
-        if child.data["protection_concerns"].include?("harmful_practice_s__d1f7955")
-          stats[:harmful_practices][:cases] += 1
-        end
-
-        if child.data["protection_concerns"].include?("other_b637c39")
-          stats[:abuse][:cases] += 1
-        end
-
-        if child.data["protection_concerns"].include?("other_b637c39")
-          stats[:other][:cases] += 1
-        end
-      end
-    end.count
-
-    # Get Percentages
-    stats.each do |key, value|
-      value[:percentage] = get_percentage(value[:cases], total_case_count) unless total_case_count.eql?(0)
-    end
-
-    total_cases =  {
-      violence:          { cases: stats[:violence          ][:cases] , percentage: stats[:violence          ][:percentage]} ,
-      exploitation:      { cases: stats[:exploitation      ][:cases] , percentage: stats[:exploitation      ][:percentage]} ,
-      neglect:           { cases: stats[:neglect           ][:cases] , percentage: stats[:neglect           ][:percentage]} ,
-      harmful_practices: { cases: stats[:harmful_practices ][:cases] , percentage: stats[:harmful_practices ][:percentage]} ,
-      abuse:             { cases: stats[:abuse             ][:cases] , percentage: stats[:abuse             ][:percentage]} ,
-      other:             { cases: stats[:other             ][:cases] , percentage: stats[:other             ][:percentage]} ,
-    }
-
-    total_cases
-  end
+  # ====================================================================== #
+  #                                 Graphs                                 #
+  # ====================================================================== #
 
   # resolved_cases_by_gender_and_types_of_violence_stats
   # Graph for 'Closed Cases by Sex and Protection Concern'
@@ -724,7 +623,7 @@ class Child < ApplicationRecord
     # Referrals
       # View cases referred to him
     # Child Protection Officer (cpo)
-      # View Cases of Social Case Worker, Psychologist and Child Helpline Operator working in  his user group (Same District)
+      # View Cases of Social Case Worker, Psychologist and Child Helpline Operator working in his user group (Same District)
     # Member CPWC
       # View Cases of all Districts (Provincial data)
 
@@ -793,7 +692,7 @@ class Child < ApplicationRecord
     # Referrals
       # View cases referred to him
     # Child Protection Officer (cpo)
-      # View Cases of Social Case Worker, Psychologist and Child Helpline Operator working in  his user group (Same District)
+      # View Cases of Social Case Worker, Psychologist and Child Helpline Operator working in his user group (Same District)
     # Member CPWC
       # View Cases of all Districts (Provincial data)
 
@@ -856,112 +755,11 @@ class Child < ApplicationRecord
     result
   end
 
-  # =========================================================================================================================================
+  # ============================== End of Graphs ============================== #
 
-  # Helper Methods
-  # -----------------------------------------------------------------------------------------------------------
-  # Used By:
-    # 'Percentage of Children who received Child Protection Services'
-    # 'Registered and Closed Cases by Month'
-    # 'Significant Harm Cases by Protection Concern'
-  # Get Cases Based on:
-    # Who's the User
-    # Risk Level
-    # Whether the Case is Registered or Not
-  #TODO Need get Records based on Graph Roles
-  def self.get_childs(user, is_risk_level_high = nil, registered = nil)
-    case user.role.name
-    #? What does this do? What purpose does this scope have?
-    when "CP Manager"
-      with_province(user)
-    # All Cases of a Particular Group and Paricular Risk Level
-    when "CPI In-charge"
-      get_cases_for_particular_user_group(user.user_groups, is_risk_level_high)
-    # All Cases of a Particular User, Particular Risk Level, and Registeration Status
-    when "CPO" || "Superuser"
-      get_cases_assigned_to_specific_user(user, is_risk_level_high, registered).results
-    # All Cases that are owned by the users under an Agency and are also owned by a particular location
-    else
-      get_cases_with_district_and_agency(user, is_risk_level_high)
-    end
-  end
-
-  # All Cases of a Particular Group and Paricular Risk Level
-  def self.get_cases_for_particular_user_group(user_groups, is_risk_level_high = nil)
-    # Returns Usernames that Own the Usergroups
-    usernames = user_groups.first.users.pluck(:user_name)
-
-    #TODO See if this can be optimized. Uses cases for cases.total and then running the same code with
-    #TODO - search variable seems not right.
-
-    # risk_level is one of the store_accessors
-    # Get Cases that are owned by given Usernames
-    cases = Child.search do
-      with(:owned_by, usernames)
-      with(:risk_level, 'high') if is_risk_level_high.present?
-    end
-
-    # Get Cases that are owned by given Usernames and Also Paginate them.
-    search = Child.search do
-      with(:owned_by, usernames)
-      with(:risk_level, 'high') if is_risk_level_high.present?
-
-      paginate :page => 1, :per_page => cases.total
-    end
-
-    search.results
-  end
-
-  # All Cases of a Particular User, Paricular Risk Level, and Registeration Status
-  def self.get_cases_assigned_to_specific_user(user, is_risk_level_high = nil, registered = nil)
-    username = user.user_name
-
-    #TODO See if this can be optimized. Uses cases for cases.total and then running the same code with
-    #TODO - search variable seems not right.
-
-    # risk_level is one of the store_accessors
-    cases = Child.search do
-      with(:owned_by, username)
-      with(:risk_level, 'high') if is_risk_level_high.present?
-    end
-
-    search = Child.search do
-      with(:owned_by, username)
-      with(:risk_level, 'high') if is_risk_level_high.present?
-
-      paginate :page => 1, :per_page => cases.total
-    end
-
-    search
-  end
-
-  # All Cases that are owned by the users under an Agency and are also owned by a particular location
-  def self.get_cases_with_district_and_agency(user, is_risk_level_high = nil)
-    # Users under an Agency that another User created.
-    usernames = user.agency.users.pluck(:user_name)
-
-    #TODO See if this can be optimized. Uses cases for cases.total and then running the same code with
-    #TODO - search variable seems not right.
-
-    cases = Child.search do
-      with(:risk_level, 'high') if is_risk_level_high.present?
-      any_of do
-        with(:owned_by, usernames)
-        with(:owned_by_location, user.location)
-      end
-    end
-
-    search = Child.search do
-      with(:risk_level, 'high') if is_risk_level_high.present?
-      any_of do
-        with(:owned_by, usernames)
-        with(:owned_by_location, user.location)
-      end
-      paginate :page => 1, :per_page => cases.total
-    end
-
-    search.results
-  end
+  # ====================================================================== #
+  #                             Helper Methods                             #
+  # ====================================================================== #
 
   # Used By:
     # resolved_cases_by_gender_and_types_of_violence
@@ -1090,16 +888,6 @@ class Child < ApplicationRecord
     search.results
   end
 
-  # 'Cases Referral (To Agency )'
-  #TODO Logic needs to be modified, There is no Agency Field Under referal Form, Ask for that.
-  def self.get_reffered_cases
-    search = Child.search do
-      without(:assigned_user_names, nil)
-    end
-
-    search.results
-  end
-
   # TODO Seem quite simple, May need to modfy this.
   #  Registered and Closed Cases by Month
   def self.hash_return_for_month_wise_api
@@ -1134,10 +922,7 @@ class Child < ApplicationRecord
     gender_list
   end
 
-  def self.get_percentage(value, count)
-    ((value / count.to_f) * 100).round
-  end
-  # -----------------------------------------------------------------------------------------------------------
+  # =========================== End of Helper Methods =========================== #
 end
 
 # rubocop:enable Metrics/ClassLength

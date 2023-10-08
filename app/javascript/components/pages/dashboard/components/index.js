@@ -1,5 +1,4 @@
 /* TODO Update the referencing comments after properly updating the files */
-/* TODO Add Explanatory Comments */
 
 export { default as Overview } from "./overview";
 export { default as SharedFromMyTeam } from "./shared-from-my-team";
@@ -16,10 +15,13 @@ export { default as CasesToAssign } from "./cases-to-assign";
 export { default as PerpetratorArmedForceGroupPartyNames } from "./perpetrator-armed-force-group-party-names";
 export { default as ViolationsCategoryVerificationStatus } from "./violations-category-verification-status";
 export { default as ViolationsCategoryRegion } from "./violations-category-region";
-// protection_concerns_services_stats
-// Percentage of Children who received Child Protection Services
-export { default as ServicesPercentage } from "./services-percentage";
-// --------------------------------------------------------------------
+
+/* ====================================== */
+/*                 Graphs                 */
+/* ====================================== */
+
+// 'Percentage of Children who received Child Protection Services'
+export { default as PercentageChildrenReceivedChildProtectionServices } from "./children-received-protection-services-percentage";
 // resolved_cases_by_gender_and_types_of_violence_stats
 // Closed Cases by Sex and Protection Concern
 export { default as RegResCasesGender } from "./reg-res-cases-gender";

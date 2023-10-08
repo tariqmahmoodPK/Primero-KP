@@ -1,5 +1,4 @@
 /* TODO Update the referencing comments after properly updating the files */
-/* TODO Add Explanatory Comments */
 
 import { RECORD_PATH } from "../../../config";
 import { DB_COLLECTIONS_NAMES } from "../../../db";
@@ -126,12 +125,15 @@ export const fetchDashboards = () => ({
   }
 });
 
-// protection_concerns_services_stats
-// Percentage of Children who received Child Protection Services
-export const fetchRegisteredCasesByProtectionConcern = () => ({
-  type: actions.REGISTERED_CASES_BY_PROTECTION_CONCERN,
+/* ====================================== */
+/*                 Graphs                 */
+/* ====================================== */
+
+// 'Percentage of Children who received Child Protection Services'
+export const fetchPercentageChildrenReceivedChildProtectionServices = () => ({
+  type: actions.PERCENTAGE_OF_CHILDREN_WHO_RECEIVED_CHILD_PROTECTION_SERVICES,
   api: {
-    path: "dashboards/protection_concerns_services_stats"
+    path: "dashboards/percentage_children_received_child_protection_services"
   }
 });
 

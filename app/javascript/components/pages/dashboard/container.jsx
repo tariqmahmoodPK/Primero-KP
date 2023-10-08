@@ -1,8 +1,5 @@
 /* TODO Update the referencing comments after properly updating the files */
-/* TODO Add Explanatory Comments */
-
-// Dashboard Component that import all the Graphs on it.
-// Add Proper Comments About these later
+// Dashboard Component that import all the Graphs in it.
 
 /* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable global-require */
@@ -36,9 +33,8 @@ import {
   ViolationsCategoryVerificationStatus,
   WorkflowIndividualCases,
   WorkflowTeamCases,
-  // protection_concerns_services_stats
-  // Percentage of Children who received Child Protection Services
-  ServicesPercentage,
+  // 'Percentage of Children who received Child Protection Services'
+  PercentageChildrenReceivedChildProtectionServices,
   // --------------------------------------------------------------
   // resolved_cases_by_gender_and_types_of_violence_stats
   // Closed Cases by Sex and Protection Concern
@@ -126,7 +122,8 @@ const Dashboard = () => {
           <Grid item xl={12} md={12} xs={12}>
             <Overview loadingIndicator={indicatorProps} userPermissions={userPermissions} />
             <WorkflowIndividualCases loadingIndicator={indicatorProps} />
-            <ServicesPercentage /> {/* Percentage of Children who received Child Protection Services */}
+            {/* Percentage of Children who received Child Protection Services */}
+            <PercentageChildrenReceivedChildProtectionServices />
             <RegResCasesGender /> {/* Closed Cases by Sex and Protection Concern */}
             <CasesReferralToAgency /> {/* Cases Referral (To Agency ) */}
             <GraphFour /> {/* Cases requiring Alternative Care Placement Services */}

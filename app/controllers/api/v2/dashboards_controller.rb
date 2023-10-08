@@ -9,13 +9,9 @@ class Api::V2::DashboardsController < ApplicationApiController
     @indicator_stats = IndicatorQueryService.query(indicators, current_user)
   end
 
-  # Graph for 'Percentage of Children who received Child Protection Services'
-  #TODO Rename All of it's relevant methods, and files to reflect the proper name.
-    #TODO May be percentage_of_children_who_received_child_protection_services
-    #TODO or children_percentage_who_received_child_protection_services
-    #TODO or protection_concerns_services_received_stats
-  def protection_concerns_services_stats
-    @stats = Child.protection_concern_stats(current_user)
+  # 'Percentage of Children who received Child Protection Services' Graph
+  def percentage_children_received_child_protection_services
+    @stats = Child.percentage_children_received_child_protection_services_stats(current_user)
   end
 
   # Closed Cases by Sex and Protection Concern

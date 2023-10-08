@@ -1,5 +1,4 @@
 /* TODO Update the referencing comments after properly updating the files */
-/* TODO Add Explanatory Comments */
 
 import { namespaceActions } from "../../../libs";
 
@@ -22,11 +21,9 @@ export default namespaceActions(NAMESPACE, [
   "DASHBOARD_FLAGS_FAILURE",
   "OPEN_PAGE_ACTIONS",
   "SERVICES_STATUS",
-  // protection_concerns_services_stats
   // 'Percentage of Children who received Child Protection Services'
-  "REGISTERED_CASES_BY_PROTECTION_CONCERN",
-  "REGISTERED_CASES_BY_PROTECTION_CONCERN_SUCCESS",
-  // -------------------------------------------------------------------
+  "PERCENTAGE_OF_CHILDREN_WHO_RECEIVED_CHILD_PROTECTION_SERVICES",
+  "PERCENTAGE_OF_CHILDREN_WHO_RECEIVED_CHILD_PROTECTION_SERVICES_SUCCESS",
   // resolved_cases_by_gender_and_types_of_violence_stats
   // Closed Cases by Sex and Protection Concern
   "RES_CASES_BY_GENDER",
