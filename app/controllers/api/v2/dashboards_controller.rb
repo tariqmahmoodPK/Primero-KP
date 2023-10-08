@@ -14,18 +14,39 @@ class Api::V2::DashboardsController < ApplicationApiController
     @stats = Child.percentage_children_received_child_protection_services_stats(current_user)
   end
 
-  # Closed Cases by Sex and Protection Concern
-  # New name 'Closed Cases by Sex and Reason'
-  #TODO Rename All of it's relevant methods, and files to reflect the proper name.
-  def resolved_cases_by_gender_and_types_of_violence_stats
-    #TODO Create a method for this later on.
-    #TODO had to do this as there is no lookup created for Closure form's what_is_the_reason_for_closing_this_case__d2d2ce8 field
-    #TODO the lookups are hardcoded into the field itself.
-    form_to_work_with = FormSection.where("name_i18n->>'en' = ? AND form_group_id = ?", "Closure", "closure").first
-    form_field = form_to_work_with.fields.find_by(name: "what_is_the_reason_for_closing_this_case__d2d2ce8")
-    @lookup_values = form_field.option_strings_text_i18n
+  # 'Closed Cases by Sex and Reason' Graph
+  def resolved_cases_by_gender_and_reason
+    @stats = Child.resolved_cases_by_gender_and_reason_stats(current_user)
 
-    @stats = Child.resolved_cases_by_gender_and_types_of_violence(current_user)
+    # Properly format the stats to use on the React Component
+    lookup_values = Lookup.reason_for_closing_case_values
+
+    closed_cases_by_sex_and_reason = {}
+
+    @stats.each do |key, value|
+      # Find the corresponding entry in the lookup_values array
+      lookup_entry = lookup_values.find { |entry| entry["id"] == key.to_s }
+
+      if lookup_entry
+        # Get the English label from the lookup entry
+        english_label = lookup_entry["display_text"]["en"]
+        # Add the English label as a new key in the closed_cases_by_sex_and_reason hash
+        closed_cases_by_sex_and_reason[english_label] = value
+      end
+    end
+
+    # The new stats format is like this:
+    # {
+    #   "Case goals all met" => {:male=>0, :female=>0, :transgender=>0},
+    #   "Case goals substantially met and there is no further child protection concern" => {:male=>0, :female=>0, :transgender=>0},
+    #   "Child reached adulthood" => {:male=>0, :female=>0, :transgender=>0},
+    #   "Child refuses services" => {:male=>0, :female=>0, :transgender=>0},
+    #   "Safety of child" => {:male=>0, :female=>0, :transgender=>0},
+    #   "Death of child" => {:male=>0, :female=>0, :transgender=>0},
+    #   "Other" => {:male=>0, :female=>0, :transgender=>0}
+    # }
+
+    @stats = closed_cases_by_sex_and_reason
   end
 
   # TODO Need to Modify logic

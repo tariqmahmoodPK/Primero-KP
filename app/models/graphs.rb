@@ -67,7 +67,7 @@ module Graphs
     }
 
     # Getting Total Number of Opened Cases that are High Risk
-    high_risk_cases = Child.get_childs(user, "high")
+    high_risk_cases = Child.get_childern_records(user, "high")
     total_case_count = high_risk_cases.count
 
     # Calculate Stats
@@ -141,4 +141,98 @@ module Graphs
     total_cases
   end
 
+  # 'Closed Cases by Sex and Reason'
+  def resolved_cases_by_gender_and_reason_stats(user)
+    # Stats Calculation Formula:
+      # Total Number of Closed Cases by Sex
+        # Where the 'What is reason for closing this case' contains these dropdown values: (Each Reason is a Separate bar).
+          # * 1) 'Case goals all met'
+            # case_goals_all_met_811860
+          # *  2) 'Case goals substantially met and there is no further child protection concern'
+            # case_goals_substantially_met_and_there_is_no_further_child_protection_concern_376876
+          # *  3) 'Child reached adulthood'
+            # child_reached_adulthood_490887
+          # *  4) 'Child refuses services'
+            # child_refuses_services_181533
+          # *  5) 'Safety of child'
+            # safety_of_child_362513
+          # *  6) 'Death of child'
+            # death_of_child_285462
+          # *  7) 'Other'
+            # other_100182
+
+    # Getting User's Role to check if they are allowed to view the graph.
+    name = user.role.name
+
+    # User Roles allowed
+    return { permission: false } unless name.in? [
+      'Social Case Worker'    ,
+      'Psychologist'          ,
+      'Child Helpline Officer',
+      'Referral'              ,
+      'CPO'                   ,
+      'CPWC'
+    ]
+
+    # Statistics related to different case scenarios.
+      # Each key represents a specific case scenario, and the corresponding value is a nested hash
+        # that keeps track of counts for different genders (male, female, transgender).
+      # The number of Male, Female, and Transgender counts make up the total number of cases that
+        # have one of the 'What is reason for closing this case' options.
+    stats = {
+      case_goals_all_met:           { male: 0, female: 0, transgender: 0 }, # case_goals_all_met_811860
+      case_goals_substantially_met: { male: 0, female: 0, transgender: 0 }, # case_goals_substantially_met_and_there_is_no_further_child_protection_concern_376876
+      child_reached_adulthood:      { male: 0, female: 0, transgender: 0 }, # child_reached_adulthood_490887
+      child_refuses_services:       { male: 0, female: 0, transgender: 0 }, # child_refuses_services_181533
+      safety_of_child:              { male: 0, female: 0, transgender: 0 }, # safety_of_child_362513
+      death_of_child:               { male: 0, female: 0, transgender: 0 }, # death_of_child_285462
+      other:                        { male: 0, female: 0, transgender: 0 }, # other_100182
+    }
+
+    get_resolved_cases_for_role(user, "high").each do |child|
+      gender = child.data["sex"]
+      next unless gender
+
+      if child.data["case_goals_all_met_811860"].present?
+        stats[:case_goals_all_met][gender.to_sym] += 1
+      end
+
+      if child.data["case_goals_substantially_met_and_there_is_no_further_child_protection_concern_376876"].present?
+        stats[:case_goals_substantially_met][gender.to_sym] += 1
+      end
+
+      if child.data["child_reached_adulthood_490887"].present?
+        stats[:child_reached_adulthood][gender.to_sym] += 1
+      end
+
+      if child.data["child_refuses_services_181533"].present?
+        stats[:child_refuses_services][gender.to_sym] += 1
+      end
+
+      if child.data["safety_of_child_362513"].present?
+        stats[:safety_of_child][gender.to_sym] += 1
+      end
+
+      if child.data["death_of_child_285462"].present?
+        stats[:death_of_child][gender.to_sym] += 1
+      end
+
+      if child.data["other_100182"].present?
+        stats[:other][gender.to_sym] += 1
+      end
+    end
+
+    # NOTE Needed to do it for simplicity with the code in the json.jbuilder file
+    formatted_stats = {
+      case_goals_all_met_811860:      stats[:case_goals_all_met],
+      case_goals_substantially_met_and_there_is_no_further_child_protection_concern_376876: stats[:case_goals_substantially_met],
+      child_reached_adulthood_490887: stats[:child_reached_adulthood],
+      child_refuses_services_181533:  stats[:child_refuses_services],
+      safety_of_child_362513:         stats[:safety_of_child],
+      death_of_child_285462:          stats[:death_of_child],
+      other_100182:                   stats[:other]
+    }
+
+    formatted_stats
+  end
 end

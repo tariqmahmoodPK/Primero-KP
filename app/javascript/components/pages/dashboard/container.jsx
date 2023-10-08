@@ -35,10 +35,8 @@ import {
   WorkflowTeamCases,
   // 'Percentage of Children who received Child Protection Services'
   PercentageChildrenReceivedChildProtectionServices,
-  // --------------------------------------------------------------
-  // resolved_cases_by_gender_and_types_of_violence_stats
-  // Closed Cases by Sex and Protection Concern
-  RegResCasesGender,
+  // 'Closed Cases by Sex and Reason'
+  ResolvedCasesByGenderAndReason,
   // --------------------------------------------------------------
   // cases_referral_to_agency_stats
   // Cases Referral (To Agency )
@@ -122,9 +120,9 @@ const Dashboard = () => {
           <Grid item xl={12} md={12} xs={12}>
             <Overview loadingIndicator={indicatorProps} userPermissions={userPermissions} />
             <WorkflowIndividualCases loadingIndicator={indicatorProps} />
-            {/* Percentage of Children who received Child Protection Services */}
+            {/* 'Percentage of Children who received Child Protection Services' */}
             <PercentageChildrenReceivedChildProtectionServices />
-            <RegResCasesGender /> {/* Closed Cases by Sex and Protection Concern */}
+            <ResolvedCasesByGenderAndReason /> {/* 'Closed Cases by Sex and Reason' */}
             <CasesReferralToAgency /> {/* Cases Referral (To Agency ) */}
             <GraphFour /> {/* Cases requiring Alternative Care Placement Services */}
             <MonthlyRegResCases /> {/* Registered and Closed Cases by Month */}

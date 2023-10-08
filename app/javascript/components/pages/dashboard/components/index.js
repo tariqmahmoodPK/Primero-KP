@@ -22,9 +22,8 @@ export { default as ViolationsCategoryRegion } from "./violations-category-regio
 
 // 'Percentage of Children who received Child Protection Services'
 export { default as PercentageChildrenReceivedChildProtectionServices } from "./children-received-protection-services-percentage";
-// resolved_cases_by_gender_and_types_of_violence_stats
-// Closed Cases by Sex and Protection Concern
-export { default as RegResCasesGender } from "./reg-res-cases-gender";
+// 'Closed Cases by Sex and Reason'
+export { default as ResolvedCasesByGenderAndReason } from "./resolved-cases-by-gender-and-reason";
 // --------------------------------------------------------------------
 // cases_referral_to_agency_stats
 // Cases Referral (To Agency )

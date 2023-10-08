@@ -102,10 +102,10 @@ Rails.application.routes.draw do
 
       resources :dashboards, only: [:index] do
         collection do
-          # Percentage of Children who received Child Protection Services
+          # 'Percentage of Children who received Child Protection Services'
           get :percentage_children_received_child_protection_services
-          # Closed Cases by Sex and Protection Concern
-          get :resolved_cases_by_gender_and_types_of_violence_stats
+          # 'Closed Cases by Sex and Reason'
+          get :resolved_cases_by_gender_and_reason
           # Cases Referral (To Agency )
           get :cases_referral_to_agency_stats
           # Cases requiring Alternative Care Placement Services

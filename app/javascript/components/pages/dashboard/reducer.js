@@ -14,10 +14,9 @@ const reducer = (state = DEFAULT_STATE, { type, payload }) => {
     // 'Percentage of Children who received Child Protection Services'
     case actions.PERCENTAGE_OF_CHILDREN_WHO_RECEIVED_CHILD_PROTECTION_SERVICES_SUCCESS:
       return state.set("percentageChildrenReceivedChildProtectionServices", fromJS(payload));
-    // resolved_cases_by_gender_and_types_of_violence_stats
-    // Closed Cases by Sex and Protection Concern
-    case actions.RES_CASES_BY_GENDER_SUCCESS:
-      return state.set("resCasesByGender", fromJS(payload));
+    // 'Closed Cases by Sex and Reason'
+    case actions.RESOLVED_CASES_BY_GENDER_AND_REASON_SUCCESS:
+      return state.set("resolvedCasesByGenderAndReason", fromJS(payload));
     // ------------------------------------------------------------------------
     // cases_referral_to_agency_stats
     // Cases Referral (To Agency )

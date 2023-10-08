@@ -31,7 +31,7 @@
 
 json.data do
   @stats.each do |key, value|
-    #TODO Ask What purpose does this serve
+    #? Why did we use this? What purpose does this check serve?
     if key.to_s.eql?("permission")
       json.set!(key, value)
     else

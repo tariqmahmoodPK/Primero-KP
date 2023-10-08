@@ -157,10 +157,9 @@ export const getPercentageChildrenReceivedChildProtectionServices = state => {
   return state.getIn(["records", NAMESPACE, "percentageChildrenReceivedChildProtectionServices"], fromJS({}));
 };
 
-// resolved_cases_by_gender_and_types_of_violence_stats
-// Closed Cases by Sex and Protection Concern
-export const getResCasesByGender = state => {
-  return state.getIn(["records", NAMESPACE, "resCasesByGender"], fromJS({}));
+// 'Closed Cases by Sex and Reason'
+export const getResolvedCasesByGenderAndReason = state => {
+  return state.getIn(["records", NAMESPACE, "resolvedCasesByGenderAndReason"], fromJS({}));
 };
 
 // cases_referral_to_agency_stats

@@ -52,7 +52,6 @@ const Component = () => {
     }
   };
 
-  debugger;
   if (stats) {
     const labels = [];
     const cases = [];

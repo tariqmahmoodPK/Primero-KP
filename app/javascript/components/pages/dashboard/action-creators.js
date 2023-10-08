@@ -137,12 +137,11 @@ export const fetchPercentageChildrenReceivedChildProtectionServices = () => ({
   }
 });
 
-// resolved_cases_by_gender_and_types_of_violence_stats
-// Closed Cases by Sex and Protection Concern
-export const fetchResCasesByGender = () => ({
-  type: actions.RES_CASES_BY_GENDER,
+// 'Closed Cases by Sex and Reason'
+export const fetchResolvedCasesByGenderAndReason = () => ({
+  type: actions.RESOLVED_CASES_BY_GENDER_AND_REASON,
   api: {
-    path: "dashboards/resolved_cases_by_gender_and_types_of_violence_stats"
+    path: "dashboards/resolved_cases_by_gender_and_reason"
   }
 });
 // cases_referral_to_agency_stats

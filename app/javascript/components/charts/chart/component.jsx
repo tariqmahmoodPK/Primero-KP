@@ -4,10 +4,6 @@
 /* TODO Update the referencing comments after properly updating the files */
 /* TODO Add Explanatory Comments */
 
-// Used by:
-// alternative_care_placement_by_gender
-// Cases requiring Alternative Care Placement Services
-
 /* eslint-disable no-param-reassign */
 import ChartJS from "chart.js";
 import { createRef, useEffect } from "react";
@@ -78,7 +74,6 @@ const Chart = ({ type, data, description, showDetails, options }) => {
         // tooltips: {
         //   callbacks: {
         //     label: (tooltipItem, chartData) => {
-        //       debugger;
         //       const { label } = chartData.datasets[tooltipItem.datasetIndex];
         //       let { value } = tooltipItem;
 
