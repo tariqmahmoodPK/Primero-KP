@@ -32,8 +32,5 @@ export { default as CasesRequiringAlternativeCarePlacementServices } from "./cas
 export { default as MonthlyRegisteredAndResolvedCases } from "./monthly-reg-res-cases";
 // 'High Risk Cases by Protection Concern'
 export { default as HighRiskCasesByProtectionConcern } from "./high-risk-cases-by-protection-concern";
-// --------------------------------------------------------------------
-// registered_cases_by_protection_concern
-// Registered Cases by Protection Concern
+// 'Registered Cases by Protection Concern'
 export { default as RegisteredCasesByProtectionConcern } from "./registered-cases-by-protection-concern";
-// --------------------------------------------------------------------

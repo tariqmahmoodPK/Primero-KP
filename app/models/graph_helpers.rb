@@ -5,18 +5,18 @@ module GraphHelpers
     # 'Registered and Closed Cases by Month'
     # 'High Risk Cases by Protection Concern'
     # 'Registered Cases by Protection Concern'
-  def get_childern_records(user, is_risk_level_high = nil)
+  def get_childern_records(user, is_risk_level_high = nil, open_cases = false)
     # User's role
     role = user.role.name
 
     # Getting records based on the Permissions of Each Role to View the Graphs
     case role
     # View Cases of a User
-    when 'Social Case Worker', 'Psychologist', 'Child Helpline Officer'
-      get_cases_assigned_to_specific_user(user, is_risk_level_high)
+    when 'Social Case Worker', 'Psychologist', 'Child Helpline Officer', 'Superuser'
+      get_cases_assigned_to_specific_user(user, is_risk_level_high, open_cases)
     # View Cases of all Districts (Provincial data)
     when 'CPWC'
-      get_cases_assigned_to_specific_location(user, is_risk_level_high)
+      get_cases_assigned_to_specific_location(user, is_risk_level_high, open_cases)
     # View Cases of
       # Users with Roles:
         # Social Case Worker
@@ -24,32 +24,34 @@ module GraphHelpers
         # Child Helpline Operator
       # That are Working in his UserGroup.
     when 'CPO'
-      get_cases_for_particular_user_group(user, is_risk_level_high)
+      get_cases_for_particular_user_group(user, is_risk_level_high, open_cases)
     # View Cases Referred to User
     when 'Referral'
-      get_cases_referred_to_user(user, is_risk_level_high)
+      get_cases_referred_to_user(user, is_risk_level_high, open_cases)
     else
       #TODO Ask what should be here
       # Temporarily using this method as this was used in the Sindh Version as well.
       # All Cases that are owned by the users under an Agency and are also owned by a particular location
-      get_cases_with_location_and_agency(user, is_risk_level_high)
+      get_cases_with_location_and_agency(user, is_risk_level_high, open_cases)
     end
   end
 
   # View Cases of a User
-  def get_cases_assigned_to_specific_user(user, is_risk_level_high = nil)
+  def get_cases_assigned_to_specific_user(user, is_risk_level_high = nil, open_cases = false)
     username = user.user_name
 
     # Search for Records that are 'Owned By'/'Created by' Username
     # And have a 'High Risk Level'/'Significant Harm'
     cases = Child.search do
       with(:owned_by, username)
+      with(:status, "open")
       with(:risk_level, 'high') if is_risk_level_high.present?
     end
 
     # Needed to panginate using the Total Number of Cases. That is why, Had to search twice.
     search = Child.search do
       with(:owned_by, username)
+      with(:status, "open")
       with(:risk_level, 'high') if is_risk_level_high.present?
 
       paginate :page => 1, :per_page => cases.total
@@ -60,7 +62,7 @@ module GraphHelpers
 
   # View Cases of all Districts (Provincial data)
   # TODO Modify the Logic for it if necessary after Clearing out Questions and Assumptions
-  def get_cases_assigned_to_specific_location(user, is_risk_level_high = nil)
+  def get_cases_assigned_to_specific_location(user, is_risk_level_high = nil, open_cases = false)
     # User's Location Code
     location_code = user.location
 
@@ -71,11 +73,13 @@ module GraphHelpers
     if location_code.present?
       cases = Child.search do
         with(:location_current, location_code)
+        with(:status, "open")
         with(:risk_level, 'high') if is_risk_level_high.present?
       end
 
       search = Child.search do
         with(:location_current, location_code)
+        with(:status, "open")
         with(:risk_level, 'high') if is_risk_level_high.present?
 
         paginate :page => 1, :per_page => cases.total
@@ -85,11 +89,13 @@ module GraphHelpers
       cases = Child.search do
         with_province # Checks if the location_current has 'KPK' in it
         with(:risk_level, 'high') if is_risk_level_high.present?
+        with(:status, "open")
       end
 
       search = Child.search do
         with_province # Checks if the location_current has 'KPK' in it
         with(:risk_level, 'high') if is_risk_level_high.present?
+        with(:status, "open")
 
         paginate :page => 1, :per_page => cases.total
       end
@@ -99,7 +105,7 @@ module GraphHelpers
   end
 
   # View Cases of Social Case Worker, Psychologist, Child Helpline Operator, Working in his user group.
-  def get_cases_for_particular_user_group(cpo_user, is_risk_level_high = nil)
+  def get_cases_for_particular_user_group(cpo_user, is_risk_level_high = nil, open_cases = false)
     # Find users with the specified roles ('Social Case Worker', 'Psychologist', 'Child Helpline Officer')
     role_names = [
       'Social Case Worker',
@@ -120,12 +126,14 @@ module GraphHelpers
 
     cases = Child.search do
       with(:owned_by, usernames)
+      with(:status, "open")
       with(:risk_level, 'high') if is_risk_level_high.present?
     end
 
     # Get Cases that are owned by given Usernames and Also Paginate them.
     search = Child.search do
       with(:owned_by, usernames)
+      with(:status, "open")
       with(:risk_level, 'high') if is_risk_level_high.present?
 
       paginate :page => 1, :per_page => cases.total
@@ -135,14 +143,14 @@ module GraphHelpers
   end
 
   # View Cases Referred to User
-  def get_cases_referred_to_user(user, is_risk_level_high = nil)
+  def get_cases_referred_to_user(user, is_risk_level_high = nil, open_cases = false)
     # User's Name, Duh!
     user_name = user.name
 
     results = []
 
     # Get all the referred cases and see if the User has any cases referred to him.
-    Child.get_referred_cases.each do |child|
+    Child.get_referred_cases(open_cases).each do |child|
       if is_risk_level_high.present? && child.risk_level == 'high'
         child.data["assigned_user_names"].each do |referred_user|
           # If referred_user matches the user_name, add the child to results
@@ -155,7 +163,14 @@ module GraphHelpers
   end
 
   # Get all Child records where 'assigned_user_names' in not nil
-  def get_referred_cases
+
+
+
+
+
+
+
+  def get_referred_cases(open_cases = false)
     search = Child.search do
       without(:assigned_user_names, nil)
     end
@@ -164,7 +179,7 @@ module GraphHelpers
   end
 
   # All Cases that are owned by the users under an Agency and are also owned by a particular location
-  def get_cases_with_location_and_agency(user, is_risk_level_high = nil)
+  def get_cases_with_location_and_agency(user, is_risk_level_high = nil, open_cases = false)
     # User's Location Code
     location_code = user.location
 
@@ -180,6 +195,7 @@ module GraphHelpers
       any_of do
         with(:owned_by, usernames)
         with(:location_current, location_code)
+        with(:status, "open")
         # TODO Remove this after
         # This won't wont be used as there in no longer an attribute 'owned_by_location'
         # with(:owned_by_location, user.location)
@@ -193,6 +209,7 @@ module GraphHelpers
       any_of do
         with(:owned_by, usernames)
         with(:location_current, location_code)
+        with(:status, "open")
         # TODO Remove this after
         # with(:owned_by_location, user.location)
       end
@@ -527,6 +544,7 @@ module GraphHelpers
 
     cases = Child.search do
       with(:owned_by, username)
+      with(:status, "open")
       with(:risk_level, 'high') if is_risk_level_high.present?
 
       # NOTE If in the future we want to check for any nationality then we can simply do that with
@@ -541,6 +559,7 @@ module GraphHelpers
 
     search = Child.search do
       with(:owned_by, username)
+      with(:status, "open")
       with(:risk_level, 'high') if is_risk_level_high.present?
 
       any_of do
@@ -568,6 +587,7 @@ module GraphHelpers
     if location_code.present?
       cases = Child.search do
         with(:location_current, location_code)
+        with(:status, "open")
         with(:risk_level, 'high') if is_risk_level_high.present?
 
         any_of do
@@ -581,6 +601,7 @@ module GraphHelpers
       # Needed to panginate using the Total Number of Cases. That is why, Had to search twice.
       search = Child.search do
         with(:location_current, location_code)
+        with(:status, "open")
         with(:risk_level, 'high') if is_risk_level_high.present?
 
         any_of do
@@ -600,6 +621,7 @@ module GraphHelpers
       cases = Child.search do
         with_province # Checks if the location_current has 'KPK' in it
         with(:risk_level, 'high') if is_risk_level_high.present?
+        with(:status, "open")
 
         any_of do
           with(:nationality_b80911e, 'nationality1' ) # Pakistani
@@ -613,6 +635,7 @@ module GraphHelpers
       search = Child.search do
         with_province # Checks if the location_current has 'KPK' in it
         with(:risk_level, 'high') if is_risk_level_high.present?
+        with(:status, "open")
 
         any_of do
           with(:nationality_b80911e, 'nationality1' ) # Pakistani
@@ -651,6 +674,7 @@ module GraphHelpers
 
     cases = Child.search do
       with(:owned_by, usernames)
+      with(:status, "open")
       with(:risk_level, 'high') if is_risk_level_high.present?
 
       any_of do
@@ -664,6 +688,7 @@ module GraphHelpers
     # Get Cases that are owned by given Usernames and Also Paginate them.
     search = Child.search do
       with(:owned_by, usernames)
+      with(:status, "open")
       with(:risk_level, 'high') if is_risk_level_high.present?
 
       any_of do
@@ -703,6 +728,7 @@ module GraphHelpers
   def get_referred_cases_requiring_alternative_care_services
     search = Child.search do
       without(:assigned_user_names, nil)
+      with(:status, "open")
 
       any_of do
         with(:nationality_b80911e, 'nationality1' ) # Pakistani
@@ -725,6 +751,7 @@ module GraphHelpers
 
     cases = Child.search do
       with(:risk_level, 'high') if is_risk_level_high.present?
+      with(:status, "open")
 
       all_of do
         any_of do
@@ -748,6 +775,7 @@ module GraphHelpers
     # Needed to panginate using the Total Number of Cases. That is why, Had to search twice.
     search = Child.search do
       with(:risk_level, 'high') if is_risk_level_high.present?
+      with(:status, "open")
 
       all_of do
         any_of do
@@ -777,7 +805,7 @@ module GraphHelpers
 
   # Used By:
     # 'Cases Referrals (To Agency)'
-  def get_cases_referred_to_agencies(user, is_risk_level_high = nil)
+  def get_cases_referred_to_agencies(user, is_risk_level_high = nil, open_cases = false)
     # User's role
     role = user.role.name
 
@@ -785,10 +813,10 @@ module GraphHelpers
     case role
     # View Open Referrals Cases Where Referred to Agency, Owned by a Specific User
     when 'Social Case Worker', 'Psychologist', 'Child Helpline Officer'
-      get_cases_referred_to_agencies_of_specific_user(user, is_risk_level_high)
+      get_cases_referred_to_agencies_of_specific_user(user, is_risk_level_high, open_cases)
     # View Open Referrals cases Where Referred to Agency, Of all Districts (Provincial data)
     when 'CPWC'
-      get_cases_referred_to_agencies_by_specific_location(user, is_risk_level_high)
+      get_cases_referred_to_agencies_by_specific_location(user, is_risk_level_high, open_cases)
     # View Open Referrals Cases Where Referred to Agency,
       # Users with Roles:
         # Social Case Worker
@@ -796,24 +824,25 @@ module GraphHelpers
         # Child Helpline Operator
       # That are Working in his UserGroup.
     when 'CPO'
-      get_cases_referred_to_agencies_for_particular_user_group(user, is_risk_level_high)
+      get_cases_referred_to_agencies_for_particular_user_group(user, is_risk_level_high, open_cases)
     # View Open Referrals Cases Where Referred to Agency that Referred to User
     when 'Referral'
-      get_cases_referred_to_agencies_referred_to_user(user, is_risk_level_high)
+      get_cases_referred_to_agencies_referred_to_user(user, is_risk_level_high, open_cases)
     else
       #TODO Ask what should be here
       # Temporarily using this method as something similar was used in the Sindh Version as well.
       # All Open Referrals Cases Where Referred to Agency that are owned by the users under an Agency and are also owned by a particular location
-      get_cases_referred_to_agencies_with_location_and_agency(user, is_risk_level_high)
+      get_cases_referred_to_agencies_with_location_and_agency(user, is_risk_level_high, open_cases)
     end
   end
 
   # View Open Referrals cases Where Referred to Agency, Owned by a Specific User
-  def get_cases_referred_to_agencies_of_specific_user(user, is_risk_level_high)
+  def get_cases_referred_to_agencies_of_specific_user(user, is_risk_level_high = nil, open_cases = false)
     username = user.user_name
 
     search = Child.search do
       with(:owned_by, username)
+      with(:status, "open")
       with(:risk_level, 'high') if is_risk_level_high.present?
       without(:assigned_user_names, nil)
     end
@@ -824,7 +853,7 @@ module GraphHelpers
   end
 
   # View Open Referrals cases Where Referred to Agency, Of all Districts (Provincial data)
-  def get_cases_referred_to_agencies_by_specific_location(user, is_risk_level_high)
+  def get_cases_referred_to_agencies_by_specific_location(user, is_risk_level_high = nil, open_cases = false)
     # User's Location Code
     location_code = user.location
 
@@ -836,6 +865,7 @@ module GraphHelpers
         with(:location_current, location_code)
         with(:risk_level, 'high') if is_risk_level_high.present?
         without(:assigned_user_names, nil)
+        with(:status, "open")
       end
     # If there is no User location present then get all the records with location in 'Khyber Pakhtunkhwa'/KPK
     else
@@ -843,6 +873,7 @@ module GraphHelpers
         with_province # Checks if the location_current has 'KPK' in it
         with(:risk_level, 'high') if is_risk_level_high.present?
         without(:assigned_user_names, nil)
+        with(:status, "open")
       end
     end
 
@@ -850,7 +881,7 @@ module GraphHelpers
   end
 
   # View Open Referrals cases Where Referred to Agency, Users with Roles:Social Case Worker, Psychologist, Child Helpline Operator, That are Working in his UserGroup.
-  def get_cases_referred_to_agencies_for_particular_user_group(cpo_user, is_risk_level_high)
+  def get_cases_referred_to_agencies_for_particular_user_group(cpo_user, is_risk_level_high = nil, open_cases = false)
     # Find users with the specified roles ('Social Case Worker', 'Psychologist', 'Child Helpline Officer')
     role_names = [
       'Social Case Worker',
@@ -874,20 +905,21 @@ module GraphHelpers
       with(:owned_by, usernames)
       with(:risk_level, 'high') if is_risk_level_high.present?
       without(:assigned_user_names, nil)
+      with(:status, "open")
     end
 
     get_filter_cases_referred_to_agencies_from_referred_cases(search.results)
   end
 
   # View Open Referrals Cases Where Referred to Agency that Referred to User
-  def get_cases_referred_to_agencies_referred_to_user(user, is_risk_level_high)
+  def get_cases_referred_to_agencies_referred_to_user(user, is_risk_level_high = nil, open_cases = false)
     # User's Name, Duh!
     user_name = user.name
 
     referred_cases = []
 
     # Get all the referred cases and see if the User has any cases referred to him.
-    Child.get_referred_cases.each do |child|
+    Child.get_referred_cases(open_cases).each do |child|
       if is_risk_level_high.present? && child.risk_level == 'high'
         child.data["assigned_user_names"].each do |referred_user|
           # If referred_user matches the user_name, add the child to referred_cases
@@ -900,7 +932,7 @@ module GraphHelpers
   end
 
   # All Open Referrals Cases Where Referred to Agency that are owned by the users under an Agency and are also owned by a particular location
-  def get_cases_referred_to_agencies_with_location_and_agency(user, is_risk_level_high)
+  def get_cases_referred_to_agencies_with_location_and_agency(user, is_risk_level_high = nil, open_cases = false)
     # User's Location Code
     location_code = user.location
 
@@ -910,6 +942,7 @@ module GraphHelpers
     search = Child.search do
       with(:risk_level, 'high') if is_risk_level_high.present?
       without(:assigned_user_names, nil)
+      with(:status, "open")
 
       any_of do
         with(:owned_by, usernames)

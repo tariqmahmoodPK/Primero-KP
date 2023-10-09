@@ -29,13 +29,9 @@ const reducer = (state = DEFAULT_STATE, { type, payload }) => {
     // 'High Risk Cases by Protection Concern'
     case actions.HIGH_RISK_CASES_BY_PROTECTION_CONCERN_SUCCESS:
       return state.set("highRiskCasesByProtectionConcern", fromJS(payload));
-    // ------------------------------------------------------------------------
-    // registered_cases_by_protection_concern
-    // Registered Cases by Protection Concern
-    case actions.REGISTERED_CASES_BY_PROTECTION_CONCERN_REAL:
-      return state.set("registeredCasesByProtectionConcernReal", fromJS(payload));
-    // ------------------------------------------------------------------------
-
+    // 'Registered Cases by Protection Concern'
+    case actions.REGISTERED_CASES_BY_PROTECTION_CONCERN_SUCCESS:
+      return state.set("registeredCasesByProtectionConcern", fromJS(payload));
     case actions.DASHBOARD_FLAGS:
       return state.set("flags", fromJS(payload));
     case actions.CASES_BY_STATUS:

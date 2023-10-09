@@ -125,9 +125,37 @@ class Api::V2::DashboardsController < ApplicationApiController
     @stats = concerns
   end
 
-  #TODO Rename All of it's relevant methods, and files to reflect the proper name.
-  # Registered Cases by Protection Concern Graph
+  # 'Registered Cases by Protection Concern' Graph
   def registered_cases_by_protection_concern
     @stats = Child.registered_cases_by_protection_concern_stats(current_user)
+
+    # Properly format the stats to use on the React Component
+    lookup_values = Lookup.protection_concerns_values
+
+    concerns = {}
+
+    @stats.each do |key, value|
+      # Find the corresponding entry in the lookup_values array
+      lookup_entry = lookup_values.find { |entry| entry["id"] == key.to_s }
+
+      if lookup_entry
+        # Get the English label from the lookup entry
+        english_label = lookup_entry["display_text"]["en"]
+        # Add the English label as a new key in the concerns hash
+        concerns[english_label] = value
+      end
+    end
+
+    # The new stats format is like this:
+    # {
+    #   "Violence" =>            { male: 0, female: 0, transgender: 0 },
+    #   "Exploitation" =>        { male: 0, female: 0, transgender: 0 },
+    #   "Neglect" =>             { male: 0, female: 0, transgender: 0 },
+    #   "Harmful practice(s)" => { male: 0, female: 0, transgender: 0 },
+    #   "Abuse" =>               { male: 0, female: 0, transgender: 0 },
+    #   "Other" =>               { male: 0, female: 0, transgender: 0 }
+    # }
+
+    @stats = concerns
   end
 end

@@ -182,8 +182,7 @@ export const getHighRiskCasesByProtectionConcern = state => {
   return state.getIn(["records", NAMESPACE, "highRiskCasesByProtectionConcern"], fromJS({}));
 };
 
-// registered_cases_by_protection_concern
-// Registered Cases by Protection Concern
-export const getRegisteredCasesByProtectionConcernReal = state => {
-  return state.getIn(["records", NAMESPACE, "registeredCasesByProtectionConcernReal"], fromJS({}));
+// 'Registered Cases by Protection Concern'
+export const getRegisteredCasesByProtectionConcern = state => {
+  return state.getIn(["records", NAMESPACE, "registeredCasesByProtectionConcern"], fromJS({}));
 };

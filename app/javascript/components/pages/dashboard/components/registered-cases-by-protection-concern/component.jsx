@@ -1,17 +1,16 @@
-/* TODO Update the referencing comments after properly updating the files */
-// registered_cases_by_protection_concern
-// Registered Cases by Protection Concern
+// 'Registered Cases by Protection Concern'
 
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
+
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import { Grid } from "@material-ui/core";
 
 import { BarChart } from "../../../../charts";
-import { fetchRegisteredCasesByProtectionConcernReal } from "../../action-creators";
-import { getRegisteredCasesByProtectionConcernReal } from "../../selectors";
+import { fetchRegisteredCasesByProtectionConcern } from "../../action-creators";
+import { getRegisteredCasesByProtectionConcern } from "../../selectors";
 import { useMemoizedSelector } from "../../../../../libs";
 
 import styles from "./styles.css";
@@ -21,11 +20,11 @@ const useStyles = makeStyles(styles);
 const Component = () => {
   const css = useStyles();
   const dispatch = useDispatch();
-  const data = useMemoizedSelector(state => getRegisteredCasesByProtectionConcernReal(state));
+  const data = useMemoizedSelector(state => getRegisteredCasesByProtectionConcern(state));
   const stats = data.getIn(["data", "stats"]) ? data.getIn(["data", "stats"]).toJS() : null;
 
   useEffect(() => {
-    dispatch(fetchRegisteredCasesByProtectionConcernReal());
+    dispatch(fetchRegisteredCasesByProtectionConcern());
   }, []);
 
   let graphData;

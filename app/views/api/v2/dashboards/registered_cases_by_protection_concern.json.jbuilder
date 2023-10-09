@@ -1,27 +1,24 @@
-# TODO Update the referencing comments after properly updating the files
-# registered_cases_by_protection_concern
-# Registered Cases by Protection Concern
+# 'Registered Cases by Protection Concern'
+
+# Received Stats Format:
+# {
+#   "Violence" =>            { male: 0, female: 0, transgender: 0 },
+#   "Exploitation" =>        { male: 0, female: 0, transgender: 0 },
+#   "Neglect" =>             { male: 0, female: 0, transgender: 0 },
+#   "Harmful practice(s)" => { male: 0, female: 0, transgender: 0 },
+#   "Abuse" =>               { male: 0, female: 0, transgender: 0 },
+#   "Other" =>               { male: 0, female: 0, transgender: 0 }
+# }
 
 json.data do
   @stats.each do |key, value|
-
-    #? Why are we checking for this ?
+    #? Why did we use this? What purpose does this check serve?
     if key.to_s.eql?("permission")
       json.set!(key, value)
     else
-      concerns = {}
-
-      value.each do |key1, value2|
-        key1_str = key1.to_s # Convert the symbol to a string
-        matching_data = Lookup.protection_concerns_values.find { |data| data["id"] == key1_str }
-
-        if matching_data
-          key1_en = matching_data["display_text"]["en"]
-          concerns[key1_en] = value2
-        end
+      json.stats do
+        json.set!(key, value)
       end
-
-      json.set!(key, concerns)
     end
   end
 end

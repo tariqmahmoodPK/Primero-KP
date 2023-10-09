@@ -177,10 +177,9 @@ export const fetchHighRiskCasesByProtectionConcern = () => ({
   }
 });
 
-// registered_cases_by_protection_concern
-// Registered Cases by Protection Concern
-export const fetchRegisteredCasesByProtectionConcernReal = () => ({
-  type: actions.REGISTERED_CASES_BY_PROTECTION_CONCERN_REAL,
+// 'Registered Cases by Protection Concern'
+export const fetchRegisteredCasesByProtectionConcern = () => ({
+  type: actions.REGISTERED_CASES_BY_PROTECTION_CONCERN,
   api: {
     path: "dashboards/registered_cases_by_protection_concern"
   }

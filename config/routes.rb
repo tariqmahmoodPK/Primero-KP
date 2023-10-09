@@ -114,7 +114,7 @@ Rails.application.routes.draw do
           get :month_wise_registered_and_resolved_cases_stats
           # 'High Risk Cases by Protection Concern'
           get :high_risk_cases_by_protection_concern
-          # Registered Cases by Protection Concern
+          # 'Registered Cases by Protection Concern'
           get :registered_cases_by_protection_concern
         end
       end

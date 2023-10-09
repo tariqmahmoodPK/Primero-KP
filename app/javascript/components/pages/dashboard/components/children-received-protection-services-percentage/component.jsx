@@ -41,7 +41,7 @@ const Component = () => {
 
   // Use the useEffect hook to perform an action when the component is mounted.
   useEffect(() => {
-    // Dispatch an action to fetch RegisteredCasesByProtectionConcern
+    // Dispatch an action to fetch PercentageChildrenReceivedChildProtectionServices
     dispatch(fetchPercentageChildrenReceivedChildProtectionServices());
   }, []);
 

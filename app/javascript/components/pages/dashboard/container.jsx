@@ -45,11 +45,8 @@ import {
   MonthlyRegisteredAndResolvedCases,
   // 'High Risk Cases by Protection Concern'
   HighRiskCasesByProtectionConcern,
-  // --------------------------------------------------------------
-  // registered_cases_by_protection_concern
-  // Registered Cases by Protection Concern
+  // 'Registered Cases by Protection Concern'
   RegisteredCasesByProtectionConcern
-  // --------------------------------------------------------------
 } from "./components";
 import NAMESPACE from "./namespace";
 import { NAME } from "./constants";
@@ -120,7 +117,7 @@ const Dashboard = () => {
             <CasesRequiringAlternativeCarePlacementServices />
             <MonthlyRegisteredAndResolvedCases /> {/* Registered and Closed Cases by Month */}
             <HighRiskCasesByProtectionConcern /> {/* 'High Risk Cases by Protection Concern' */}
-            <RegisteredCasesByProtectionConcern /> {/* Registered Cases by Protection Concern */}
+            <RegisteredCasesByProtectionConcern /> {/* 'Registered Cases by Protection Concern' */}
           </Grid>
 
           <Grid item xl={3} md={4} xs={12}>

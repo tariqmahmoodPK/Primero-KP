@@ -39,8 +39,7 @@ export default namespaceActions(NAMESPACE, [
   // 'High Risk Cases by Protection Concern'
   "HIGH_RISK_CASES_BY_PROTECTION_CONCERN",
   "HIGH_RISK_CASES_BY_PROTECTION_CONCERN_SUCCESS",
-  // -------------------------------------------------------------------
-  "REGISTERED_CASES_BY_PROTECTION_CONCERN_REAL",
-  "REGISTERED_CASES_BY_PROTECTION_CONCERN_REAL_SUCCESS"
-  // -------------------------------------------------------------------
+  // 'Registered Cases by Protection Concern'
+  "REGISTERED_CASES_BY_PROTECTION_CONCERN",
+  "REGISTERED_CASES_BY_PROTECTION_CONCERN_SUCCESS"
 ]);

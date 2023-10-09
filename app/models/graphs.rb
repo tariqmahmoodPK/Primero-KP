@@ -66,7 +66,7 @@ module Graphs
       other:             { cases: 0 , percentage: 0 },
     }
 
-    # Getting Total Number of Opened Cases that are High Risk
+    # Getting Total Number of Cases that are High Risk
     high_risk_cases = Child.get_childern_records(user, "high")
     total_case_count = high_risk_cases.count
 
@@ -239,7 +239,7 @@ module Graphs
   # 'Cases requiring Alternative Care Placement Services'
   def alternative_care_placement_by_gender(user)
     # Stats Calculation Formula:
-      # Total Number of Open Cases Open Where Nationality is 'Pakistani' or 'Afghani' or 'Irani'
+      # Total Number of Open Cases Where Nationality is 'Pakistani' or 'Afghani' or 'Irani'
       # Desegregated by Sex
 
     # Getting User's Role to check if they are allowed to view the graph.
@@ -329,7 +329,7 @@ module Graphs
 
     # TODO Ask if this search query should also include cases with High Risk
     # Get cases referred to agencies for the user
-    cases_referred_to_agencies = get_cases_referred_to_agencies(user)
+    cases_referred_to_agencies = get_cases_referred_to_agencies(user, nil, true)
 
     cases_referred_to_agencies.each do |child|
       gender = child.data["sex"]
@@ -428,7 +428,7 @@ module Graphs
     }
 
     # Getting Total Number of Opened Cases that are High Risk
-    high_risk_cases = Child.get_childern_records(user, "high")
+    high_risk_cases = Child.get_childern_records(user, "high", true)
     total_case_count = high_risk_cases.count
 
     # Calculate Stats
@@ -476,5 +476,81 @@ module Graphs
     }
 
     total_cases
+  end
+
+  # 'Registered Cases by Protection Concern'
+  def registered_cases_by_protection_concern_stats(user)
+    # Stats Calculation Formula:
+      # Total No of Open Cases by Protection Concern desegregated by Sex (by User)
+
+    # Getting User's Role to check if they are allowed to view the graph.
+    name = user.role.name
+
+    # User Roles allowed
+    return { permission: false } unless name.in? [
+      'Social Case Worker'    ,
+      'Psychologist'          ,
+      'Child Helpline Officer',
+      'Referral'              ,
+      'CPO'                   ,
+      'CPWC'
+    ]
+
+    # The 'stats' data structure stores statistics for different types of Protection Concerns.
+      # Each Protection Concern is represented as a key-value pair, where:
+      # 'cases' indicates the number of cases associated with that concern.
+      # 'percentage' represents the percentage of cases compared to the total cases that have any of these Protection Concerns
+
+    stats = {
+      violence:          { male: 0, female: 0, transgender: 0 },
+      exploitation:      { male: 0, female: 0, transgender: 0 },
+      neglect:           { male: 0, female: 0, transgender: 0 },
+      harmful_practices: { male: 0, female: 0, transgender: 0 },
+      abuse:             { male: 0, female: 0, transgender: 0 },
+      other:             { male: 0, female: 0, transgender: 0 },
+    }
+
+    # Calculate Stats
+    Child.get_childern_records(user, "high", true).each do |child|
+      # child.data["protection_concerns"] returns an array of strings, Each specifing a Protection Concern
+      gender = child.data["sex"]
+      next unless gender
+
+      if child.data["protection_concerns"].include?("other")
+        stats[:violence][gender.to_sym] += 1
+      end
+
+      if child.data["protection_concerns"].include?("exploitation_b9352d1")
+        stats[:exploitation][gender.to_sym] += 1
+      end
+
+      if child.data["protection_concerns"].include?("neglect_a7b48b2")
+        stats[:neglect][gender.to_sym] += 1
+      end
+
+      if child.data["protection_concerns"].include?("harmful_practice_s__d1f7955")
+        stats[:harmful_practices][gender.to_sym] += 1
+      end
+
+      if child.data["protection_concerns"].include?("other_b637c39")
+        stats[:abuse][gender.to_sym] += 1
+      end
+
+      if child.data["protection_concerns"].include?("other_b637c39")
+        stats[:other][gender.to_sym] += 1
+      end
+    end
+
+    # NOTE Needed to do it for properly get the 'Display Text' Values of these records, To Display on the Graph
+    formatted_stats = {
+      other:                        stats[:violence],
+      exploitation_b9352d1:         stats[:exploitation],
+      neglect_a7b48b2:              stats[:neglect],
+      harmful_practice_s__d1f7955:  stats[:harmful_practices],
+      other_b637c39:                stats[:abuse],
+      other_b637c39:                stats[:other],
+    }
+
+    formatted_stats
   end
 end
