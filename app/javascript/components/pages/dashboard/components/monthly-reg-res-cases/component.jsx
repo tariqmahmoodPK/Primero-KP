@@ -1,5 +1,4 @@
-// month_wise_registered_and_resolved_cases_stats
-// Registered and Closed Cases by Month
+// 'Registered and Closed Cases by Month'
 
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */

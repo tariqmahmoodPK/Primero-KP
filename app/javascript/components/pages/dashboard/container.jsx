@@ -37,15 +37,11 @@ import {
   PercentageChildrenReceivedChildProtectionServices,
   // 'Closed Cases by Sex and Reason'
   ResolvedCasesByGenderAndReason,
-  // --------------------------------------------------------------
   // 'Cases Referrals (To Agency)'
   CasesReferralsToAgency,
-  // --------------------------------------------------------------
   // 'Cases requiring Alternative Care Placement Services'
   CasesRequiringAlternativeCarePlacementServices,
-  // --------------------------------------------------------------
-  // month_wise_registered_and_resolved_cases_stats
-  // Registered and Closed Cases by Month
+  // 'Registered and Closed Cases by Month'
   MonthlyRegResCases,
   // --------------------------------------------------------------
   // significant_harm_cases_registered_by_age_and_gender_stats

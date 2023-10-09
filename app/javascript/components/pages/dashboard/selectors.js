@@ -172,8 +172,7 @@ export const getCasesRequiringAlternativeCarePlacementServices = state => {
   return state.getIn(["records", NAMESPACE, "casesRequiringAlternativeCarePlacementServices"], fromJS({}));
 };
 
-// month_wise_registered_and_resolved_cases_stats
-// Registered and Closed Cases by Month
+// 'Registered and Closed Cases by Month'
 export const getMonthlyRegisteredAndResolvedCases = state => {
   return state.getIn(["records", NAMESPACE, "monthlyRegisteredAndResolvedCases"], fromJS({}));
 };

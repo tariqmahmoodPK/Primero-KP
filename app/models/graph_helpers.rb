@@ -944,4 +944,24 @@ module GraphHelpers
 
   # -------------------------------------------------------------------------------------------------
 
+  #  Registered and Closed Cases by Month
+  def hash_return_for_month_wise_api
+    month_list = {
+      "Jan" => { "male" => 0, "female" => 0, "transgender" => 0, "total" => 0 },
+      "Feb" => { "male" => 0, "female" => 0, "transgender" => 0, "total" => 0 },
+      "Mar" => { "male" => 0, "female" => 0, "transgender" => 0, "total" => 0 },
+      "Apr" => { "male" => 0, "female" => 0, "transgender" => 0, "total" => 0 },
+      "May" => { "male" => 0, "female" => 0, "transgender" => 0, "total" => 0 },
+      "Jun" => { "male" => 0, "female" => 0, "transgender" => 0, "total" => 0 },
+      "Jul" => { "male" => 0, "female" => 0, "transgender" => 0, "total" => 0 },
+      "Aug" => { "male" => 0, "female" => 0, "transgender" => 0, "total" => 0 },
+      "Sep" => { "male" => 0, "female" => 0, "transgender" => 0, "total" => 0 },
+      "Oct" => { "male" => 0, "female" => 0, "transgender" => 0, "total" => 0 },
+      "Nov" => { "male" => 0, "female" => 0, "transgender" => 0, "total" => 0 },
+      "Dec" => { "male" => 0, "female" => 0, "transgender" => 0, "total" => 0 },
+    }
+
+    month_list
+  end
+  # -------------------------------------------------------------------------------------------------
 end

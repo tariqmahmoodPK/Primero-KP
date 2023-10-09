@@ -28,9 +28,7 @@ export { default as ResolvedCasesByGenderAndReason } from "./resolved-cases-by-g
 export { default as CasesReferralsToAgency } from "./cases-referrals-to-agency";
 // 'Cases requiring Alternative Care Placement Services'
 export { default as CasesRequiringAlternativeCarePlacementServices } from "./cases-requiring-alternative-care-placement-services";
-// --------------------------------------------------------------------
-// month_wise_registered_and_resolved_cases_stats
-//  Registered and Closed Cases by Month
+//  'Registered and Closed Cases by Month'
 export { default as MonthlyRegResCases } from "./monthly-reg-res-cases";
 // --------------------------------------------------------------------
 // significant_harm_cases_registered_by_age_and_gender_stats

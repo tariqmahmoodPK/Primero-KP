@@ -161,8 +161,7 @@ export const fetchCasesRequiringAlternativeCarePlacementServices = () => ({
   }
 });
 
-// month_wise_registered_and_resolved_cases_stats
-// Registered and Closed Cases by Month
+// 'Registered and Closed Cases by Month'
 export const fetchMonthlyRegisteredAndResolvedCases = () => ({
   type: actions.MONTHLY_REGISTERED_AND_RESOLVED_CASES,
   api: {

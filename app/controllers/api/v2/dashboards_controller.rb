@@ -86,8 +86,7 @@ class Api::V2::DashboardsController < ApplicationApiController
     @stats = nationalities
   end
 
-  # Registered and Closed Cases by Month
-  #TODO Rename All of it's relevant methods, and files to reflect the proper name.
+  # 'Registered and Closed Cases by Month'
   def month_wise_registered_and_resolved_cases_stats
     @stats = Child.month_wise_registered_and_resolved_cases(current_user)
   end

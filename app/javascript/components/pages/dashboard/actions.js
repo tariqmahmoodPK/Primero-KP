@@ -30,13 +30,10 @@ export default namespaceActions(NAMESPACE, [
   // 'Cases Referrals (To Agency)'
   "CASES_REFERRALS_TO_AGENCY",
   "CASES_REFERRALS_TO_AGENCY_SUCCESS",
-  // -------------------------------------------------------------------
   // 'Cases requiring Alternative Care Placement Services'
   "CASES_REQUIRING_ALTERNATIVE_CARE_PLACEMENT_SERVICES",
   "CASES_REQUIRING_ALTERNATIVE_CARE_PLACEMENT_SERVICES_SUCCESS",
-  // -------------------------------------------------------------------
-  // month_wise_registered_and_resolved_cases_stats
-  // Registered and Closed Cases by Month
+  // 'Registered and Closed Cases by Month'
   "MONTHLY_REGISTERED_AND_RESOLVED_CASES",
   "MONTHLY_REGISTERED_AND_RESOLVED_CASES_SUCCESS",
   // -------------------------------------------------------------------

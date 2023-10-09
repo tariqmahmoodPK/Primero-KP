@@ -305,7 +305,7 @@ module Graphs
   # 'Cases Referrals (To Agency)'
   def cases_referrals_to_agency_stats(user)
     # Stats Calculation Formula:
-    # Total Number of Open Referrals cases Where Referred to Agency, Desegregated by Sex
+      # Total Number of Open Referrals cases Where Referred to Agency, Desegregated by Sex
 
     # Getting User's Role to check if they are allowed to view the graph.
     name = user.role.name
@@ -349,4 +349,50 @@ module Graphs
 
     stats
   end
+
+  # 'Registered and Closed Cases by Month'
+  def month_wise_registered_and_resolved_cases(user)
+    # Stats Calculation Formula:
+      # Total Number of Registered and Closed Cases Gender wise (by User) – Last 12 months
+
+    # Getting User's Role to check if they are allowed to view the graph.
+    name = user.role.name
+
+    # User Roles allowed
+    return { permission: false } unless name.in? [
+      'Social Case Worker'    ,
+      'Psychologist'          ,
+      'Child Helpline Officer',
+      'Referral'              ,
+      'CPO'                   ,
+      'CPWC'
+    ]
+
+    stats = {
+      "Resolved"   => hash_return_for_month_wise_api, # Closed
+      "Registered" => hash_return_for_month_wise_api  # Registered
+    }
+
+    Child.get_childern_records(user).each do |child|
+      day = child.created_at
+      next unless day.to_date.in? (Date.today.prev_year..Date.today)
+
+      key = day.strftime("%B")[0,3]
+      # Getting 'transgender_a797d7e' for child.data["sex"].
+      # That exactly match with the 'transgender' word.
+      # So, using this line.
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
+
+      if child.age.present? && child.data["status"].eql?("open")
+        stats["Registered"][key][gender] += 1
+        stats["Registered"][key]["total"] += 1
+      elsif child.data["status"].eql?("closed")
+        stats["Resolved"][key][gender] += 1
+        stats["Resolved"][key]["total"] += 1
+      end
+    end
+
+    stats
+  end
+
 end
