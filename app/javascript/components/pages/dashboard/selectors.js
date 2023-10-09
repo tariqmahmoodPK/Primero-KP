@@ -162,10 +162,9 @@ export const getResolvedCasesByGenderAndReason = state => {
   return state.getIn(["records", NAMESPACE, "resolvedCasesByGenderAndReason"], fromJS({}));
 };
 
-// cases_referral_to_agency_stats
-// Cases Referral (To Agency )
-export const getCasesReferralToAgency = state => {
-  return state.getIn(["records", NAMESPACE, "casesReferralToAgency"], fromJS({}));
+// 'Cases Referrals (To Agency)'
+export const getCasesReferralsToAgency = state => {
+  return state.getIn(["records", NAMESPACE, "casesReferralsToAgency"], fromJS({}));
 };
 
 // 'Cases requiring Alternative Care Placement Services'

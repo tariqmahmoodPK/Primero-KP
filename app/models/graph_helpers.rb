@@ -4,6 +4,7 @@ module GraphHelpers
     # 'Percentage of Children who received Child Protection Services'
     # 'Registered and Closed Cases by Month'
     # 'Significant Harm Cases by Protection Concern'
+    # 'Registered Cases by Protection Concern'
   def get_childern_records(user, is_risk_level_high = nil)
     # User's role
     role = user.role.name
@@ -17,7 +18,7 @@ module GraphHelpers
     when 'CPWC'
       get_cases_assigned_to_specific_location(user, is_risk_level_high)
     # View Cases of
-      # User with Roles:
+      # Users with Roles:
         # Social Case Worker
         # Psychologist
         # Child Helpline Operator
@@ -143,9 +144,9 @@ module GraphHelpers
     # Get all the referred cases and see if the User has any cases referred to him.
     Child.get_referred_cases.each do |child|
       if is_risk_level_high.present? && child.risk_level == 'high'
-        child.data["assigned_user_names"].each do |refered_user|
+        child.data["assigned_user_names"].each do |referred_user|
           # If referred_user matches the user_name, add the child to results
-          results << child if refered_user == user_name
+          results << child if referred_user == user_name
         end
       end
     end
@@ -223,7 +224,7 @@ module GraphHelpers
     when 'CPWC'
       get_resolved_cases_by_specific_location(user, is_risk_level_high)
     # View Resolved Cases of
-      # User with Roles:
+      # Users with Roles:
         # Social Case Worker
         # Psychologist
         # Child Helpline Operator
@@ -344,7 +345,7 @@ module GraphHelpers
     search.results
   end
 
-  # View Resolved Cases of User with Roles: Social Case Worker, Psychologist, Child Helpline Operator, That are Working in his UserGroup.
+  # View Resolved Cases of Users with Roles: Social Case Worker, Psychologist, Child Helpline Operator, That are Working in his UserGroup.
   def get_resolved_cases_for_particular_user_group(cpo_user, is_risk_level_high = nil)
     # Find users with the specified roles ('Social Case Worker', 'Psychologist', 'Child Helpline Officer')
     role_names = [
@@ -409,9 +410,9 @@ module GraphHelpers
     # Get all the Resolved referred cases and see if the User has any cases referred to him.
     Child.get_referred_and_resolved_cases.each do |child|
       if is_risk_level_high.present? && child.risk_level == 'high'
-        child.data["assigned_user_names"].each do |refered_user|
+        child.data["assigned_user_names"].each do |referred_user|
           # If referred_user matches the user_name, add the child to results
-          results << child if refered_user == user_name
+          results << child if referred_user == user_name
         end
       end
     end
@@ -502,7 +503,7 @@ module GraphHelpers
     when 'CPWC'
       get_cases_requiring_alternative_care_services_by_specific_location(user, is_risk_level_high)
     # View Cases requiring Alternative Care Placement Services of
-      # User with Roles:
+      # Users with Roles:
         # Social Case Worker
         # Psychologist
         # Child Helpline Operator
@@ -688,9 +689,9 @@ module GraphHelpers
     # Get all the referred cases and see if the User has any cases referred to him.
     Child.get_referred_cases_requiring_alternative_care_services.each do |child|
       if is_risk_level_high.present? && child.risk_level == 'high'
-        child.data["assigned_user_names"].each do |refered_user|
+        child.data["assigned_user_names"].each do |referred_user|
           # If referred_user matches the user_name, add the child to results
-          results << child if refered_user == user_name
+          results << child if referred_user == user_name
         end
       end
     end
@@ -771,4 +772,176 @@ module GraphHelpers
 
     search.results
   end
+
+  # -------------------------------------------------------------------------------------------------
+
+  # Used By:
+    # 'Cases Referrals (To Agency)'
+  def get_cases_referred_to_agencies(user, is_risk_level_high = nil)
+    # User's role
+    role = user.role.name
+
+    # Getting records based on the Permissions of Each Role to View the Graphs
+    case role
+    # View Open Referrals Cases Where Referred to Agency, Owned by a Specific User
+    when 'Social Case Worker', 'Psychologist', 'Child Helpline Officer'
+      get_cases_referred_to_agencies_of_specific_user(user, is_risk_level_high)
+    # View Open Referrals cases Where Referred to Agency, Of all Districts (Provincial data)
+    when 'CPWC'
+      get_cases_referred_to_agencies_by_specific_location(user, is_risk_level_high)
+    # View Open Referrals Cases Where Referred to Agency,
+      # Users with Roles:
+        # Social Case Worker
+        # Psychologist
+        # Child Helpline Operator
+      # That are Working in his UserGroup.
+    when 'CPO'
+      get_cases_referred_to_agencies_for_particular_user_group(user, is_risk_level_high)
+    # View Open Referrals Cases Where Referred to Agency that Referred to User
+    when 'Referral'
+      get_cases_referred_to_agencies_referred_to_user(user, is_risk_level_high)
+    else
+      #TODO Ask what should be here
+      # Temporarily using this method as something similar was used in the Sindh Version as well.
+      # All Open Referrals Cases Where Referred to Agency that are owned by the users under an Agency and are also owned by a particular location
+      get_cases_referred_to_agencies_with_location_and_agency(user, is_risk_level_high)
+    end
+  end
+
+  # View Open Referrals cases Where Referred to Agency, Owned by a Specific User
+  def get_cases_referred_to_agencies_of_specific_user(user, is_risk_level_high)
+    username = user.user_name
+
+    search = Child.search do
+      with(:owned_by, username)
+      with(:risk_level, 'high') if is_risk_level_high.present?
+      without(:assigned_user_names, nil)
+    end
+
+    search.results
+
+    get_filter_cases_referred_to_agencies_from_referred_cases(search.results)
+  end
+
+  # View Open Referrals cases Where Referred to Agency, Of all Districts (Provincial data)
+  def get_cases_referred_to_agencies_by_specific_location(user, is_risk_level_high)
+    # User's Location Code
+    location_code = user.location
+
+    search = nil
+
+    # If the location of the each record matches the User's Location then get those records
+    if location_code.present?
+      search = Child.search do
+        with(:location_current, location_code)
+        with(:risk_level, 'high') if is_risk_level_high.present?
+        without(:assigned_user_names, nil)
+      end
+    # If there is no User location present then get all the records with location in 'Khyber Pakhtunkhwa'/KPK
+    else
+      search = Child.search do
+        with_province # Checks if the location_current has 'KPK' in it
+        with(:risk_level, 'high') if is_risk_level_high.present?
+        without(:assigned_user_names, nil)
+      end
+    end
+
+    get_filter_cases_referred_to_agencies_from_referred_cases(search.results)
+  end
+
+  # View Open Referrals cases Where Referred to Agency, Users with Roles:Social Case Worker, Psychologist, Child Helpline Operator, That are Working in his UserGroup.
+  def get_cases_referred_to_agencies_for_particular_user_group(cpo_user, is_risk_level_high)
+    # Find users with the specified roles ('Social Case Worker', 'Psychologist', 'Child Helpline Officer')
+    role_names = [
+      'Social Case Worker',
+      'Psychologist',
+      'Child Helpline Officer'
+    ]
+
+    users_with_roles = User.joins(:role).where(roles: { name: role_names })
+
+    # Find the user group of the cpo user
+    cpo_user_group_ids = cpo_user.user_groups.pluck(:id)
+
+    # Find users with the specified roles who are in the same user group as the cpo user
+    users_in_same_user_group = users_with_roles.joins(:user_groups).where(user_groups: { id: cpo_user_group_ids })
+
+    # Extract the usernames of users in the same user group
+    usernames = users_in_same_user_group.pluck(:user_name)
+
+    # Get Cases that are owned by given Usernames and Also Paginate them.
+    search = Child.search do
+      with(:owned_by, usernames)
+      with(:risk_level, 'high') if is_risk_level_high.present?
+      without(:assigned_user_names, nil)
+    end
+
+    get_filter_cases_referred_to_agencies_from_referred_cases(search.results)
+  end
+
+  # View Open Referrals Cases Where Referred to Agency that Referred to User
+  def get_cases_referred_to_agencies_referred_to_user(user, is_risk_level_high)
+    # User's Name, Duh!
+    user_name = user.name
+
+    referred_cases = []
+
+    # Get all the referred cases and see if the User has any cases referred to him.
+    Child.get_referred_cases.each do |child|
+      if is_risk_level_high.present? && child.risk_level == 'high'
+        child.data["assigned_user_names"].each do |referred_user|
+          # If referred_user matches the user_name, add the child to referred_cases
+          referred_cases << child if referred_user == user_name
+        end
+      end
+    end
+
+    get_filter_cases_referred_to_agencies_from_referred_cases(referred_cases)
+  end
+
+  # All Open Referrals Cases Where Referred to Agency that are owned by the users under an Agency and are also owned by a particular location
+  def get_cases_referred_to_agencies_with_location_and_agency(user, is_risk_level_high)
+    # User's Location Code
+    location_code = user.location
+
+    # Users under an Agency that another User created.
+    usernames = user.agency.users.pluck(:user_name)
+
+    search = Child.search do
+      with(:risk_level, 'high') if is_risk_level_high.present?
+      without(:assigned_user_names, nil)
+
+      any_of do
+        with(:owned_by, usernames)
+        with(:location_current, location_code)
+
+        # TODO Remove this after
+        # This won't wont be used as there in no longer an attribute 'owned_by_location'
+        # with(:owned_by_location, user.location)
+      end
+    end
+
+    get_filter_cases_referred_to_agencies_from_referred_cases(search.results)
+  end
+
+  def get_filter_cases_referred_to_agencies_from_referred_cases(referred_cases)
+    referred_cases_to_agency = []
+
+    referred_cases.each do |child|
+      agencies_assigned = child.data["assigned_user_names"].map do |refer|
+        user = User.find_by(user_name: refer)
+        user.agency_id ? Agency.find(user.agency_id) : nil
+      end.compact
+
+      if agencies_assigned.any?
+        # Add this child to the array if it's assigned to at least one agency
+        referred_cases_to_agency << child
+      end
+    end
+
+    referred_cases_to_agency
+  end
+
+  # -------------------------------------------------------------------------------------------------
+
 end

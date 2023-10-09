@@ -17,12 +17,9 @@ const reducer = (state = DEFAULT_STATE, { type, payload }) => {
     // 'Closed Cases by Sex and Reason'
     case actions.RESOLVED_CASES_BY_GENDER_AND_REASON_SUCCESS:
       return state.set("resolvedCasesByGenderAndReason", fromJS(payload));
-    // ------------------------------------------------------------------------
-    // cases_referral_to_agency_stats
-    // Cases Referral (To Agency )
-    case actions.CASES_REFERRAL_TO_AGENCY_SUCCESS:
-      return state.set("casesReferralToAgency", fromJS(payload));
-    // ------------------------------------------------------------------------
+    // 'Cases Referrals (To Agency)'
+    case actions.CASES_REFERRALS_TO_AGENCY_SUCCESS:
+      return state.set("casesReferralsToAgency", fromJS(payload));
     // 'Cases requiring Alternative Care Placement Services'
     case actions.CASES_REQUIRING_ALTERNATIVE_CARE_PLACEMENT_SERVICES_SUCCESS:
       return state.set("casesRequiringAlternativeCarePlacementServices", fromJS(payload));

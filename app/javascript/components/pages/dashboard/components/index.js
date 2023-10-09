@@ -24,11 +24,8 @@ export { default as ViolationsCategoryRegion } from "./violations-category-regio
 export { default as PercentageChildrenReceivedChildProtectionServices } from "./children-received-protection-services-percentage";
 // 'Closed Cases by Sex and Reason'
 export { default as ResolvedCasesByGenderAndReason } from "./resolved-cases-by-gender-and-reason";
-// --------------------------------------------------------------------
-// cases_referral_to_agency_stats
-// Cases Referral (To Agency )
-export { default as CasesReferralToAgency } from "./cases-referral-to-agency";
-// --------------------------------------------------------------------
+// 'Cases Referrals (To Agency)'
+export { default as CasesReferralsToAgency } from "./cases-referrals-to-agency";
 // 'Cases requiring Alternative Care Placement Services'
 export { default as CasesRequiringAlternativeCarePlacementServices } from "./cases-requiring-alternative-care-placement-services";
 // --------------------------------------------------------------------

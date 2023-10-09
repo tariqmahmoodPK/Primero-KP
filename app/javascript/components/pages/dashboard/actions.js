@@ -27,10 +27,9 @@ export default namespaceActions(NAMESPACE, [
   // 'Closed Cases by Sex and Reason'
   "RESOLVED_CASES_BY_GENDER_AND_REASON",
   "RESOLVED_CASES_BY_GENDER_AND_REASON_SUCCESS",
-  // cases_referral_to_agency_stats
-  // Cases Referral ( To Agency )
-  "CASES_REFERRAL_TO_AGENCY",
-  "CASES_REFERRAL_TO_AGENCY_SUCCESS",
+  // 'Cases Referrals (To Agency)'
+  "CASES_REFERRALS_TO_AGENCY",
+  "CASES_REFERRALS_TO_AGENCY_SUCCESS",
   // -------------------------------------------------------------------
   // 'Cases requiring Alternative Care Placement Services'
   "CASES_REQUIRING_ALTERNATIVE_CARE_PLACEMENT_SERVICES",

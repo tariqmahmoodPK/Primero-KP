@@ -1,4 +1,4 @@
-// 'Cases requiring Alternative Care Placement Services'
+// 'Cases Referrals (To Agency)'
 
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
@@ -15,9 +15,9 @@ import { Grid } from "@material-ui/core";
 
 import { BarChart } from "../../../../charts";
 // Import functions for fetching data.
-import { fetchCasesRequiringAlternativeCarePlacementServices } from "../../action-creators";
+import { fetchCasesReferralsToAgency } from "../../action-creators";
 // Import functions for selecting data.
-import { getCasesRequiringAlternativeCarePlacementServices } from "../../selectors";
+import { getCasesReferralsToAgency } from "../../selectors";
 // Import a custom library function.
 import { useMemoizedSelector } from "../../../../../libs";
 
@@ -34,14 +34,14 @@ const Component = () => {
   // Get access to Redux's dispatch function to trigger actions.
   const dispatch = useDispatch();
   // Use the useMemoizedSelector function to get data from the Redux store.
-  const data = useMemoizedSelector(state => getCasesRequiringAlternativeCarePlacementServices(state));
+  const data = useMemoizedSelector(state => getCasesReferralsToAgency(state));
   // Extract statistics from the data if it exists, otherwise set it to null.
   const stats = data.getIn(["data", "stats"]) ? data.getIn(["data", "stats"]).toJS() : null;
 
   // Use the useEffect hook to perform an action when the component is mounted.
   useEffect(() => {
-    // Dispatch an action to fetch ResolvedCasesByGenderAndReason
-    dispatch(fetchCasesRequiringAlternativeCarePlacementServices());
+    // Dispatch an action to fetch CasesReferralsToAgency
+    dispatch(fetchCasesReferralsToAgency());
   }, []);
 
   let graphData;
@@ -51,7 +51,7 @@ const Component = () => {
         {
           scaleLabel: {
             display: true,
-            labelString: "Countries",
+            labelString: "Departments",
             fontColor: "red"
           }
         }
@@ -60,7 +60,7 @@ const Component = () => {
         {
           scaleLabel: {
             display: true,
-            labelString: "Number of Cases",
+            labelString: "Number Of Services",
             fontColor: "green"
           }
         }
@@ -70,6 +70,7 @@ const Component = () => {
 
   if (stats) {
     const labels = [];
+    const reg = [];
     const cases = [];
     const male = [];
     const female = [];
@@ -77,14 +78,13 @@ const Component = () => {
 
     for (const key in stats) {
       labels.push(key);
-    }
-
-    for (const key in stats) {
+      reg.push(stats[key]);
       cases.push(stats[key].cases);
       male.push(stats[key].male);
       female.push(stats[key].female);
       transgender.push(stats[key].transgender);
     }
+
     graphData = {
       labels,
       datasets: [
@@ -118,9 +118,9 @@ const Component = () => {
           {/* Create a container for displaying statistics */}
           <div className={css.container}>
             {/* Display a heading */}
-            <h2>Cases Requiring Alternative Care Placement</h2>
+            <h2>Case Referrals (To Agency)</h2>
             <div className={css.card} flat>
-              <BarChart options={chartOptions} data={graphData} showDetails />
+              <BarChart options={chartOptions} data={graphData} showDetails showLegend={false} />
             </div>
           </div>
         </Grid>
@@ -129,8 +129,6 @@ const Component = () => {
   );
 };
 
-// Set a display name for the Component
-Component.displayName = `CasesRequiringAlternativeCarePlacementServices`;
+Component.displayName = `CasesReferralsToAgency`;
 
-// Export the Component so it can be used in other parts of the application.
 export default Component;

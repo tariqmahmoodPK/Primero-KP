@@ -364,44 +364,6 @@ class Child < ApplicationRecord
   #                                 Graphs                                 #
   # ====================================================================== #
 
-  # cases_referral_to_agency_stats
-  # Graph for 'Cases Referral (To Agency )'
-    # Total Number of Open Referrals cases Where Referred to Agency, Desegregated by Sex
-  #TODO Need get Records based on Graph Roles
-  #TODO Logic needs to be modified, There is no Agency Field Under referal Form, Ask for that.
-  def self.cases_referral_to_agency(user)
-    # Roles allowed
-    # Social Case Worker (scw)
-      # View his own cases
-    # Psychologist (Psy)
-      # View his own cases
-    # Child Helpline Officer (cho)
-      # View his own cases
-    # Referrals
-      # View cases referred to him
-    # Child Protection Officer (cpo)
-      # View Cases of Social Case Worker, Psychologist and Child Helpline Operator working in his user group (Same District)
-    # Member CPWC
-      # View Cases of all Districts (Provincial data)
-
-    return { permission: false } unless user.role.name.in? ['CPO', 'CPI In-charge', 'Superuser']
-
-    stats = {}
-
-    Agency.all.each do |agency|
-      stats.merge!({ agency.name => 0 })
-    end
-
-    Child.get_referred_cases.each do |child|
-      child.data["assigned_user_names"].each do |reffer|
-        dept = Agency.find(User.find_by(user_name: reffer).agency_id).name
-        stats[dept] += 1
-      end
-    end
-
-    stats
-  end
-
   #TODO Need get Records based on Graph Roles
   #TODO May need to modify the logic a bit
   # Form: Basic Information,

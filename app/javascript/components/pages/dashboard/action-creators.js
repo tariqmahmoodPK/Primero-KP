@@ -144,12 +144,12 @@ export const fetchResolvedCasesByGenderAndReason = () => ({
     path: "dashboards/resolved_cases_by_gender_and_reason"
   }
 });
-// cases_referral_to_agency_stats
-// Cases Referral (To Agency )
-export const fetchCasesReferralToAgency = () => ({
-  type: actions.CASES_REFERRAL_TO_AGENCY,
+
+// 'Cases Referrals (To Agency)'
+export const fetchCasesReferralsToAgency = () => ({
+  type: actions.CASES_REFERRALS_TO_AGENCY,
   api: {
-    path: "dashboards/cases_referral_to_agency_stats"
+    path: "dashboards/cases_referrals_to_agency"
   }
 });
 

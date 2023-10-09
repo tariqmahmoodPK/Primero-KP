@@ -106,8 +106,8 @@ Rails.application.routes.draw do
           get :percentage_children_received_child_protection_services
           # 'Closed Cases by Sex and Reason'
           get :resolved_cases_by_gender_and_reason
-          # Cases Referral (To Agency )
-          get :cases_referral_to_agency_stats
+          # 'Cases Referrals (To Agency)'
+          get :cases_referrals_to_agency
           # 'Cases requiring Alternative Care Placement Services'
           get :alternative_care_placement_by_gender
           #  Registered and Closed Cases by Month

@@ -301,4 +301,52 @@ module Graphs
 
     formatted_stats
   end
+
+  # 'Cases Referrals (To Agency)'
+  def cases_referrals_to_agency_stats(user)
+    # Stats Calculation Formula:
+    # Total Number of Open Referrals cases Where Referred to Agency, Desegregated by Sex
+
+    # Getting User's Role to check if they are allowed to view the graph.
+    name = user.role.name
+
+    # User Roles allowed
+    return { permission: false } unless name.in? [
+      'Social Case Worker'    ,
+      'Psychologist'          ,
+      'Child Helpline Officer',
+      'Referral'              ,
+      'CPO'                   ,
+      'CPWC'
+    ]
+
+    # Initialize the stats hash for all agencies
+    stats = {}
+
+    Agency.all.each do |agency|
+      stats[agency.name] = { male: 0, female: 0, transgender: 0 }
+    end
+
+    # TODO Ask if this search query should also include cases with High Risk
+    # Get cases referred to agencies for the user
+    cases_referred_to_agencies = get_cases_referred_to_agencies(user)
+
+    cases_referred_to_agencies.each do |child|
+      gender = child.data["sex"]
+
+      agencies_assigned = child.data["assigned_user_names"].map do |refer|
+        user = User.find_by(user_name: refer)
+        user.agency_id ? Agency.find(user.agency_id) : nil
+      end.compact
+
+      agency_name = agencies_assigned[0].name
+
+      next unless gender && agency_name
+
+      # Increment the count for the respective gender within the agency's statistics
+      stats[agency_name][gender.to_sym] += 1
+    end
+
+    stats
+  end
 end

@@ -38,9 +38,8 @@ import {
   // 'Closed Cases by Sex and Reason'
   ResolvedCasesByGenderAndReason,
   // --------------------------------------------------------------
-  // cases_referral_to_agency_stats
-  // Cases Referral (To Agency )
-  CasesReferralToAgency,
+  // 'Cases Referrals (To Agency)'
+  CasesReferralsToAgency,
   // --------------------------------------------------------------
   // 'Cases requiring Alternative Care Placement Services'
   CasesRequiringAlternativeCarePlacementServices,
@@ -122,7 +121,7 @@ const Dashboard = () => {
             {/* 'Percentage of Children who received Child Protection Services' */}
             <PercentageChildrenReceivedChildProtectionServices />
             <ResolvedCasesByGenderAndReason /> {/* 'Closed Cases by Sex and Reason' */}
-            <CasesReferralToAgency /> {/* Cases Referral (To Agency ) */}
+            <CasesReferralsToAgency /> {/* 'Cases Referrals (To Agency)' */}
             {/* 'Cases requiring Alternative Care Placement Services' */}
             <CasesRequiringAlternativeCarePlacementServices />
             <MonthlyRegResCases /> {/* Registered and Closed Cases by Month */}

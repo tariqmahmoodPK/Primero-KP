@@ -49,11 +49,9 @@ class Api::V2::DashboardsController < ApplicationApiController
     @stats = closed_cases_by_sex_and_reason
   end
 
-  # TODO Need to Modify logic
-  # TODO The form field for are not present in the current dump
-  # Cases Referral (To Agency )
-  def cases_referral_to_agency_stats
-    @stats = Child.cases_referral_to_agency(current_user)
+  # 'Cases Referrals (To Agency)'
+  def cases_referrals_to_agency
+    @stats = Child.cases_referrals_to_agency_stats(current_user)
   end
 
   # 'Cases requiring Alternative Care Placement Services'
