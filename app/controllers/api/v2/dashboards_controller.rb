@@ -49,12 +49,12 @@ class Api::V2::DashboardsController < ApplicationApiController
     @stats = closed_cases_by_sex_and_reason
   end
 
-  # 'Cases Referrals (To Agency)'
+  # 'Cases Referrals (To Agency)' Graph
   def cases_referrals_to_agency
     @stats = Child.cases_referrals_to_agency_stats(current_user)
   end
 
-  # 'Cases requiring Alternative Care Placement Services'
+  # 'Cases requiring Alternative Care Placement Services' Graph
   def alternative_care_placement_by_gender
     @stats = Child.alternative_care_placement_by_gender(current_user)
 
@@ -86,19 +86,47 @@ class Api::V2::DashboardsController < ApplicationApiController
     @stats = nationalities
   end
 
-  # 'Registered and Closed Cases by Month'
+  # 'Registered and Closed Cases by Month' Graph
   def month_wise_registered_and_resolved_cases_stats
     @stats = Child.month_wise_registered_and_resolved_cases(current_user)
   end
 
-  #TODO Rename All of it's relevant methods, and files to reflect the proper name.
-  # Significant Harm Cases by Protection Concern
-  def significant_harm_cases_registered_by_age_and_gender_stats
-    @stats = Child.significant_harm_cases_registered_by_age_and_gender(current_user)
+  # 'High Risk Cases by Protection Concern' Graph
+  def high_risk_cases_by_protection_concern
+    @stats = Child.high_risk_cases_by_protection_concern_stats(current_user)
+
+    # Properly format the stats to use on the React Component
+    lookup_values = Lookup.protection_concerns_values
+
+    concerns = {}
+
+    @stats.each do |key, value|
+      # Find the corresponding entry in the lookup_values array
+      lookup_entry = lookup_values.find { |entry| entry["id"] == key.to_s }
+
+      if lookup_entry
+        # Get the English label from the lookup entry
+        english_label = lookup_entry["display_text"]["en"]
+        # Add the English label as a new key in the concerns hash
+        concerns[english_label] = value
+      end
+    end
+
+    # The new stats format is like this:
+    # {
+    #   "Violence" =>            {:cases => 0, :percentage => 0},
+    #   "Exploitation" =>        {:cases => 0, :percentage => 0},
+    #   "Neglect" =>             {:cases => 0, :percentage => 0},
+    #   "Harmful practice(s)" => {:cases => 0, :percentage => 0},
+    #   "Abuse" =>               {:cases => 0, :percentage => 0},
+    #   "Other" =>               {:cases => 0, :percentage => 0}
+    # }
+
+    @stats = concerns
   end
 
   #TODO Rename All of it's relevant methods, and files to reflect the proper name.
-  # Registered Cases by Protection Concern
+  # Registered Cases by Protection Concern Graph
   def registered_cases_by_protection_concern
     @stats = Child.registered_cases_by_protection_concern_stats(current_user)
   end

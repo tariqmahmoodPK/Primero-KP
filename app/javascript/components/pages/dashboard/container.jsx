@@ -42,11 +42,9 @@ import {
   // 'Cases requiring Alternative Care Placement Services'
   CasesRequiringAlternativeCarePlacementServices,
   // 'Registered and Closed Cases by Month'
-  MonthlyRegResCases,
-  // --------------------------------------------------------------
-  // significant_harm_cases_registered_by_age_and_gender_stats
-  // Significant Harm Cases by Protection Concern
-  HarmCases,
+  MonthlyRegisteredAndResolvedCases,
+  // 'High Risk Cases by Protection Concern'
+  HighRiskCasesByProtectionConcern,
   // --------------------------------------------------------------
   // registered_cases_by_protection_concern
   // Registered Cases by Protection Concern
@@ -120,8 +118,8 @@ const Dashboard = () => {
             <CasesReferralsToAgency /> {/* 'Cases Referrals (To Agency)' */}
             {/* 'Cases requiring Alternative Care Placement Services' */}
             <CasesRequiringAlternativeCarePlacementServices />
-            <MonthlyRegResCases /> {/* Registered and Closed Cases by Month */}
-            <HarmCases /> {/* Significant Harm Cases by Protection Concern */}
+            <MonthlyRegisteredAndResolvedCases /> {/* Registered and Closed Cases by Month */}
+            <HighRiskCasesByProtectionConcern /> {/* 'High Risk Cases by Protection Concern' */}
             <RegisteredCasesByProtectionConcern /> {/* Registered Cases by Protection Concern */}
           </Grid>
 

@@ -26,11 +26,9 @@ const reducer = (state = DEFAULT_STATE, { type, payload }) => {
     // 'Registered and Closed Cases by Month'
     case actions.MONTHLY_REGISTERED_AND_RESOLVED_CASES_SUCCESS:
       return state.set("monthlyRegisteredAndResolvedCases", fromJS(payload));
-    // ------------------------------------------------------------------------
-    // significant_harm_cases_registered_by_age_and_gender_stats
-    // Significant Harm Cases by Protection Concern
-    case actions.HARM_CASES_SUCCESS:
-      return state.set("harmCases", fromJS(payload));
+    // 'High Risk Cases by Protection Concern'
+    case actions.HIGH_RISK_CASES_BY_PROTECTION_CONCERN_SUCCESS:
+      return state.set("highRiskCasesByProtectionConcern", fromJS(payload));
     // ------------------------------------------------------------------------
     // registered_cases_by_protection_concern
     // Registered Cases by Protection Concern

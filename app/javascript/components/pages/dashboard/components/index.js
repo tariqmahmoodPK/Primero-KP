@@ -29,11 +29,9 @@ export { default as CasesReferralsToAgency } from "./cases-referrals-to-agency";
 // 'Cases requiring Alternative Care Placement Services'
 export { default as CasesRequiringAlternativeCarePlacementServices } from "./cases-requiring-alternative-care-placement-services";
 //  'Registered and Closed Cases by Month'
-export { default as MonthlyRegResCases } from "./monthly-reg-res-cases";
-// --------------------------------------------------------------------
-// significant_harm_cases_registered_by_age_and_gender_stats
-// Significant Harm Cases by Protection Concern
-export { default as HarmCases } from "./harm-cases";
+export { default as MonthlyRegisteredAndResolvedCases } from "./monthly-reg-res-cases";
+// 'High Risk Cases by Protection Concern'
+export { default as HighRiskCasesByProtectionConcern } from "./high-risk-cases-by-protection-concern";
 // --------------------------------------------------------------------
 // registered_cases_by_protection_concern
 // Registered Cases by Protection Concern

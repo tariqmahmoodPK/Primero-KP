@@ -169,12 +169,11 @@ export const fetchMonthlyRegisteredAndResolvedCases = () => ({
   }
 });
 
-// significant_harm_cases_registered_by_age_and_gender_stats
-// Significant Harm Cases by Protection Concern
-export const fetchHarmCases = () => ({
-  type: actions.HARM_CASES,
+// 'High Risk Cases by Protection Concern'
+export const fetchHighRiskCasesByProtectionConcern = () => ({
+  type: actions.HIGH_RISK_CASES_BY_PROTECTION_CONCERN,
   api: {
-    path: "dashboards/significant_harm_cases_registered_by_age_and_gender_stats"
+    path: "dashboards/high_risk_cases_by_protection_concern"
   }
 });
 

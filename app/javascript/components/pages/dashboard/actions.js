@@ -36,11 +36,9 @@ export default namespaceActions(NAMESPACE, [
   // 'Registered and Closed Cases by Month'
   "MONTHLY_REGISTERED_AND_RESOLVED_CASES",
   "MONTHLY_REGISTERED_AND_RESOLVED_CASES_SUCCESS",
-  // -------------------------------------------------------------------
-  // significant_harm_cases_registered_by_age_and_gender_stats
-  // Significant Harm Cases by Protection Concern
-  "HARM_CASES",
-  "HARM_CASES_SUCCESS",
+  // 'High Risk Cases by Protection Concern'
+  "HIGH_RISK_CASES_BY_PROTECTION_CONCERN",
+  "HIGH_RISK_CASES_BY_PROTECTION_CONCERN_SUCCESS",
   // -------------------------------------------------------------------
   "REGISTERED_CASES_BY_PROTECTION_CONCERN_REAL",
   "REGISTERED_CASES_BY_PROTECTION_CONCERN_REAL_SUCCESS"

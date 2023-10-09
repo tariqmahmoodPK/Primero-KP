@@ -3,7 +3,7 @@ module GraphHelpers
   # Used By:
     # 'Percentage of Children who received Child Protection Services'
     # 'Registered and Closed Cases by Month'
-    # 'Significant Harm Cases by Protection Concern'
+    # 'High Risk Cases by Protection Concern'
     # 'Registered Cases by Protection Concern'
   def get_childern_records(user, is_risk_level_high = nil)
     # User's role
@@ -963,5 +963,6 @@ module GraphHelpers
 
     month_list
   end
+
   # -------------------------------------------------------------------------------------------------
 end

@@ -39,7 +39,6 @@ const Component = () => {
     const registered = stats.Registered;
     const resolved = stats.Resolved;
 
-    // ? Let or Const for key
     for (const key in registered) {
       const t = {
         name: key,
@@ -150,6 +149,6 @@ const Component = () => {
   );
 };
 
-Component.displayName = `RegResCases`;
+Component.displayName = `MonthlyRegisteredAndResolvedCases`;
 
 export default Component;

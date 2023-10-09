@@ -85,6 +85,7 @@ const Component = () => {
       female.push(stats[key].female);
       transgender.push(stats[key].transgender);
     }
+
     graphData = {
       labels,
       datasets: [

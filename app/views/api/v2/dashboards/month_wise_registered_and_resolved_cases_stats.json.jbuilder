@@ -1,6 +1,6 @@
 # 'Registered and Closed Cases by Month'
 
-# Received Stats Format
+# Received Stats Format:
 # {
 #   "Resolved"=> {
 #     "Jan"=>{"male"=>0, "female"=>0, "transgender"=>0, "total"=>0},

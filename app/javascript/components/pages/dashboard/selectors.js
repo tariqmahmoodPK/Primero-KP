@@ -177,10 +177,9 @@ export const getMonthlyRegisteredAndResolvedCases = state => {
   return state.getIn(["records", NAMESPACE, "monthlyRegisteredAndResolvedCases"], fromJS({}));
 };
 
-// significant_harm_cases_registered_by_age_and_gender_stats
-// Significant Harm Cases by Protection Concern
-export const getHarmCases = state => {
-  return state.getIn(["records", NAMESPACE, "harmCases"], fromJS({}));
+// 'High Risk Cases by Protection Concern'
+export const getHighRiskCasesByProtectionConcern = state => {
+  return state.getIn(["records", NAMESPACE, "highRiskCasesByProtectionConcern"], fromJS({}));
 };
 
 // registered_cases_by_protection_concern
