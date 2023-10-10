@@ -190,7 +190,10 @@ module Graphs
     }
 
     get_resolved_cases_for_role(user, "high").each do |child|
-      gender = child.data["sex"]
+      # Getting 'transgender_a797d7e' for child.data["sex"].
+      # That exactly match with the 'transgender' word.
+      # So, using this line.
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
       next unless gender
 
       if child.data["case_goals_all_met_811860"].present?
@@ -270,7 +273,10 @@ module Graphs
     cases_requiring_alternative_care = get_cases_requiring_alternative_care(user)
 
     cases_requiring_alternative_care.each do |child|
-      gender = child.data["sex"]
+      # Getting 'transgender_a797d7e' for child.data["sex"].
+      # That exactly match with the 'transgender' word.
+      # So, using this line.
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
       next unless gender
 
       if child.data["nationality_b80911e"].include?("nationality1")
@@ -330,7 +336,10 @@ module Graphs
     cases_referred_to_agencies = get_cases_referred_to_agencies(user, nil, true)
 
     cases_referred_to_agencies.each do |child|
-      gender = child.data["sex"]
+      # Getting 'transgender_a797d7e' for child.data["sex"].
+      # That exactly match with the 'transgender' word.
+      # So, using this line.
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
 
       agencies_assigned = child.data["assigned_user_names"].map do |refer|
         user = User.find_by(user_name: refer)
@@ -511,7 +520,11 @@ module Graphs
     # Calculate Stats
     Child.get_childern_records(user, "high", true).each do |child|
       # child.data["protection_concerns"] returns an array of strings, Each specifing a Protection Concern
-      gender = child.data["sex"]
+
+      # Getting 'transgender_a797d7e' for child.data["sex"].
+      # That exactly match with the 'transgender' word.
+      # So, using this line.
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
       next unless gender
 
       if child.data["protection_concerns"].include?("other")
