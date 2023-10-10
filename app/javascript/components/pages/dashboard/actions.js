@@ -1,5 +1,3 @@
-/* TODO Update the referencing comments after properly updating the files */
-
 import { namespaceActions } from "../../../libs";
 
 import NAMESPACE from "./namespace";

@@ -267,7 +267,6 @@ module Graphs
       other:     { male: 0, female: 0, transgender: 0 }, # Lookup id: nationality10
     }
 
-    # TODO Ask if this search query should also include cases with High Risk
     cases_requiring_alternative_care = get_cases_requiring_alternative_care(user)
 
     cases_requiring_alternative_care.each do |child|
@@ -327,7 +326,6 @@ module Graphs
       stats[agency.name] = { male: 0, female: 0, transgender: 0 }
     end
 
-    # TODO Ask if this search query should also include cases with High Risk
     # Get cases referred to agencies for the user
     cases_referred_to_agencies = get_cases_referred_to_agencies(user, nil, true)
 

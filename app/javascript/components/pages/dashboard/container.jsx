@@ -1,4 +1,3 @@
-/* TODO Update the referencing comments after properly updating the files */
 // Dashboard Component that import all the Graphs in it.
 
 /* eslint-disable react/jsx-no-target-blank */

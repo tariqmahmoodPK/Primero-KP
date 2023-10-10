@@ -1,5 +1,3 @@
-/* TODO Update the referencing comments after properly updating the files */
-
 import { fromJS, Map } from "immutable";
 import orderBy from "lodash/orderBy";
 

@@ -1,10 +1,5 @@
-// TODO The Chart is supposed to be a Bar type chart not a Donut Pie type
-// TODO May need to change this later on.
-
-/* TODO Update the referencing comments after properly updating the files */
-/* TODO Add Explanatory Comments */
-
 /* eslint-disable no-param-reassign */
+
 import ChartJS from "chart.js";
 import { createRef, useEffect } from "react";
 import PropTypes from "prop-types";

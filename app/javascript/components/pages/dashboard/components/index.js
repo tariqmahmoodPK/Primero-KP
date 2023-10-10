@@ -1,5 +1,3 @@
-/* TODO Update the referencing comments after properly updating the files */
-
 export { default as Overview } from "./overview";
 export { default as SharedFromMyTeam } from "./shared-from-my-team";
 export { default as SharedWithMyTeam } from "./shared-with-my-team";

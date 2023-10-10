@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# TODO Update the referencing comments after properly updating the files
-# TODO Add Explanatory Comments
-
 Rails.application.routes.draw do
   root to: 'home#v2'
 

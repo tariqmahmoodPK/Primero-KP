@@ -1,5 +1,3 @@
-/* TODO Update the referencing comments after properly updating the files */
-
 import { fromJS } from "immutable";
 
 import { DASHBOARD_NAMES } from "./constants";

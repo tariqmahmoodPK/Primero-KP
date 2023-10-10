@@ -4,10 +4,6 @@
 # The truth of it is, this is a long class.
 # Just the same, it shouldn't exceed 300 lines (250 lines of active code).
 
-# TODO Update the referencing comments after properly updating the files
-# TODO Add Explanatory Comments
-# TODO Create Concerns so that this file does not exceed 300 lines, More or less
-
 # The central Primero model object that represents an individual's case.
 # In spite of the name, this will represent adult cases as well.
 class Child < ApplicationRecord
@@ -82,7 +78,7 @@ class Child < ApplicationRecord
 
   # Scopes
   scope :by_date_of_birth, -> { where.not('data @> ?', { date_of_birth: nil }.to_json) }
-  #! Assumming this is how to search for records in KPK Province, Since there is no longer a owned_by_location attribute
+  # Search for records in KPK Province
   scope :with_province, -> {
     where("location_current LIKE ?", "KPK%").where('risk_level = ?', 'high')
   }

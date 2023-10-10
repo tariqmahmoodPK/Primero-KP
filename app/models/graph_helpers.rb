@@ -12,7 +12,7 @@ module GraphHelpers
     # Getting records based on the Permissions of Each Role to View the Graphs
     case role
     # View Cases of a User
-    when 'Social Case Worker', 'Psychologist', 'Child Helpline Officer', 'Superuser'
+    when 'Social Case Worker', 'Psychologist', 'Child Helpline Officer'
       get_cases_assigned_to_specific_user(user, is_risk_level_high, open_cases)
     # View Cases of all Districts (Provincial data)
     when 'CPWC'
@@ -29,8 +29,6 @@ module GraphHelpers
     when 'Referral'
       get_cases_referred_to_user(user, is_risk_level_high, open_cases)
     else
-      #TODO Ask what should be here
-      # Temporarily using this method as this was used in the Sindh Version as well.
       # All Cases that are owned by the users under an Agency and are also owned by a particular location
       get_cases_with_location_and_agency(user, is_risk_level_high, open_cases)
     end
@@ -61,7 +59,6 @@ module GraphHelpers
   end
 
   # View Cases of all Districts (Provincial data)
-  # TODO Modify the Logic for it if necessary after Clearing out Questions and Assumptions
   def get_cases_assigned_to_specific_location(user, is_risk_level_high = nil, open_cases = false)
     # User's Location Code
     location_code = user.location
@@ -196,9 +193,6 @@ module GraphHelpers
         with(:owned_by, usernames)
         with(:location_current, location_code)
         with(:status, "open")
-        # TODO Remove this after
-        # This won't wont be used as there in no longer an attribute 'owned_by_location'
-        # with(:owned_by_location, user.location)
       end
     end
 
@@ -210,8 +204,6 @@ module GraphHelpers
         with(:owned_by, usernames)
         with(:location_current, location_code)
         with(:status, "open")
-        # TODO Remove this after
-        # with(:owned_by_location, user.location)
       end
 
       paginate :page => 1, :per_page => cases.total
@@ -252,8 +244,6 @@ module GraphHelpers
     when 'Referral'
       get_resolved_cases_referred_to_user(user, is_risk_level_high)
     else
-      #TODO Ask what should be here
-      # Temporarily using this method as this was used in the Sindh Version as well.
       # All Resolved Cases that are owned by the users under an Agency and are also owned by a particular location
       get_resolved_cases_with_location_and_agency(user, is_risk_level_high)
     end
@@ -479,9 +469,6 @@ module GraphHelpers
       any_of do
         with(:owned_by, usernames)
         with(:location_current, location_code)
-        # TODO Remove this after
-        # This won't wont be used as there in no longer an attribute 'owned_by_location'
-        # with(:owned_by_location, user.location)
       end
     end
 
@@ -493,8 +480,6 @@ module GraphHelpers
       any_of do
         with(:owned_by, usernames)
         with(:location_current, location_code)
-        # TODO Remove this after
-        # with(:owned_by_location, user.location)
       end
 
       paginate :page => 1, :per_page => cases.total
@@ -531,8 +516,6 @@ module GraphHelpers
     when 'Referral'
       get_cases_requiring_alternative_care_services_referred_to_user(user, is_risk_level_high)
     else
-      #TODO Ask what should be here
-      # Temporarily using this method as something similar was used in the Sindh Version as well.
       # All Cases requiring Alternative Care Placement Services that are owned by the users under an Agency and are also owned by a particular location
       get_cases_requiring_alternative_care_services_with_location_and_agency(user, is_risk_level_high)
     end
@@ -757,10 +740,6 @@ module GraphHelpers
         any_of do
           with(:owned_by, usernames)
           with(:location_current, location_code)
-
-          # TODO Remove this after
-          # This won't wont be used as there in no longer an attribute 'owned_by_location'
-          # with(:owned_by_location, user.location)
         end
 
         any_of do
@@ -781,10 +760,6 @@ module GraphHelpers
         any_of do
           with(:owned_by, usernames)
           with(:location_current, location_code)
-
-          # TODO Remove this after
-          # This won't wont be used as there in no longer an attribute 'owned_by_location'
-          # with(:owned_by_location, user.location)
         end
 
         any_of do
@@ -829,8 +804,6 @@ module GraphHelpers
     when 'Referral'
       get_cases_referred_to_agencies_referred_to_user(user, is_risk_level_high, open_cases)
     else
-      #TODO Ask what should be here
-      # Temporarily using this method as something similar was used in the Sindh Version as well.
       # All Open Referrals Cases Where Referred to Agency that are owned by the users under an Agency and are also owned by a particular location
       get_cases_referred_to_agencies_with_location_and_agency(user, is_risk_level_high, open_cases)
     end
@@ -948,9 +921,6 @@ module GraphHelpers
         with(:owned_by, usernames)
         with(:location_current, location_code)
 
-        # TODO Remove this after
-        # This won't wont be used as there in no longer an attribute 'owned_by_location'
-        # with(:owned_by_location, user.location)
       end
     end
 

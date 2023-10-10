@@ -1,5 +1,3 @@
-/* TODO Update the referencing comments after properly updating the files */
-
 import { RECORD_PATH } from "../../../config";
 import { DB_COLLECTIONS_NAMES } from "../../../db";
 
