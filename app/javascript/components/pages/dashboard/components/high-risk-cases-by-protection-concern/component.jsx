@@ -46,6 +46,7 @@ const Component = () => {
       labels,
       datasets: [
         {
+          label: labels,
           data: cases,
           backgroundColor: [
             "rgb(255, 99, 132)",
