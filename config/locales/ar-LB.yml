@@ -280,7 +280,7 @@ ar-LB:
   errors:
     models:
       child:
-        age: يجب أن يتراوح العمر بين 0 و 130
+        age: يجب أن يتراوح العمر بين 0 و 18
         date_of_birth: الرجاء إدخال تاريخ ولادة صالح لملفّ هذه الحالة
       location:
         admin_level_present: لا يجوز أن يكون فارغًا

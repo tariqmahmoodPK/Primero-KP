@@ -803,7 +803,7 @@ om:
         terms_of_use_format: Faayili kun eeggacharra kan jiru ta'uu qaba.
         name_present: Duwwaa ta'uun irra hinjiraatu.
       child:
-        age: Umuriin  0 fi 130 gidduu ta'uutu irra jiraata.
+        age: Umuriin  0 fi 18 gidduu ta'uutu irra jiraata.
         date_of_birth: Maaloo galmee dhimmaa kanaatiif guyyaa dhalootaa sirrii ta'e seensisaa.
       export_configuration:
         opt_out_field_does_not_exist: Dirreen murtaa'aan filatanii ittiin bahanii galmee irra hin jiru.
@@ -1248,6 +1248,7 @@ om:
       violation: Miidhaawwan/seera cabsuu.
       registry_details: Tarreeffamoota galmeessaa.
       registry_record: Galmee itti galmaa'an.
+      prevention: ጉራጫ
     required_field: '%{field}dirree barbaachissuudha'
     select_label: Filadhaa.
     settings: Qindaayinoota.
@@ -1703,7 +1704,7 @@ om:
   managed_reports:
     label: Qalbifannaawwan/hubannoowwan.
     total: Waliigala.
-    filter_by: 
+    filter_by:
       date: Guyyaa.
       verification_status: Haala mirkaneessaa.
     date_range:
@@ -1753,14 +1754,14 @@ om:
       filter_options:
         date_of_first_report: Guyyaa Af-gaaffii/gaaffii fi deebii.
         incident_date: Guyyaa taatee.
-      reports: 
+      reports:
         incidents: Taateewwan.
         perpetrators: Yakkamtoota.
       sub_reports:
         combined: Taateewwan.
         total: Baay'ina lakkofsa taateewwan miidhaalee kornaayaa bu'ureeffatanii gabaasaman.
         gbv_sexual_violence: Baay'ina lakkofsa taateewwan miidhaa saalaa gabaasaman.
-        gbv_previous_incidents: Taateewwan miidhaa koornaayaa bu'ureeffatan dura lakkofsa baay'ina taateewwanii namoota  lubbuudhaan hafaniin gabaasaman.. 
+        gbv_previous_incidents: Taateewwan miidhaa koornaayaa bu'ureeffatan dura lakkofsa baay'ina taateewwanii namoota  lubbuudhaan hafaniin gabaasaman..
         gbv_sexual_violence_type: Gosa/akaakuu taatee.
         incident_timeofday: Yeroo taatee guyyaa.
         elapsed_reporting_time: Garaagarummaa yeroo  gidduu taatee fi gabaasaa gidduu jiru.

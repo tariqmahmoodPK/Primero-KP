@@ -822,7 +822,7 @@ pl:
         terms_of_use_format: Plik powinien być w formacie png
         name_present: nie może być puste
       child:
-        age: Wiek musi być pomiędzy 0 a 130
+        age: Wiek musi być pomiędzy 0 a 18
         date_of_birth: Wpisz poprawną datę urodzenia dla tej sprawy
       export_configuration:
         opt_out_field_does_not_exist: Pole wypisania nie istnieje dla tego rekordu.
@@ -1264,6 +1264,7 @@ pl:
       violation: Naruszenie
       registry_details: Szczegóły Rejestru
       registry_record: Rekord Rejestru
+      prevention: Zapobieganie
     required_field: '%{field} jest polem wymaganym'
     select_label: Wybierz
     settings: Ustawienia

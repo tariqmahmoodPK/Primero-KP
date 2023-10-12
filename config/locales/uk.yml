@@ -823,7 +823,7 @@ uk:
         terms_of_use_format: Файл має бути png
         name_present: не може бути порожнім
       child:
-        age: Вік має бути від 0 до 130 років
+        age: Вік має бути від 0 до 18 років
         date_of_birth: Будь ласка, введіть дійсну дату народження для цього кейсу
       export_configuration:
         opt_out_field_does_not_exist: Зазначене поле opt_out не існує в записі.
@@ -1267,6 +1267,7 @@ uk:
       violation: Порушення
       registry_details: Деталі реєстру
       registry_record: Запис реєстру
+      prevention: Профілактика
     required_field: '%{field} є обов`язковим полем'
     select_label: Вибрати
     settings: Налаштування

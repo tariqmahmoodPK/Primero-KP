@@ -571,7 +571,7 @@ fa-AF:
     error_loading: رکورد(ها) اتفاق اختاریه
     models:
       child:
-        age: سن باید بین 0 تا 130 باشد
+        age: سن باید بین 0 تا 18 باشد
         date_of_birth: لطفاً برای این قضیه تاریخ تولد مورد اعتبار را درج نمایید
       export_configuration:
         opt_out_field_does_not_exist: بخش مشخص در ذخیره قضیه وجود ندارد که انصراف داده شده باشد.

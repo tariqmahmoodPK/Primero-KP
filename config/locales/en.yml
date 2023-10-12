@@ -859,7 +859,7 @@ en:
         terms_of_use_format: File should be png
         name_present: must not be blank
       child:
-        age: Age must be between 0 and 130
+        age: Age must be between 0 and 18
         date_of_birth: Please enter a valid date of birth for this case record
       export_configuration:
         opt_out_field_does_not_exist: Specified opt_out field does not exist on the
@@ -1329,6 +1329,7 @@ en:
       violation: Violation
       registry_details: Registry Details
       registry_record: Registry Record
+      prevention: Prevention
     required_field: '%{field} is a required field'
     select_label: Select
     settings: Settings

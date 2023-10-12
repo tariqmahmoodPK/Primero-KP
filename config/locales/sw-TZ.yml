@@ -787,7 +787,7 @@ sw_TZ:
         terms_of_use_format: Faili linatakiwa kuwa la png
         name_present: Lasima Isiwe tupu
       child:
-        age: Umri ni lazima uwe kati ya 0 mpaka 130
+        age: Umri ni lazima uwe kati ya 0 mpaka 18
         date_of_birth: Tafadhali ingiza tarehe halali ya kuzaliwa kwaajili ya suala hili
       export_configuration:
         opt_out_field_does_not_exist: Bainisha sehemu ya kuchagua kutoka haipo kwenye rekodi hii
@@ -1231,6 +1231,7 @@ sw_TZ:
       violation: Ukiukaji
       registry_details: Maelezo ya Usajili
       registry_record: Rekodi za Usajili
+      prevention: Kuzuia
     required_field: '%{field}Ni eneo linalohitajika'
     select_label: Chagua
     settings: Mipangilio

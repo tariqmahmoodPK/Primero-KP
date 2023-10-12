@@ -772,7 +772,7 @@ km:
         terms_of_use_format: រូបភាពគួរតែជាប្រភេទឯកសារ png
         name_present: មិន​អាច​ទទេ​
       child:
-        age: អាយុ​ត្រូវ​តែ​ចន្លោះ​ពី 0 និង 130
+        age: អាយុ​ត្រូវ​តែ​ចន្លោះ​ពី 0 និង 18
         date_of_birth: សូម​បញ្ចូល​ថ្ងៃខែ​ឆ្នាំ​កំណើត​ដែល​ត្រឹមត្រូវ​សម្រាប់​កំណត់​ត្រា​ករណី​នេះ
       export_configuration:
         opt_out_field_does_not_exist: មិនមាន​កន្លែង​បញ្ចូល opt_out ដែល​បាន​បញ្ជាក់​នៅ​លើ​កំណត់​ត្រា។
@@ -1217,6 +1217,7 @@ km:
       violation: ការរំលោភបំពាន
       registry_details: បញ្ជី​លម្អិត​
       registry_record: បញ្ជីនៃកំណត់ត្រា
+      prevention: ការការពារ
     required_field: 'ត្រូវបញ្ចូលព័ត៌មាន%{field}'
     select_label: ជ្រើសរើស
     settings: ការកំណត់

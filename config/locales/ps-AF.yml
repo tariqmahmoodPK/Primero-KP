@@ -576,7 +576,7 @@ ps-AF:
     error_loading: د ریکارډونو په پورته کولو کې تېروتنه
     models:
       child:
-        age: عمر باید د 0 او 13 ترمنځ وي
+        age: عمر باید د 0 او 18 ترمنځ وي
         date_of_birth: مهرباني وکړئ د دې قضیې ریکارډ لپاره د زیږون  د اعتبار نیټه دننه کړئ
       export_configuration:
         opt_out_field_does_not_exist: ټاکل شوی opt_out فیلډ په ریکارډ کې شتون نلري

@@ -812,7 +812,7 @@ ku-IQ:
         terms_of_use_format: 'بیت png پێدڤیە فایل '
         name_present: نابیت ڤالا بیت
       child:
-        age: تەمەن دڤیت دناڤبەرا 0 و 130 دا بیت
+        age: تەمەن دڤیت دناڤبەرا 0 و 18 دا بیت
         date_of_birth: هیڤیدارین  بو تومارا ڤێ کەیسێ مێژوویەکا دروست بنڤیسە
       export_configuration:
         opt_out_field_does_not_exist: بەشێ opt_out یێ دەستنیشانکری لسەر تومارێ نینە
@@ -1276,6 +1276,7 @@ ku-IQ:
       violation: سەرپێچی
       registry_details: پێزانینێن هویر یێن تومارێ
       registry_record: ریکوردێن تومارێ
+      prevention: پێشگیری
     required_field: 'بوارەکێ پێدڤیە  %{field} '
     select_label: ده ستنیشان کرن
     settings: تایبەتمەندی

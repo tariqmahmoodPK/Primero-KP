@@ -823,7 +823,7 @@ sk:
         terms_of_use_format: Súbor by mal byť vo formáte png
         name_present: nesmie byť prázdne
       child:
-        age: Vek musí byť od 0 do 130 rokov
+        age: Vek musí byť od 0 do 18 rokov
         date_of_birth: Zadajte platný dátum narodenia pre tento záznam
       export_configuration:
         opt_out_field_does_not_exist: Zadané pole opt_out v zázname neexistuje.
@@ -1269,6 +1269,7 @@ sk:
       violation: Porušenie
       registry_details: Podrobnosti Registra
       registry_record: Záznam v registri
+      prevention: Prevence
     required_field: '%{field} je vyžadované pole'
     select_label: Vybrať
     settings: Nastavenia

@@ -878,7 +878,7 @@ ku:
         terms_of_use_format: پێویستە فایلەكە بە شێوەی png بێت
         name_present: نابێت بەبەتاڵی بمێنێتەوە
       child:
-        age: تەمەن دەبێت لە نێوان ٠ و ١٣٠ بێت
+        age: تەمەن دەبێت لە نێوان ٠ و ١٨ بێت
         date_of_birth: ' تکایە بەرواری لەدایکبونى راست لە تومارى ئەم کەیسە بنوسە'
       export_configuration:
         opt_out_field_does_not_exist: ' تۆماری  opt_out ى دەستنیشانکراو لە تومارەکەدا بونى نیە'
@@ -1344,12 +1344,11 @@ ku:
       reportable_protection_concern: نیگەرانیەکانى پاراستن
       reportable_service: خزمەتگوزارى
       tracing_request: داواکاری بۆ بەدواداگەڕان
-      transfers_assignments: 'گواستنەوە/ پێسپاردنەكان
-
-         '
+      transfers_assignments: 'گواستنەوە/ پێسپاردنەكان'
       violation: توندوتیژى
       registry_details: ووردەكاریی تۆمارکردن
       registry_record: تۆمارگەی تۆمارکردن
+      prevention: پێشگیری
     required_field: ' %{field}بوارێکی پێویستە'
     select_label: دیاریکردن
     settings: ڕیکخستن

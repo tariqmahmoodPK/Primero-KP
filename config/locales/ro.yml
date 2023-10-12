@@ -754,7 +754,7 @@ ro:
         terms_of_use_format: Fișierul trebuie să fie png
         name_present: nu trebuie să rămână necompletat
       child:
-        age: Vârsta trebuie să fie cuprinsă între 0 și 130
+        age: Vârsta trebuie să fie cuprinsă între 0 și 18
         date_of_birth: Te rugăm să introduci o dată de naștere validă pentru această înregistrare
       export_configuration:
         opt_out_field_does_not_exist: Câmpul opt_out specificat nu există în înregistrare.
@@ -1212,6 +1212,7 @@ ro:
       violation: Abuz
       registry_details: Detalii Registru
       registry_record: Registru înregistrare
+      prevention: Prevenție
     required_field: '%{field}este câmp obligatoriu'
     select_label: Selectează
     settings: Setări
