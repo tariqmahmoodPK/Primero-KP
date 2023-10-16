@@ -41,6 +41,7 @@ gem 'rbnacl',              '>= 7.1.1'  # Libsodium Ruby binding. Used for encryp
 gem 'rubyzip',             '~> 2.3',   # Zip and encrypt exported files
     require: 'zip'
 gem 'spreadsheet',         '~> 1.1'    # Read XLS spreadsheets for imports (not XLSX!). TODO: Different gem? Reconsider?
+gem "simple_xlsx_reader", "~> 5.0"     # Read XLSX Spreadsheets
 # Note: if upgrading Sunspot, update the corresponding version of Solr on the Docker image
 # Current Solr version is 5.3.1
 gem 'sunspot_rails',       '~> 2.5'    # Rails ODM bindings to Solr
