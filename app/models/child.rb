@@ -9,7 +9,7 @@
 class Child < ApplicationRecord
   RISK_LEVEL_HIGH = 'high'
   RISK_LEVEL_NONE = 'none'
-  NAME_FIELDS = %w[name name_nickname name_other].freeze
+  NAME_FIELDS     = %w[name name_nickname name_other].freeze
 
   self.table_name = 'cases'
 
@@ -42,7 +42,12 @@ class Child < ApplicationRecord
   include DuplicateIdAlertable
   include FollowUpable
   include LocationCacheable
+  # Helper Methods for the Graphs
+  extend GraphHelpers
+  # Methods to Calculate Stats for Graphs
+  extend Graphs
 
+  # Accessors
   store_accessor(
     :data,
     :case_id, :case_id_code, :case_id_display,
@@ -64,13 +69,19 @@ class Child < ApplicationRecord
     :duplicate, :cp_case_plan_subform_case_plan_interventions, :has_case_plan
   )
 
-  has_many :incidents, foreign_key: :incident_case_id
-  has_many :matched_traces, class_name: 'Trace', foreign_key: 'matched_case_id'
-  has_many :duplicates, class_name: 'Child', foreign_key: 'duplicate_case_id'
-  belongs_to :duplicate_of, class_name: 'Child', foreign_key: 'duplicate_case_id', optional: true
-  belongs_to :registry_record, foreign_key: :registry_record_id, optional: true
+  # Associations
+  has_many   :incidents      ,                      foreign_key: :incident_case_id
+  has_many   :matched_traces , class_name: 'Trace', foreign_key: 'matched_case_id'
+  has_many   :duplicates     , class_name: 'Child', foreign_key: 'duplicate_case_id'
+  belongs_to :duplicate_of   , class_name: 'Child', foreign_key: 'duplicate_case_id', optional: true
+  belongs_to :registry_record,                      foreign_key: :registry_record_id, optional: true
 
+  # Scopes
   scope :by_date_of_birth, -> { where.not('data @> ?', { date_of_birth: nil }.to_json) }
+  # Search for records in KPK Province
+  scope :with_province, -> {
+    where("location_current LIKE ?", "KPK%").where('risk_level = ?', 'high')
+  }
 
   def self.sortable_text_fields
     %w[name case_id_display national_id_no registry_no]
@@ -123,37 +134,51 @@ class Child < ApplicationRecord
   end
 
   searchable do
-    filterable_id_fields.each { |f| string("#{f}_filterable", as: "#{f}_filterable_sci") { data[f] } }
-    sortable_text_fields.each { |f| string("#{f}_sortable", as: "#{f}_sortable_sci") { data[f] } }
+    filterable_id_fields.each { |f| string( "#{f}_filterable", as: "#{f}_filterable_sci") { data[f] } }
+    sortable_text_fields.each { |f| string( "#{f}_sortable"  , as: "#{f}_sortable_sci"  ) { data[f] } }
+
     Child.child_matching_field_names.each { |f| text_index(f, suffix: 'matchable') }
     Child.family_matching_field_names.each do |f|
       text_index(f, suffix: 'matchable', subform_field_name: 'family_details_section')
     end
+
     quicksearch_fields.each { |f| text_index(f) }
+
     %w[registration_date date_case_plan_initiated assessment_requested_on date_closure].each { |f| date(f) }
     %w[estimated urgent_protection_concern consent_for_tracing has_case_plan].each do |f|
       boolean(f) { data[f] == true || data[f] == 'true' }
     end
     %w[day_of_birth age].each { |f| integer(f) }
     %w[id status sex current_care_arrangements_type].each { |f| string(f, as: "#{f}_sci") }
+
     string :risk_level, as: 'risk_level_sci' do
       risk_level.present? ? risk_level : RISK_LEVEL_NONE
     end
     string :protection_concerns, multiple: true
+
     date(:assessment_due_dates, multiple: true) { Tasks::AssessmentTask.from_case(self).map(&:due_date) }
-    date(:case_plan_due_dates, multiple: true) { Tasks::CasePlanTask.from_case(self).map(&:due_date) }
-    date(:followup_due_dates, multiple: true) { Tasks::FollowUpTask.from_case(self).map(&:due_date) }
+    date(:case_plan_due_dates , multiple: true) { Tasks::CasePlanTask.from_case(self).map(&:due_date) }
+    date(:followup_due_dates  , multiple: true) { Tasks::FollowUpTask.from_case(self).map(&:due_date) }
+
     boolean(:has_incidents) { incidents.size.positive? }
+
+    # Define a 'text' field for Sunspot indexing.
+    # This field extracts the value associated with the 'nationality_b80911e' key from the 'data' JSON object.
+    text :nationality_b80911e do
+      data["nationality_b80911e"]
+    end
   end
 
+  # Validations
   validate :validate_date_of_birth
 
-  before_save :sync_protection_concerns
-  before_save :auto_populate_name
-  before_save :stamp_registry_fields
-  before_save :calculate_has_case_plan
+  # Callbacks
+  before_save   :sync_protection_concerns
+  before_save   :auto_populate_name
+  before_save   :stamp_registry_fields
+  before_save   :calculate_has_case_plan
   before_create :hide_name
-  after_save :save_incidents
+  after_save    :save_incidents
 
   class << self
     alias super_new_with_user new_with_user
@@ -174,8 +199,8 @@ class Child < ApplicationRecord
 
   def self.report_filters
     [
-      { 'attribute' => 'status', 'value' => [STATUS_OPEN] },
-      { 'attribute' => 'record_state', 'value' => ['true'] }
+      { 'attribute' => 'status'      , 'value' => [STATUS_OPEN] },
+      { 'attribute' => 'record_state', 'value' => ['true']      }
     ]
   end
 
@@ -331,4 +356,5 @@ class Child < ApplicationRecord
     %w[incident_details]
   end
 end
+
 # rubocop:enable Metrics/ClassLength

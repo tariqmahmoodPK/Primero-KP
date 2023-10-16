@@ -219,5 +219,22 @@ class Lookup < ApplicationRecord
     options = (send("lookup_values_#{locale}").present? ? send("lookup_values_#{locale}") : [])
     send_update_lookup_options(lookup_values_hash, locale, default_ids, options)
   end
+
+  def self.protection_concerns_values
+    find_by(unique_id: "lookup-protection-concerns").lookup_values_i18n
+  end
+
+  def self.nationality_lookup_values
+    find_by(unique_id: "lookup-nationality").lookup_values_i18n
+  end
+
+  # Lookup Values for the Closure Form's 'What is reason for closing this case' Field
+  def self.reason_for_closing_case_values
+    # NOTE Had to do this as there is no lookup created for Closure form's what_is_the_reason_for_closing_this_case__d2d2ce8 field the lookups are hardcoded into the field itself.
+    closure_form = FormSection.where("name_i18n->>'en' = ? AND form_group_id = ?", "Closure", "closure").first
+    reason_for_closing_this_case_field = closure_form.fields.find_by(name: "what_is_the_reason_for_closing_this_case__d2d2ce8")
+    # Lookup Values
+    reason_for_closing_this_case_field.option_strings_text_i18n
+  end
 end
 # rubocop:enable Metrics/ClassLength

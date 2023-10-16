@@ -122,3 +122,63 @@ export const fetchDashboards = () => ({
     }
   }
 });
+
+/* ====================================== */
+/*                 Graphs                 */
+/* ====================================== */
+
+// 'Percentage of Children who received Child Protection Services'
+export const fetchPercentageChildrenReceivedChildProtectionServices = () => ({
+  type: actions.PERCENTAGE_OF_CHILDREN_WHO_RECEIVED_CHILD_PROTECTION_SERVICES,
+  api: {
+    path: "dashboards/percentage_children_received_child_protection_services"
+  }
+});
+
+// 'Closed Cases by Sex and Reason'
+export const fetchResolvedCasesByGenderAndReason = () => ({
+  type: actions.RESOLVED_CASES_BY_GENDER_AND_REASON,
+  api: {
+    path: "dashboards/resolved_cases_by_gender_and_reason"
+  }
+});
+
+// 'Cases Referrals (To Agency)'
+export const fetchCasesReferralsToAgency = () => ({
+  type: actions.CASES_REFERRALS_TO_AGENCY,
+  api: {
+    path: "dashboards/cases_referrals_to_agency"
+  }
+});
+
+// 'Cases requiring Alternative Care Placement Services'
+export const fetchCasesRequiringAlternativeCarePlacementServices = () => ({
+  type: actions.CASES_REQUIRING_ALTERNATIVE_CARE_PLACEMENT_SERVICES,
+  api: {
+    path: "dashboards/alternative_care_placement_by_gender"
+  }
+});
+
+// 'Registered and Closed Cases by Month'
+export const fetchMonthlyRegisteredAndResolvedCases = () => ({
+  type: actions.MONTHLY_REGISTERED_AND_RESOLVED_CASES,
+  api: {
+    path: "dashboards/month_wise_registered_and_resolved_cases_stats"
+  }
+});
+
+// 'High Risk Cases by Protection Concern'
+export const fetchHighRiskCasesByProtectionConcern = () => ({
+  type: actions.HIGH_RISK_CASES_BY_PROTECTION_CONCERN,
+  api: {
+    path: "dashboards/high_risk_cases_by_protection_concern"
+  }
+});
+
+// 'Registered Cases by Protection Concern'
+export const fetchRegisteredCasesByProtectionConcern = () => ({
+  type: actions.REGISTERED_CASES_BY_PROTECTION_CONCERN,
+  api: {
+    path: "dashboards/registered_cases_by_protection_concern"
+  }
+});

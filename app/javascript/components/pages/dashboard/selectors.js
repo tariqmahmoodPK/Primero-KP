@@ -145,3 +145,42 @@ export const getDashboardFlags = (state, excludeResolved = false) => {
 };
 
 export const getCasesToAssign = state => getDashboardByName(state, DASHBOARD_NAMES.CASES_TO_ASSIGN);
+
+/* ====================================== */
+/*                 Graphs                 */
+/* ====================================== */
+
+// 'Percentage of Children who received Child Protection Services'
+export const getPercentageChildrenReceivedChildProtectionServices = state => {
+  return state.getIn(["records", NAMESPACE, "percentageChildrenReceivedChildProtectionServices"], fromJS({}));
+};
+
+// 'Closed Cases by Sex and Reason'
+export const getResolvedCasesByGenderAndReason = state => {
+  return state.getIn(["records", NAMESPACE, "resolvedCasesByGenderAndReason"], fromJS({}));
+};
+
+// 'Cases Referrals (To Agency)'
+export const getCasesReferralsToAgency = state => {
+  return state.getIn(["records", NAMESPACE, "casesReferralsToAgency"], fromJS({}));
+};
+
+// 'Cases requiring Alternative Care Placement Services'
+export const getCasesRequiringAlternativeCarePlacementServices = state => {
+  return state.getIn(["records", NAMESPACE, "casesRequiringAlternativeCarePlacementServices"], fromJS({}));
+};
+
+// 'Registered and Closed Cases by Month'
+export const getMonthlyRegisteredAndResolvedCases = state => {
+  return state.getIn(["records", NAMESPACE, "monthlyRegisteredAndResolvedCases"], fromJS({}));
+};
+
+// 'High Risk Cases by Protection Concern'
+export const getHighRiskCasesByProtectionConcern = state => {
+  return state.getIn(["records", NAMESPACE, "highRiskCasesByProtectionConcern"], fromJS({}));
+};
+
+// 'Registered Cases by Protection Concern'
+export const getRegisteredCasesByProtectionConcern = state => {
+  return state.getIn(["records", NAMESPACE, "registeredCasesByProtectionConcern"], fromJS({}));
+};

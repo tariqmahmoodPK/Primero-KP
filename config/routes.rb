@@ -83,6 +83,7 @@ Rails.application.routes.draw do
           get :export, to: 'form_sections#export'
         end
       end
+
       resources :users do
         post :'password-reset-request', to: 'password_reset#user_password_reset_request'
         collection do
@@ -93,8 +94,28 @@ Rails.application.routes.draw do
           post :'password-reset', to: 'password_reset#password_reset'
         end
       end
+
       resources :identity_providers, only: [:index]
-      resources :dashboards, only: [:index]
+
+      resources :dashboards, only: [:index] do
+        collection do
+          # 'Percentage of Children who received Child Protection Services'
+          get :percentage_children_received_child_protection_services
+          # 'Closed Cases by Sex and Reason'
+          get :resolved_cases_by_gender_and_reason
+          # 'Cases Referrals (To Agency)'
+          get :cases_referrals_to_agency
+          # 'Cases requiring Alternative Care Placement Services'
+          get :alternative_care_placement_by_gender
+          #  'Registered and Closed Cases by Month'
+          get :month_wise_registered_and_resolved_cases_stats
+          # 'High Risk Cases by Protection Concern'
+          get :high_risk_cases_by_protection_concern
+          # 'Registered Cases by Protection Concern'
+          get :registered_cases_by_protection_concern
+        end
+      end
+
       resource :contact_information, only: %i[show update], controller: 'contact_information'
       resources :system_settings, only: [:index]
       resources :tasks, only: [:index]

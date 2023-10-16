@@ -9,6 +9,27 @@ const DEFAULT_STATE = Map({});
 
 const reducer = (state = DEFAULT_STATE, { type, payload }) => {
   switch (type) {
+    // 'Percentage of Children who received Child Protection Services'
+    case actions.PERCENTAGE_OF_CHILDREN_WHO_RECEIVED_CHILD_PROTECTION_SERVICES_SUCCESS:
+      return state.set("percentageChildrenReceivedChildProtectionServices", fromJS(payload));
+    // 'Closed Cases by Sex and Reason'
+    case actions.RESOLVED_CASES_BY_GENDER_AND_REASON_SUCCESS:
+      return state.set("resolvedCasesByGenderAndReason", fromJS(payload));
+    // 'Cases Referrals (To Agency)'
+    case actions.CASES_REFERRALS_TO_AGENCY_SUCCESS:
+      return state.set("casesReferralsToAgency", fromJS(payload));
+    // 'Cases requiring Alternative Care Placement Services'
+    case actions.CASES_REQUIRING_ALTERNATIVE_CARE_PLACEMENT_SERVICES_SUCCESS:
+      return state.set("casesRequiringAlternativeCarePlacementServices", fromJS(payload));
+    // 'Registered and Closed Cases by Month'
+    case actions.MONTHLY_REGISTERED_AND_RESOLVED_CASES_SUCCESS:
+      return state.set("monthlyRegisteredAndResolvedCases", fromJS(payload));
+    // 'High Risk Cases by Protection Concern'
+    case actions.HIGH_RISK_CASES_BY_PROTECTION_CONCERN_SUCCESS:
+      return state.set("highRiskCasesByProtectionConcern", fromJS(payload));
+    // 'Registered Cases by Protection Concern'
+    case actions.REGISTERED_CASES_BY_PROTECTION_CONCERN_SUCCESS:
+      return state.set("registeredCasesByProtectionConcern", fromJS(payload));
     case actions.DASHBOARD_FLAGS:
       return state.set("flags", fromJS(payload));
     case actions.CASES_BY_STATUS:
