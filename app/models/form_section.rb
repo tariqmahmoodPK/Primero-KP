@@ -6,6 +6,8 @@ class FormSection < ApplicationRecord
   include LocalizableJsonProperty
   include ConfigurationRecord
 
+  # TODO Figure out if need to add an entry for 'prevention'
+  # TODO or created another Constant like PC_MODULE_RECORD_TYPES and add 'prevention' entry to it.
   RECORD_TYPES = %w[case incident tracing_request registry_record].freeze
 
   SYSTEM_FORMS = %w[approvals incident_from_case transfers_assignments referral change_logs].freeze

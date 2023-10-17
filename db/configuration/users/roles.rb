@@ -1,3 +1,5 @@
+# This allows diferent types of roles to have different types of access to Resources.
+
 # frozen_string_literal: true
 
 def create_or_update_role(role_hash)
@@ -504,6 +506,11 @@ superuser_permissions = [
   ),
   Permission.new(
     resource: Permission::TRACING_REQUEST,
+    actions: [Permission::MANAGE]
+  ),
+  # Granted permission to Mange the Prevention Resource
+  Permission.new(
+    resource: Permission::PREVENTION,
     actions: [Permission::MANAGE]
   ),
   Permission.new(

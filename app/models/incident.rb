@@ -3,20 +3,38 @@
 # Model representing an event. Some events are correlated to a case, forming a historical record.
 # rubocop:disable Metrics/ClassLength
 class Incident < ApplicationRecord
+  # Defines shared functionality and characteristics for all core Primero record types, enhancing code consistency and maintainability.
   include Record
+  # Provides functionality for indexing and searching record fields using the Sunspot search library, including handling different field types and custom indexing configurations.
   include Searchable
+  # Adds the ability to track and manage the historical information of records, including creation and updates.
+  # Essential for maintaining historical data within record management systems.
   include Historical
+  # This describes all models that may be owned by a particular user
   include Ownable
+  # Provides the ability to flag records, allowing for the marking and categorization of records for different
+  # purposes. Useful for systems that require flagging records for special attention or categorization.
   include Flaggable
+  # Adds alert management features to records, allowing them to handle different alert types.
+  # Useful for tracking and responding to events like field changes, new forms, and approval requests
+  # within record management systems.
   include Alertable
+  # Enables the declaration and management of record attachments, including images, audio, and documents.
+  # Particularly useful for systems dealing with attachment-heavy records.
   include Attachable
+  # Enhances database query efficiency by enabling eager loading of specified associations for records.
   include EagerLoadable
+  # Enables records to interact with external systems using webhooks, offering support for managing webhook-related
+  # attributes and tracking synchronization status. An essential tool for real-time data exchange.
   include Webhookable
   include Kpi::GBVIncident
   include ReportableLocation
   include GenderBasedViolence
   include MonitoringReportingMechanism
+  # Simplifies location service integration in records by providing an attribute writer to set the location service
+  # and a method to access the LocationService singleton. Essential for efficient location-based operations in records.
   include LocationCacheable
+
 
   store_accessor(
     :data,
@@ -30,10 +48,11 @@ class Incident < ApplicationRecord
     :incident_date_end, :is_incident_date_range
   )
 
-  has_many :violations, dependent: :destroy, inverse_of: :incident
-  has_many :perpetrators, through: :violations
+  has_many :violations        , dependent: :destroy, inverse_of: :incident
+  has_many :perpetrators      , through: :violations
   has_many :individual_victims, through: :violations
-  has_many :sources, through: :violations
+  has_many :sources           , through: :violations
+
   belongs_to :case, foreign_key: 'incident_case_id', class_name: 'Child', optional: true
   after_save :save_violations_and_associations
 

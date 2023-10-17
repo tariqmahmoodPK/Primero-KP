@@ -1,62 +1,100 @@
 # frozen_string_literal: true
 
+# * Role Model
+  # This model defines the roles and associated permissions in the application.
+  # Roles are used to control access to various resources and actions within the system.
+  # Each role is associated with a set of permissions that determine what actions
+  # and resources a user with that role can access.
+#
+
 # The model for Role
 # rubocop:disable Metrics/ClassLength
 class Role < ApplicationRecord
+  # The ConfigurationRecord concern provides a shared set of methods and attributes for
+    # managing and generating unique IDs for configuration records, making it easier to
+    # create, update, and work with different types of configuration data in the application.
+  #
   include ConfigurationRecord
 
+  # Permissions for super user roles with full access to most resources.
   SUPER_ROLE_PERMISSIONS = {
-    'case' => ['manage'],
-    'role' => ['manage'],
-    'user' => ['manage'],
-    'agency' => ['manage'],
-    'report' => ['manage'],
-    'system' => ['manage'],
-    'incident' => ['manage'],
-    'metadata' => ['manage'],
+    'prevention' => ['manage'], # Allowed Superuser to mange everything relating to Preventions
+    'case'       => ['manage'],
+    'role'       => ['manage'],
+    'user'       => ['manage'],
+    'agency'     => ['manage'],
+    'report'     => ['manage'],
+    'system'     => ['manage'],
+    'incident'   => ['manage'],
+    'metadata'   => ['manage'],
     'user_group' => ['manage']
   }.freeze
 
+  # Permissions for admin roles with limited access or custom access to resources.
   ADMIN_ROLE_PERMISSIONS = {
-    'role' => ['manage'],
-    'user' => ['manage'],
-    'agency' => ['manage'],
-    'system' => ['manage'],
-    'metadata' => ['manage'],
+    'role'       => ['manage'],
+    'user'       => ['manage'],
+    'agency'     => ['manage'],
+    'system'     => ['manage'],
+    'metadata'   => ['manage'],
     'user_group' => ['manage']
   }.freeze
 
+  # This schema is used to define the expected structure of the Role model's attributes and their data types.
+  # It may be used for validation, data handling, or other purposes within the Role model or in other parts of your application.
   ROLE_FIELDS_SCHEMA = {
-    'id' => { 'type' => 'integer' }, 'unique_id' => { 'type' => 'string' },
-    'name' => { 'type' => 'string' }, 'description' => { 'type' => 'string' },
-    'group_permission' => { 'type' => 'string' }, 'referral' => { 'type' => 'boolean' },
-    'is_manager' => { 'type' => 'boolean' }, 'transfer' => { 'type' => 'boolean' },
-    'disabled' => { 'type' => 'boolean' }, 'module_unique_ids' => { 'type' => 'array' },
-    'permissions' => { 'type' => 'object' }, 'form_section_read_write' => { 'type' => 'object' },
+    'id'                       => { 'type' => 'integer'        },
+    'unique_id'                => { 'type' => 'string'         },
+    'name'                     => { 'type' => 'string'         },
+    'description'              => { 'type' => 'string'         },
+    'group_permission'         => { 'type' => 'string'         },
+    'referral'                 => { 'type' => 'boolean'        },
+    'is_manager'               => { 'type' => 'boolean'        },
+    'transfer'                 => { 'type' => 'boolean'        },
+    'disabled'                 => { 'type' => 'boolean'        },
+    'module_unique_ids'        => { 'type' => 'array'          },
+    'permissions'              => { 'type' => 'object'         },
+    'form_section_read_write'  => { 'type' => 'object'         },
     'reporting_location_level' => { 'type' => %w[integer null] }
   }.freeze
 
+  # Associations:
   has_many :form_permissions
+  # Relationship with form sections, indicating which forms the role can access.
   has_many :form_sections, through: :form_permissions, dependent: :destroy
+  # Relationship with Primero modules, specifying the modules associated with the role.
   has_and_belongs_to_many :primero_modules, -> { distinct }
-
+  # Many users can have this role.
   has_many :users
 
+  # Alias for the 'primero_modules' attribute with the name 'modules'.
+  # 'role.primero_modules' can be 'role.modules'
   alias_attribute :modules, :primero_modules
 
+  # Store complex data structures in a single column of the database.
+    # Serializing the permissions attribute using a serializer class called Permission::PermissionSerializer.
+      # Permission::PermissionSerializer class is responsible for defining how the permissions attribute should be serialized and deserialized.
+        # It determines how the data is converted to and from a string when stored in the database.
+    # 'permissions' attribute, which is complex data structure, is stored in the database as a serialized string.
+    # When retrieving a Role object from the database,
+      # Rails will automatically deserialize the string back into its original data structure, so you can work with it as an object in your code.
   serialize :permissions, Permission::PermissionSerializer
 
-  validates :permissions, presence: { message: 'errors.models.role.permission_presence' }
-  validates :name, presence: { message: 'errors.models.role.name_present' },
-                   uniqueness: { message: 'errors.models.role.unique_name' }
+  # Validation:
+  validates :permissions, presence:   { message: 'errors.models.role.permission_presence' }
+  validates :name       , presence:   { message: 'errors.models.role.name_present'        },
+                          uniqueness: { message: 'errors.models.role.unique_name'         }
   validate :validate_reporting_location_level
 
+  # Callbacks
   before_create :generate_unique_id
-  before_save :reject_form_by_module
+  before_save   :reject_form_by_module
 
+  # Scopes
   scope :by_referral, -> { where(referral: true) }
   scope :by_transfer, -> { where(transfer: true) }
 
+  # Checks if the role permits access to a specific form.
   def permitted_form_id?(form_unique_id_id)
     form_sections.map(&:unique_id).include?(form_unique_id_id)
   end
@@ -100,6 +138,7 @@ class Role < ApplicationRecord
     end
   end
 
+  # Returns a list of forms accessible by the role.
   def permitted_forms(record_type = nil, visible_only = false, include_subforms = false)
     forms = form_sections.where(
       { parent_form: record_type, visible: (visible_only || nil) }.compact.merge(is_nested: false)
@@ -112,6 +151,7 @@ class Role < ApplicationRecord
     ).order(:order, :order_subform)
   end
 
+  # Returns a list of roles permitted by this role.
   def permitted_roles
     return Role.none if permitted_role_unique_ids.blank?
 
@@ -129,10 +169,12 @@ class Role < ApplicationRecord
     permissions.find { |p| p.resource == resource }&.actions&.include?(action)
   end
 
+  # Checks if the role permits access to a specific dashboard.
   def permitted_dashboard?(dashboard_name)
     permits?(Permission::DASHBOARD, dashboard_name)
   end
 
+  # Returns a list of permitted dashboards.
   def dashboards
     dashboard_permissions = permissions.find { |p| p.resource == Permission::DASHBOARD }
     update_dashboard_permissions(dashboard_permissions)&.compact || []
@@ -192,23 +234,26 @@ class Role < ApplicationRecord
     reporting_location
   end
 
+  # Checks if the role is a Superuser role.
   def super_user_role?
     superuser_resources = [
-      Permission::CASE, Permission::INCIDENT, Permission::REPORT,
-      Permission::ROLE, Permission::USER, Permission::USER_GROUP,
+      Permission::CASE  , Permission::INCIDENT, Permission::REPORT    , Permission::PREVENTION,
+      Permission::ROLE  , Permission::USER    , Permission::USER_GROUP,
       Permission::AGENCY, Permission::METADATA, Permission::SYSTEM
     ]
     managed_resources?(superuser_resources)
   end
 
+  # Checks if the role is a user admin role.
   def user_admin_role?
     admin_only_resources = [
-      Permission::ROLE, Permission::USER, Permission::USER_GROUP,
+      Permission::ROLE  , Permission::USER    , Permission::USER_GROUP,
       Permission::AGENCY, Permission::METADATA, Permission::SYSTEM
     ]
     managed_resources?(admin_only_resources)
   end
 
+  # Checks if the role is permitted to export data.
   def permitted_to_export?
     export_permission? || manage_permission?
   end
@@ -261,6 +306,7 @@ class Role < ApplicationRecord
     modules.pluck(:unique_id)
   end
 
+  # Updates role properties, including permissions and form access.
   def update_properties(role_properties)
     role_properties = role_properties.with_indifferent_access if role_properties.is_a?(Hash)
     assign_attributes(role_properties.except('permissions', 'form_section_read_write', 'module_unique_ids'))
@@ -269,6 +315,7 @@ class Role < ApplicationRecord
     update_modules(role_properties['module_unique_ids'])
   end
 
+  # Serializes role properties for storage.
   def configuration_hash
     hash = attributes.except('id', 'permissions')
     hash['permissions'] = Permission::PermissionSerializer.dump(permissions)

@@ -2,18 +2,36 @@
 
 # Describes a request by a single individual to trace one or more children (cases)
 class TracingRequest < ApplicationRecord
+  # Defines shared functionality and characteristics for all core Primero record types, enhancing code consistency and maintainability.
   include Record
+  # Provides functionality for indexing and searching record fields using the Sunspot search library, including handling different field types and custom indexing configurations.
   include Searchable
+  # This describes all models that may be owned by a particular user
   include Ownable
+  # Adds the ability to track and manage the historical information of records, including creation and updates.
+  # Essential for maintaining historical data within record management systems.
   include Historical
+  # Provides the ability to flag records, allowing for the marking and categorization of records for different
+  # purposes. Useful for systems that require flagging records for special attention or categorization.
   include Flaggable
+  # Adds alert management features to records, allowing them to handle different alert types.
+  # Useful for tracking and responding to events like field changes, new forms, and approval requests
+  # within record management systems.
   include Alertable
+  # Enables the declaration and management of record attachments, including images, audio, and documents.
+  # Particularly useful for systems dealing with attachment-heavy records.
   include Attachable
+  # Enhances database query efficiency by enabling eager loading of specified associations for records.
   include EagerLoadable
+  # Enables records to interact with external systems using webhooks, offering support for managing webhook-related
+  # attributes and tracking synchronization status. An essential tool for real-time data exchange.
   include Webhookable
+  # Simplifies location service integration in records by providing an attribute writer to set the location service
+  # and a method to access the LocationService singleton. Essential for efficient location-based operations in records.
   include LocationCacheable
 
   has_many :traces
+
   store_accessor :data,
                  :tracing_request_id, :inquiry_date, :relation_name, :relation_age,
                  :relation_date_of_birth, :relation_sex,
@@ -23,7 +41,9 @@ class TracingRequest < ApplicationRecord
                  :monitor_number, :survivor_code, :reunited, :inquiry_date,
                  :location_last
   alias inquirer_id tracing_request_id
+
   after_save :save_traces
+
   class << self
     def filterable_id_fields
       %w[tracing_request_id short_id]

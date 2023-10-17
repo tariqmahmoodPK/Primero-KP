@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# TODO Add Comments Explaining the Code Below.
+# TODO Explain how records views are then translated to actual views for the Indented records, Like Cases, Incidents,...
+# TODO Figure out why is there no Edit Method
+
 # Shared code for all record-type controllers.
 # This will be a long module, by it's nature,
 # but we'll need to be careful to extract as much code as possible into services

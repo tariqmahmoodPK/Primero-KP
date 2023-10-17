@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Implements class methods for declaring attachments of type image, audio, and document
-# on Records. Has idiomatic methods for handing case photos
+# The "Attachable" module provides class methods for declaring attachments of types such as images, audio, and
+# documents on records. It includes idiomatic methods for handling case photos and related functionalities.
 module Attachable
   extend ActiveSupport::Concern
   include Sunspot::Rails::Searchable
@@ -11,18 +11,22 @@ module Attachable
   AUDIOS_FIELD_NAME = 'recorded_audio'
 
   included do
-    has_many :attachments, -> { order('date DESC NULLS LAST') }, as: :record
+    # Associations
+    has_many :attachments   , -> { order('date DESC NULLS LAST') }, as: :record
     has_many :current_photos, -> { where(field_name: PHOTOS_FIELD_NAME).order('date DESC NULLS LAST') },
              as: :record, class_name: 'Attachment'
     has_many :current_audios, -> { where(field_name: AUDIOS_FIELD_NAME).order('date DESC NULLS LAST') },
              as: :record, class_name: 'Attachment'
+    # Validations
     validate :maximum_attachments_exceeded
 
+    # Define how attachable records should be indexed for searching.
     searchable do
       boolean :has_photo
     end
   end
 
+  # Checks if the record has a photo by verifying if it has any current photos associated with it.
   def photo?
     # Because Matz
     # rubocop:disable Naming/MemoizedInstanceVariableName
@@ -32,10 +36,12 @@ module Attachable
   alias has_photo? photo?
   alias has_photo photo?
 
+  # Retrieves the first current photo associated with the record.
   def photo
     @photo ||= current_photos.first
   end
 
+  # Generates the URL for the first photo, allowing access to the photo's file.
   def photo_url
     return unless photo&.file
 
@@ -44,6 +50,7 @@ module Attachable
 
   private
 
+  # Validates that the maximum number of attachments on the record does not exceed the predefined limit.
   def maximum_attachments_exceeded
     return unless attachments.size > (MAX_ATTACHMENTS - 1)
 

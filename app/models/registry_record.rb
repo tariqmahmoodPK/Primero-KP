@@ -2,18 +2,33 @@
 
 # Model representing a registry
 class RegistryRecord < ApplicationRecord
-  REGISTRY_TYPE_FARMER = 'farmer'
+  REGISTRY_TYPE_FARMER      = 'farmer'
   REGISTRY_TYPE_FOSTER_CARE = 'foster_care'
-  REGISTRY_TYPE_INDIVIDUAL = 'individual'
+  REGISTRY_TYPE_INDIVIDUAL  = 'individual'
 
+  # Defines shared functionality and characteristics for all core Primero record types, enhancing code consistency and maintainability.
   include Record
+  # Provides functionality for indexing and searching record fields using the Sunspot search library, including handling different field types and custom indexing configurations.
   include Searchable
+  # Adds the ability to track and manage the historical information of records, including creation and updates.
+  # Essential for maintaining historical data within record management systems.
   include Historical
+  # This describes all models that may be owned by a particular user
   include Ownable
+  # Provides the ability to flag records, allowing for the marking and categorization of records for different
+  # purposes. Useful for systems that require flagging records for special attention or categorization.
   include Flaggable
+  # Adds alert management features to records, allowing them to handle different alert types.
+  # Useful for tracking and responding to events like field changes, new forms, and approval requests
+  # within record management systems.
   include Alertable
+  # Enables the declaration and management of record attachments, including images, audio, and documents.
+  # Particularly useful for systems dealing with attachment-heavy records.
   include Attachable
+  # Enhances database query efficiency by enabling eager loading of specified associations for records.
   include EagerLoadable
+  # Simplifies location service integration in records by providing an attribute writer to set the location service
+  # and a method to access the LocationService singleton. Essential for efficient location-based operations in records.
   include LocationCacheable
 
   store_accessor(

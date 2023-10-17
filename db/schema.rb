@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_15_000000) do
+ActiveRecord::Schema.define(version: 2023_10_12_085547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -383,6 +383,14 @@ ActiveRecord::Schema.define(version: 2023_03_15_000000) do
     t.uuid "perpetrator_id"
     t.index ["perpetrator_id"], name: "index_perpetrators_violations_on_perpetrator_id"
     t.index ["violation_id"], name: "index_perpetrators_violations_on_violation_id"
+  end
+
+  create_table "preventions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.jsonb "data", default: {}
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index "((data ->> 'prevention_id'::text))", name: "preventions_prevention_id_unique_idx", unique: true
+    t.index ["data"], name: "index_preventions_on_data", using: :gin
   end
 
   create_table "primero_configurations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

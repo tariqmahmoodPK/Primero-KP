@@ -1,25 +1,31 @@
 # frozen_string_literal: true
 
-# Concern for services
+# The "Serviceable" module is responsible for managing services associated with records.
+# It allows records to store service-related information, implement services, track their statuses,
+# and set due dates. This module enhances records with capabilities to manage services within record management systems.
+
 module Serviceable
   extend ActiveSupport::Concern
 
   # TODO: This will need to be reconciled with the ReportableService object.
-  SERVICE_IMPLEMENTED = 'implemented'
-  SERVICE_NOT_IMPLEMENTED = 'not_implemented'
-  SERVICES_NONE = 'no_services'
-  SERVICES_IN_PROGRESS = 'in_progress'
+  # Constants defining service statuses.
+  SERVICE_IMPLEMENTED      = 'implemented'
+  SERVICE_NOT_IMPLEMENTED  = 'not_implemented'
+  SERVICES_NONE            = 'no_services'
+  SERVICES_IN_PROGRESS     = 'in_progress'
   SERVICES_ALL_IMPLEMENTED = 'all_implemented'
 
   # rubocop:disable Metrics/BlockLength
   included do
     store_accessor :data, :consent_for_services, :services_section # TODO: Do we need a services alias for this?
 
+    # Define how services should be indexed for searching.
     searchable do
       boolean :consent_for_services
       time :service_due_dates, multiple: true
     end
 
+    # Callback to update the 'service_implemented' field based on implemented or not-implemented services.
     before_save :update_implement_field
 
     def update_implement_field
