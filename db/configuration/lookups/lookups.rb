@@ -872,6 +872,8 @@ Lookup.create_or_update!(
   ].map(&:with_indifferent_access)
 )
 
+# CP Module Form Groups Lookups # Start
+# --------------------------------------------------------------------------------------------------
 Lookup.create_or_update!(
   :unique_id => "lookup-form-group-cp-case",
   :name_en => "Form Groups - CP Case",
@@ -926,6 +928,8 @@ Lookup.create_or_update!(
     { id: 'registry_details', display_text: 'Registry Details' }
   ].map(&:with_indifferent_access)
 )
+# --------------------------------------------------------------------------------------------------
+# CP Module Form Groups Lookups # End
 
 Lookup.create_or_update!(
   :unique_id => "lookup-agency-office",

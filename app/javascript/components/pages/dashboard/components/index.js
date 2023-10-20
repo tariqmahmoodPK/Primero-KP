@@ -32,3 +32,7 @@ export { default as MonthlyRegisteredAndResolvedCases } from "./monthly-reg-res-
 export { default as HighRiskCasesByProtectionConcern } from "./high-risk-cases-by-protection-concern";
 // 'Registered Cases by Protection Concern'
 export { default as RegisteredCasesByProtectionConcern } from "./registered-cases-by-protection-concern";
+// 'Community based Child Protection Committees'
+export { default as CommunityBasedChildProtectionCommittees } from "./community-based-child-protection-committees";
+// 'Community Engagement Sessions'
+export { default as CommunityEngagementSessions } from "./community-engagement-sessions";

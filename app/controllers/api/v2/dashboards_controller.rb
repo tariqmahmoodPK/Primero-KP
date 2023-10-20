@@ -160,14 +160,12 @@ class Api::V2::DashboardsController < ApplicationApiController
   end
 
   # 'Community based Child Protection Committees'
-  # TODO Modify it to fit the Prevention Graphs Needs
-  def community_based_child_protection_committees(user)
-    #
+  def community_based_child_protection_committees
+    @stats = Prevention.community_based_child_protection_committees_stats(current_user)
   end
 
   # 'Community Engagement Sessions'
-  # TODO Modify it to fit the Prevention Graphs Needs
-  def community_engagement_sessions(user)
-    #
+  def community_engagement_sessions
+    @stats = Prevention.community_engagement_sessions_stats(current_user)
   end
 end
