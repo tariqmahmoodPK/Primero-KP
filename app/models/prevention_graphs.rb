@@ -57,7 +57,7 @@ module PreventionGraphs
     session_records = Prevention.get_community_engagement_sessions_records
 
     session_records.each do |session_record|
-      community_engagement_sessions_info = session_record.data["community_engagement_sessions"]
+      community_engagement_sessions_info = session_record.data["community_engagement_session"]
 
       if community_engagement_sessions_info["num_of_boys_participants"].present?
         stats[:num_of_boys_participants] += 1

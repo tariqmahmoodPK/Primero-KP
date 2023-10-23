@@ -37,12 +37,23 @@ class Prevention < ApplicationRecord
   # Methods to Calculate Stats for Graphs
   extend PreventionGraphs
 
+  # TODO Add the needed Form Fields or Custom Accessors
+  # Accessors
+  store_accessor(
+    :data,
+    :prevention_id,
+    :prevention_id_display,
+    :unique_id,
+    :male_community_based_child_protection_committees,
+    :female_community_based_child_protection_committees,
+    :community_engagement_sessions
+  )
 
-  # # TODO Filter form this and see what is actually needed or needs to be added or modified
-  # # Would need to add all the columns that will be added as keys in the data jsonb column of the child model.
-  # # Or will they be added to the prevention records themselfs
 
-  # # Accessors
+  # TODO Filter form this and see what is actually needed or needs to be added or modified
+  # Would need to add all the columns that will be added as keys in the data jsonb column of the child model.
+  # Or will they be added to the prevention records themselfs
+
   # store_accessor(
   #   :data,
   #   :case_id, :case_id_code, :case_id_display,
@@ -64,14 +75,16 @@ class Prevention < ApplicationRecord
   #   :duplicate, :cp_case_plan_subform_case_plan_interventions, :has_case_plan
   # )
 
-  # # Associations
-  # # figureout the associations for this model
-  # # Maybe there needs to be foreing key column too to related this table to the Child model
+  # Associations
+    # TODO Figureout the associations for this model
+  #
+  # Maybe there needs to be foreing key column too to related this table to the Child model
   # has_many   :incidents      ,                      foreign_key: :incident_case_id
   # has_many   :matched_traces , class_name: 'Trace', foreign_key: 'matched_case_id'
   # has_many   :duplicates     , class_name: 'Child', foreign_key: 'duplicate_case_id'
   # belongs_to :duplicate_of   , class_name: 'Child', foreign_key: 'duplicate_case_id', optional: true
   # belongs_to :registry_record,                      foreign_key: :registry_record_id, optional: true
+
 
   # # may be add the filed for Prevention forms now.
   # def self.sortable_text_fields
@@ -162,16 +175,82 @@ class Prevention < ApplicationRecord
   #   end
   # end
 
-  # # Validations
+
+  # Validations
+    # TODO Add validations
   # validate :validate_date_of_birth
 
-  # # Callbacks
+  # Callbacks
+    # TODO Add Callbacks
   # before_save   :sync_protection_concerns
   # before_save   :auto_populate_name
   # before_save   :stamp_registry_fields
   # before_save   :calculate_has_case_plan
   # before_create :hide_name
   # after_save    :save_incidents
+
+  # The purpose of this method is to provide a list of fields that can be used to sort Child records
+    # in a text-based, alphabetical, or lexicographical order when necessary.
+  # For example, if you want to display a list of Child records sorted by their names or other text-based
+    # attributes, you would use these field names to sort the records effectively.
+  #
+  # TODO Add the relevant fields that can be used for Prevention records
+  def self.sortable_text_fields
+    %w[ ]
+  end
+
+  # TODO Add the relevant fields that can be used for Prevention records
+  # This defines a list of fields primarily used for filtering and searching, and
+  # it includes fields for unique identification and additional identifiers.
+  def self.filterable_id_fields
+    %w[ unique_identifier prevention_id ]
+  end
+
+  # TODO Add the relevant fields that can be used for Prevention records
+  # This combines the filterable identification fields with name-related fields to create a
+  # list of attributes that can be quickly searched when using the Searchable module.
+  def self.quicksearch_fields
+    filterable_id_fields + %w[ ]
+  end
+
+  # TODO Add the relevant fields that can be used for Prevention records
+  # This method is used to define a standard set of field names that should be included in the summary view of
+  # Prevention records. The FieldSelectionService class uses this method to determine which fields to display
+  # based on the query parameters and user role when generating responses for Prevention records.
+  def self.summary_field_names
+    common_summary_fields + %w[
+      id
+    ]
+  end
+
+  # This string represents the endpoint or path that clients can use to interact with Prevention records in the API
+  def self.api_path
+    '/api/v2/preventions'
+  end
+
+  searchable do
+    # This code iterates through the sortable text fields defined by self.sortable_text_fields and
+    # configures Sunspot to index and store those fields in a way that allows sorting.
+    # It adds a sortable text field for each of the specified attributes, which enables efficient sorting
+    # of Prevention records based on these fields during search operations.
+    sortable_text_fields.each { |f| string( "#{f}_sortable"  , as: "#{f}_sortable_sci"  ) { data[f] } }
+
+    filterable_id_fields.each { |f| string("#{f}_filterable", as: "#{f}_filterable_sci") { data[f] } }
+
+    quicksearch_fields.each { |f| text_index(f) }
+
+    %w[id].each { |f| string(f, as: "#{f}_sci") }
+  end
+
+
+
+  def set_instance_id
+    self.prevention_id ||= unique_identifier
+  end
+
+  def to_s
+    name.present? ? "#{name} (#{unique_identifier})" : unique_identifier
+  end
 
   # class << self
   #   alias super_new_with_user new_with_user
