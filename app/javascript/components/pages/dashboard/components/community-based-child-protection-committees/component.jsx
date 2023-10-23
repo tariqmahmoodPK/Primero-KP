@@ -30,16 +30,11 @@ const Component = () => {
 
   if (stats) {
     const labels = [];
-    const cases = [];
-    const percentage = [];
+    const genderStats = [];
 
     for (const key in stats) {
       labels.push(key);
-    }
-
-    for (const key in stats) {
-      cases.push(stats[key].cases);
-      percentage.push(stats[key].percentage);
+      genderStats.push(stats[key]);
     }
 
     graphData = {
@@ -47,7 +42,7 @@ const Component = () => {
       datasets: [
         {
           label: labels,
-          data: cases,
+          data: genderStats,
           backgroundColor: [
             "rgb(255, 99, 132)",
             "rgb(54, 162, 235)",
@@ -103,7 +98,7 @@ const Component = () => {
       {graphData && (
         <Grid item xl={6} md={6} xs={12}>
           <div className={css.container}>
-            <h2>High Risk Cases by Protection Concern</h2>
+            <h2>Community based Child Protection Committees</h2>
             <div className={css.card} flat>
               <Chart type="doughnut" options={chartOptions} data={graphData} showDetails />
             </div>

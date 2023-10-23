@@ -33,19 +33,19 @@ const Chart = ({ type, data, description, showDetails, options }) => {
         options.tooltips = {
           callbacks: {
             label(tooltipItem, data) {
-              // get the concerned dataset
+              // Get the Concerned Dataset
               const dataset = data.datasets[tooltipItem.datasetIndex];
-              // calculate the total of this data set
+              // Calculate the Total of this Dataset
               const total = dataset.data.reduce((previousValue, currentValue, currentIndex, array) => {
                 return previousValue + currentValue;
               });
-              // get the current items value
+              // Get the Current Item's Value
               const currentValue = dataset.data[tooltipItem.index];
-              // calculate the precentage based on the total and current item,
-              // also this does a rough rounding to give a whole number
+              // Calculate the percentage based on the total and current item,
+              // Also this does a rough rounding to give a whole number
               const percentage = Math.floor((currentValue / total) * 100 + 0.5);
 
-              return ` ${dataset.label[tooltipItem.index]} ${percentage}%`;
+              return ` ${dataset.label[tooltipItem.index]} ${percentage}% | ${currentValue} Record(s)`;
             }
           }
         };
