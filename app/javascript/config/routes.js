@@ -63,6 +63,7 @@ import { ROUTES, MODES, RECORD_PATH } from "./constants";
 
 const recordPaths = [
   RECORD_PATH.cases,
+  RECORD_PATH.preventions,
   RECORD_PATH.incidents,
   RECORD_PATH.tracing_requests,
   RECORD_PATH.registry_records
@@ -123,6 +124,11 @@ export default [
       ...recordRoutes,
       {
         path: "/cases",
+        component: RecordList,
+        actions: READ_RECORDS
+      },
+      {
+        path: "/preventions",
         component: RecordList,
         actions: READ_RECORDS
       },

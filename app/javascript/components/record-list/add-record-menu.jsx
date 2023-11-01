@@ -41,10 +41,15 @@ const AddRecordMenu = ({ recordType }) => {
   };
 
   const handleClick = event => {
-    if (userModules.size === 1) {
-      showDialogOrRedirectNew(userModules.first());
+    // if (userModules.size === 1) {
+    //   showDialogOrRedirectNew(userModules.first());
+    // } else {
+    //   setAnchorEl(event.currentTarget);
+    // }
+    if (RECORD_TYPES.preventions === RECORD_TYPES[recordType]) {
+      showDialogOrRedirectNew(Array.from(userModules)[1]);
     } else {
-      setAnchorEl(event.currentTarget);
+      showDialogOrRedirectNew(userModules.first());
     }
   };
 

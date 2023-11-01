@@ -45,34 +45,34 @@ export const TOKEN_REFRESH_INTERVAL = 30 * 1000 * 60;
 
 export const CASE = "case";
 export const CASES = "cases";
+export const PREVENTION = "prevention";
+export const PREVENTIONS = "preventions";
 export const TRACING_REQUEST = "tracing_request";
 export const TRACING_REQUESTS = "tracing_requests";
 export const INCIDENT = "incident";
 export const INCIDENTS = "incidents";
 export const REGISTRY_RECORD = "registry_record";
 export const REGISTRY_RECORDS = "registry_records";
-export const PREVENTION = "prevention";
-export const PREVENTIONS = "preventions";
 
 // Record Type for when the Module is CP
 // Type of records available singular (key): plural (value)
 // This Constant is used as in the Filter Options now.
 export const RECORD_TYPES = {
   [CASES]: CASE,
+  [PREVENTIONS]: PREVENTION,
   [TRACING_REQUESTS]: TRACING_REQUEST,
   [INCIDENTS]: INCIDENT,
   [REGISTRY_RECORDS]: REGISTRY_RECORD,
-  [PREVENTIONS]: PREVENTION,
   all: "all"
 };
 
 // Record Type for when the Module is CP
 export const RECORD_TYPES_PLURAL = {
   [CASE]: CASES,
+  [PREVENTION]: PREVENTIONS,
   [TRACING_REQUEST]: TRACING_REQUESTS,
   [INCIDENT]: INCIDENTS,
   [REGISTRY_RECORD]: REGISTRY_RECORDS,
-  [PREVENTION]: PREVENTIONS
 };
 
 export const CP_RECORD_TYPES = {
@@ -143,6 +143,7 @@ export const RECORD_PATH = {
   alerts: "alerts",
   audit_logs: "audit_logs",
   cases: "cases",
+  preventions: "preventions",
   configurations: "configurations",
   contact_information: "contact_information",
   codes_of_conduct: "codes_of_conduct",
@@ -205,6 +206,7 @@ export const ROUTES = {
   admin_users_new: "/admin/users/new",
   audit_logs: "/admin/audit_logs",
   cases: "/cases",
+  preventions: "/preventions",
   configurations: "/admin/configurations",
   admin_configurations_new: "/admin/configurations/new",
   code_of_conduct: "/code_of_conduct",
@@ -247,6 +249,7 @@ export const PERMITTED_URL = [
   ROUTES.password_reset,
   ROUTES.support,
   ROUTES.cases,
+  ROUTES.preventions,
   ROUTES.tracing_requests,
   ROUTES.incidents,
   ROUTES.registry_records,
@@ -407,6 +410,15 @@ export const APPLICATION_NAV = (permissions, userId) => {
       icon: "cases",
       jewelCount: "case",
       resources: RESOURCES.cases,
+      actions: READ_RECORDS,
+      validateWithUserPermissions: true
+    },
+    {
+      name: "navigation.preventions",
+      to: ROUTES.preventions,
+      icon: "cases",
+      jewelCount: "prevention",
+      resources: RESOURCES.preventions,
       actions: READ_RECORDS,
       validateWithUserPermissions: true
     },

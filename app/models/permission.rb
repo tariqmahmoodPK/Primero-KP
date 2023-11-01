@@ -341,7 +341,7 @@ class Permission < ValueObject
 
   # Check if a permission relates to a resource with ownership authorization (CASE, INCIDENT, TRACING_REQUEST).
   def record_with_ownership_authorization?
-    [CASE, INCIDENT, TRACING_REQUEST].include?(resource)
+    [CASE, INCIDENT, TRACING_REQUEST, PREVENTION].include?(resource)
   end
 
   # Retrieve the corresponding class for a resource

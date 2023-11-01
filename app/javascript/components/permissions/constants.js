@@ -120,6 +120,7 @@ export const RESOURCES = {
   any: "any",
   audit_logs: "audit_logs",
   cases: "cases",
+  preventions: "preventions",
   codes_of_conduct: "codes_of_conduct",
   configurations: "primero_configurations",
   contact_information: "contact_information",
