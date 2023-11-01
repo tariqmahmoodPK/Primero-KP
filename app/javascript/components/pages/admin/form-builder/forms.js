@@ -1,4 +1,3 @@
-// Creating a New Form File.
 import { fromJS } from "immutable";
 import isEmpty from "lodash/isEmpty";
 import some from "lodash/some";
@@ -105,6 +104,9 @@ export const settingsForm = ({ formMode, onManageTranslation, onEnglishTextChang
                 // Since the Field is at it's core a MultiSelect Field,
                 // So we get a single entry the first time a Module is selected
                 // And Two entries afterwards
+                // So, selected[1] does not exists the first time.
+                // That is why we can't conditions in a single line like:
+                // selected[0].id === "primeromodule-cp" || selected[1].id === "primeromodule-cp"
                 if (selected.length > 0) {
                   if (selected[0].id === "primeromodule-cp") {
                     setRecordOptions(CP_RECORD_TYPES);

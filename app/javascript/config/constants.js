@@ -72,7 +72,7 @@ export const RECORD_TYPES_PLURAL = {
   [PREVENTION]: PREVENTIONS,
   [TRACING_REQUEST]: TRACING_REQUESTS,
   [INCIDENT]: INCIDENTS,
-  [REGISTRY_RECORD]: REGISTRY_RECORDS,
+  [REGISTRY_RECORD]: REGISTRY_RECORDS
 };
 
 export const CP_RECORD_TYPES = {
@@ -161,8 +161,7 @@ export const RECORD_PATH = {
   user_groups: "user_groups",
   users: "users",
   activity_log: "activity_log",
-  registry_records: "registry_records",
-  prevention: "prevention"
+  registry_records: "registry_records"
 };
 
 export const RECORD_INFORMATION_GROUP = "record_information";

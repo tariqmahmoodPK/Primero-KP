@@ -1,15 +1,6 @@
 # frozen_string_literal: true
 
 # This describes all models that may be owned by a particular user
-
-# The "Ownable" module extends models with ownership functionality, allowing them to be associated with a specific user.
-# It manages data fields such as owner's username, full name, agency, user groups, and more. The module provides
-# querying scopes for ownership, handles field updates before saving, and allows retrieval of associated users.
-
-# This module provides ownership-related functionality to models. It allows models to specify
-# that they can be owned by a particular user, including information such as username, full name, agency,
-# user groups, location, and related details.
-
 module Ownable
   extend ActiveSupport::Concern
 
@@ -20,7 +11,6 @@ module Ownable
                    :assigned_user_names, :module_id, :associated_user_groups, :associated_user_agencies,
                    :associated_user_names
 
-    # Define how fields should be indexed for searching.
     searchable do
       %i[
         associated_user_names associated_user_groups associated_user_agencies owned_by_groups assigned_user_names
@@ -31,7 +21,6 @@ module Ownable
       boolean :not_edited_by_owner
     end
 
-    # Define scopes for querying models based on ownership.
     scope :owned_by, ->(username) { where('data @> ?', { owned_by: username }.to_json) }
     scope :associated_with, (lambda do |username|
       where(
@@ -40,13 +29,11 @@ module Ownable
       )
     end)
 
-    # Define callbacks to update associated and ownership fields before saving and updating.
-    before_save   :update_associated
-    before_save   :update_owned_by
+    before_save :update_associated
+    before_save :update_owned_by
     before_update :update_previously_owned_by
   end
 
-  # Callback to set owner-related fields for a given user.
   def owner_fields_for(user)
     self.owned_by ||= user&.user_name
     self.owned_by_full_name = user&.full_name
@@ -54,14 +41,12 @@ module Ownable
     self.associated_user_names = ([owned_by] + (assigned_user_names || [])).compact.uniq
   end
 
-  # Helper method to retrieve associated users.
   def associated_users(reload = false)
     return @associated_users unless reload || @associated_users.nil?
 
     @associated_users = User.where(user_name: associated_user_names)
   end
 
-  # Helper method to update ownership information.
   def owner(reload = false)
     return @owner unless reload || @owner.nil?
 
@@ -101,7 +86,6 @@ module Ownable
     self.owned_by = changes_to_save_for_record['owned_by'][0]
   end
 
-  # Helper method to update previously owned information.
   def update_previously_owned_by
     return if changes_to_save_for_record['owned_by'].blank?
 
@@ -113,7 +97,6 @@ module Ownable
   end
   # rubocop:enable Metrics/AbcSize
 
-  # Helper method to update associated user information.
   def update_associated
     return unless changes_to_save_for_record['assigned_user_names'].present? ||
                   changes_to_save_for_record['owned_by'].present? ||

@@ -1,15 +1,6 @@
 # frozen_string_literal: true
 
-# A shared concern for all core Primero record types: Cases (child), Incidents, Tracing Requests, Prevention
-
-# This file defines the shared behavior and characteristics for all core Primero record types, including Cases (child),
-  # Incidents, Tracing Requests, and Prevention.
-# It encapsulates essential features such as default values, unique identifiers, and handling of nested reportables.
-# These shared behaviors make it easier to maintain a consistent structure across different record types by reusing this common code.
-# Additionally, it includes methods for accessing and updating record properties, dynamically retrieving values
-  # from subforms, and managing nested reportables.
-#
-
+# A shared concern for all core Primero record types: Cases (child), Incidents, Tracing Requests
 module Record
   extend ActiveSupport::Concern
 

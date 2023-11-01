@@ -95,7 +95,7 @@ export const IDB_SAVEABLE_RECORD_TYPES = [
   RECORD_PATH.incidents,
   RECORD_PATH.tracing_requests,
   RECORD_PATH.registry_records,
-  RECORD_PATH.prevention
+  RECORD_PATH.preventions
 ];
 
 export const METHODS = Object.freeze({

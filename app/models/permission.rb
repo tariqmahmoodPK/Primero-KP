@@ -6,15 +6,12 @@
 # and the actions the user is entitled to perform on it (read, write, create).
 # Some actions actually represent sub-resources. For example a user may be granted the ability to see dashboards,
 # but each individual dashboard entitlement is treated as an action grant.
-
 # rubocop:disable Metrics/ClassLength
 class Permission < ValueObject
   # The role_unique_ids property is used solely for the ROLE resource
   # It associates other roles with this ROLE permission
   # That restricts this role to only be able to manage those associated roles
   # If the role_unique_ids property is empty on a ROLE permission, then that allows this role to manage all other ROLES
-
-  # Define the properties associated with a permission.
   attr_accessor :resource, :actions, :role_unique_ids, :agency_unique_ids
 
   # Define constants for common actions, and for resources (business objects).

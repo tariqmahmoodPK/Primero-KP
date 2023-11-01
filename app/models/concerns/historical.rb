@@ -1,26 +1,20 @@
 # frozen_string_literal: true
 
-# The "Historical" module is designed for managing the history of record changes. It allows records to track
-# historical information about creation, updates, and other changes. It enriches records with fields for
-# storing historical data and provides methods for updating history and accessing historical information.
-
+# Concern of Historical
 # rubocop:disable  Metrics/ModuleLength
 module Historical
   extend ActiveSupport::Concern
 
-  # Constants defining historical events.
   EVENT_CREATE = 'create'
   EVENT_UPDATE = 'update'
 
   included do
-    store_accessor :data                , :created_organization     , :created_agency_office    , :created_by     ,
-                   :created_by_full_name, :created_by_groups        , :created_at               , :last_updated_at,
-                   :last_updated_by     , :last_updated_by_full_name, :last_updated_organization, :posted_at
+    store_accessor :data, :created_organization, :created_agency_office, :created_by, :created_by_full_name,
+                   :created_by_groups, :created_at, :last_updated_at, :last_updated_by, :last_updated_by_full_name,
+                   :last_updated_organization, :posted_at
 
-    # Associations
     has_many :record_histories, as: :record
 
-    # Define how historical data should be indexed for searching.
     searchable do
       %i[created_organization created_agency_office created_by last_updated_by last_updated_organization].each do |f|
         string f, as: "#{f}_sci"
@@ -29,13 +23,11 @@ module Historical
       %i[created_at last_updated_at posted_at].each { |f| time(f) }
     end
 
-    # Validate the format of the 'created_at' and 'last_updated_at' fields.
     validate :validate_created_at
     validate :validate_last_updated_at
 
-    # Callbacks to update historical information.
-    before_save  :update_last_updated_at
-    before_save  :update_organization
+    before_save :update_last_updated_at
+    before_save :update_organization
     # TODO: These actions should be asynchronous
     after_create :add_creation_history
     after_update :update_history
@@ -43,7 +35,6 @@ module Historical
 
   # Module for ClassMethods
   module ClassMethods
-    # Method to retrieve records created by a specific user.
     def all_by_creator(created_by)
       where('data @> ?', { created_by: created_by }.to_json)
     end

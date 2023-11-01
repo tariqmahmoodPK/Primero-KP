@@ -5,7 +5,7 @@ export default record => {
     [CASE]: RECORD_TYPES_PLURAL.case,
     child: RECORD_TYPES_PLURAL.case,
     [PREVENTION]: RECORD_TYPES_PLURAL.prevention,
-    child: RECORD_TYPES_PLURAL.prevention,
+    prevention: RECORD_TYPES_PLURAL.prevention,
     [INCIDENT]: RECORD_TYPES_PLURAL.incident,
     [TRACING_REQUEST]: RECORD_TYPES_PLURAL.tracing_request
   });
