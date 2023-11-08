@@ -1417,14 +1417,14 @@ en:
     welcome: Welcome to Primero
     zh: 中文
   incident:
-    code: Incident Code
+    code: Prevention Code
     associated_case: "Associated Case:"
     messages:
-      creation_success: Incident record successfully created.
-      creation_success_queue: Incident record successfully created in background
-      disabled: Incident is disabled
-      update_success: 'Incident %{record_id} was successfully updated.'
-      update_success_queue: 'Incident %{record_id} was successfully updated in background.'
+      creation_success: Prevention record successfully created.
+      creation_success_queue: Prevention record successfully created in background
+      disabled: Prevention is disabled
+      update_success: 'Prevention %{record_id} was successfully updated.'
+      update_success_queue: 'Prevention %{record_id} was successfully updated in background.'
     violation:
       associated_violations: "Associated Violations:"
       update_and_return: 'Update and Return to %{association}'
@@ -1456,7 +1456,7 @@ en:
     incident_location: Incident Location
     violations: Violations
     export: Export
-    label: Incidents
+    label: Preventions
     filter_by:
       filter_category: Filter Category
       boys: Boys
@@ -1490,7 +1490,7 @@ en:
       late_verified_violations: Late-verified violations
       perpetrator_category: Type of Perpetrator
       record_owner: Record Owner
-    register_new_incident: New Incident
+    register_new_incident: New Prevention
     selectable_date_options:
       date_of_first_report: Interview Date
       mrm_date_of_first_report: Date of initial report to CTFMR member
@@ -1519,7 +1519,7 @@ en:
         incident_update:
           label: Update of Incident
     survivor_code: Survivor Code
-    show_incident: 'Incident ID %{short_id}'
+    show_incident: 'Prevention ID %{short_id}'
     social_worker: Social Worker
     violation_type: Violation Type
     violence_type: Violence Type
@@ -2118,7 +2118,7 @@ en:
     cases: Cases
     home: Home
     key_performance_indicators: Pulse/KPIs
-    incidents: Incidents
+    incidents: Preventions
     logout: Log out
     reports: Reports
     insights: Insights

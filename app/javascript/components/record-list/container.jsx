@@ -188,9 +188,11 @@ const Container = ({ match, location }) => {
           </div>
 
           {mobileDisplay && <SortContainer columns={columns} recordType={recordType} applyFilters={applyFilters} />}
-          <FilterContainer mobileDisplay={mobileDisplay}>
-            <Filters recordType={recordType} setSelectedRecords={handleSelectedRecords} metadata={metadata} />
-          </FilterContainer>
+          {recordType !== 'incidents' && 
+            <FilterContainer mobileDisplay={mobileDisplay}>
+              <Filters recordType={recordType} setSelectedRecords={handleSelectedRecords} metadata={metadata} />
+            </FilterContainer>
+          }
         </PageContent>
       </PageContainer>
       {canViewModal && (
