@@ -95,6 +95,7 @@ class PermittedFieldService
       user.role, model_class.parent_form, writeable
     )
     # TODO: Consider moving model specific permitted fields to the model class.
+    @permitted_field_names += %w[prevention_id prevention_id_display] if model_class == Incident
     @permitted_field_names += %w[workflow status case_status_reopened] if model_class == Child
     @permitted_field_names << 'tracing_names' if model_class == TracingRequest
     @permitted_field_names << 'hidden_name' if user.can?(:update, model_class)

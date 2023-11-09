@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Record Headers/Columns
+
 # This represents the columns that are to be displayed on the record list views
 # rubocop:disable Metrics/ClassLength
 class Header < ValueObject
@@ -57,6 +59,8 @@ class Header < ValueObject
   REGISTRY_NAME = Header.new(name: 'name', field_name: 'name')
   REGISTRY_CODE = Header.new(name: 'registry_no', field_name: 'registry_no')
   COMPLETE = Header.new(name: 'complete', field_name: 'complete')
+  # PREVENTION_ID = Header.new(name: 'id', field_name: 'prevention_id')
+  # PREVENTION_ID_DISPLAY = Header.new(name: 'id', field_name: 'prevention_id_display', id_search: true)
 
   class << self
     def get_headers(user, record_type)
@@ -98,16 +102,18 @@ class Header < ValueObject
       # NOTE: If headers are updated they will also need to be updated on indexeddb.
       header_list = []
       header_list << SHORT_ID
-      header_list << DATE_OF_INCIDENT if user.module?(PrimeroModule::MRM)
+      # header_list << PREVENTION_ID if user.module?(PrimeroModule::PC)
+      # header_list << PREVENTION_ID_DISPLAY if user.module?(PrimeroModule::PC)
+      # header_list << DATE_OF_INCIDENT if user.module?(PrimeroModule::MRM)
       header_list << SURVIVOR_CODE_INCIDENT if !user.manager? && user.module?(PrimeroModule::GBV)
-      header_list << DATE_OF_INTERVIEW if user.module?(PrimeroModule::GBV) || user.module?(PrimeroModule::CP)
+      header_list << DATE_OF_INTERVIEW if user.module?(PrimeroModule::GBV) # || user.module?(PrimeroModule::CP)
       header_list << GBV_DATE_OF_INCIDENT if user.module?(PrimeroModule::GBV)
       header_list << GBV_VIOLENCE_TYPE if user.module?(PrimeroModule::GBV)
-      header_list << CP_DATE_OF_INCIDENT if user.module?(PrimeroModule::CP)
-      header_list << CP_VIOLENCE_TYPE if user.module?(PrimeroModule::CP)
+      # header_list << CP_DATE_OF_INCIDENT if user.module?(PrimeroModule::CP)
+      # header_list << CP_VIOLENCE_TYPE if user.module?(PrimeroModule::CP)
       header_list << INCIDENT_LOCATION if user.module?(PrimeroModule::MRM)
       header_list << VIOLATIONS if user.module?(PrimeroModule::MRM)
-      header_list << SOCIAL_WORKER if user.manager?
+      # header_list << SOCIAL_WORKER if user.manager?
       header_list << FLAG_COUNT
       header_list
     end
