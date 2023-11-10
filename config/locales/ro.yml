@@ -1212,7 +1212,6 @@ ro:
       violation: Abuz
       registry_details: Detalii Registru
       registry_record: Registru înregistrare
-      prevention: Prevenție
     required_field: '%{field}este câmp obligatoriu'
     select_label: Selectează
     settings: Setări

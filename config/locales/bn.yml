@@ -1229,7 +1229,6 @@ bn:
       violation: নিয়ম লংঘন
       registry_details: রেজিস্ট্রি বিবরণ
       registry_record: রেজিস্ট্রি রেকর্ড
-      prevention: প্রতিরোধ
     required_field: '%{field}প্রয়োজনীয় ক্ষেত্র'
     select_label: নির্বাচন
     settings: সেটিংস

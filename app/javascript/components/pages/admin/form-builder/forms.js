@@ -1,12 +1,9 @@
-// Creating a New Form File.
 import { fromJS } from "immutable";
 import isEmpty from "lodash/isEmpty";
 import some from "lodash/some";
 import { array, boolean, object, string } from "yup";
-import { useState } from "react";
 
-// Dropdown Options for RECORD_TYPE_FIELD
-import { CP_RECORD_TYPES, PC_RECORD_TYPES } from "../../../../config/constants";
+import { RECORD_TYPES } from "../../../../config/constants";
 import {
   FieldRecord,
   FormSectionRecord,
@@ -52,10 +49,6 @@ export const validationSchema = i18n =>
   });
 
 export const settingsForm = ({ formMode, onManageTranslation, onEnglishTextChange, i18n, limitedProductionSite }) => {
-  // Creating a state for recordOptions.
-  // recordOptions would have the dropdown options for RECORD_TYPE_FIELD based on if CP or PC Module is selected.
-  const [recordOptions, setRecordOptions] = useState(CP_RECORD_TYPES);
-
   return fromJS([
     FormSectionRecord({
       unique_id: "settings",
@@ -90,7 +83,6 @@ export const settingsForm = ({ formMode, onManageTranslation, onEnglishTextChang
         }),
         {
           row: [
-            // Form Module Field
             FieldRecord({
               display_name: i18n.t("forms.module"),
               name: MODULES_FIELD,
@@ -98,28 +90,6 @@ export const settingsForm = ({ formMode, onManageTranslation, onEnglishTextChang
               option_strings_source: "Module",
               multipleLimitOne: true,
               required: true,
-              // Setting the recordOptions.
-              onChange: (e, selected) => {
-                // Options are CP_RECORD_TYPES if CP Module is selected.
-                // Options are PC_RECORD_TYPES if PC Module is selected.
-                // Since the Field is at it's core a MultiSelect Field,
-                // So we get a single entry the first time a Module is selected
-                // And Two entries afterwards
-                if (selected.length > 0) {
-                  if (selected[0].id === "primeromodule-cp") {
-                    setRecordOptions(CP_RECORD_TYPES);
-                  } else if (selected[0].id === "primeromodule-pc") {
-                    setRecordOptions(PC_RECORD_TYPES);
-                  } else if (selected[1].id === "primeromodule-cp") {
-                    setRecordOptions(CP_RECORD_TYPES);
-                  } else if (selected[1].id === "primeromodule-pc") {
-                    setRecordOptions(PC_RECORD_TYPES);
-                  }
-                } else {
-                  // Set no Options if No Module is Selected.
-                  setRecordOptions({});
-                }
-              },
               clearDependentValues: [RECORD_TYPE_FIELD, [FORM_GROUP_FIELD, []]],
               clearDependentReason: [SELECT_CHANGE_REASON.clear],
               disabled: limitedProductionSite
@@ -128,8 +98,8 @@ export const settingsForm = ({ formMode, onManageTranslation, onEnglishTextChang
               display_name: i18n.t("forms.record_type"),
               name: RECORD_TYPE_FIELD,
               type: SELECT_FIELD,
-              option_strings_text: Object.values(recordOptions).reduce((results, item) => {
-                if (item !== recordOptions.all) {
+              option_strings_text: Object.values(RECORD_TYPES).reduce((results, item) => {
+                if (item !== RECORD_TYPES.all) {
                   results.push({
                     id: item,
                     display_text: i18n.t(`forms.record_types.${item}`)

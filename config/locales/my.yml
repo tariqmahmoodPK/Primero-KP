@@ -1221,7 +1221,6 @@ my:
       violation: ချိုးဖောက်မှု
       registry_details: မှတ်ပုံတင်အသေးစိပ်
       registry_record: မှတ်ပုံတင်မှတ်တမ်း
-      prevention: ကာကွယ်ရေး
     required_field: '%{field}သည်လိုအပ်သော field တစ်ခုဖြစ်သည်။'
     select_label: ရွေးချယ်ပါ
     settings: ဆက်တင် -ချိန်ညှိချက်

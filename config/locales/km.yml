@@ -1217,7 +1217,6 @@ km:
       violation: ការរំលោភបំពាន
       registry_details: បញ្ជី​លម្អិត​
       registry_record: បញ្ជីនៃកំណត់ត្រា
-      prevention: ការការពារ
     required_field: 'ត្រូវបញ្ចូលព័ត៌មាន%{field}'
     select_label: ជ្រើសរើស
     settings: ការកំណត់

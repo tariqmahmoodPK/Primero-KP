@@ -1284,7 +1284,6 @@ fr:
       violation: Violation
       registry_details: Détails du registre
       registry_record: Dossier du registre
-      prevention: Prévention
     required_field: '%{field} est un champ obligatoire '
     select_label: 'Sélectionner '
     settings: 'Paramètres '
