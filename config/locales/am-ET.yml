@@ -1249,7 +1249,6 @@ am-ET:
       violation: ጥሰት
       registry_details: የመዝገብ ዝርዝር
       registry_record: የመዝገብ ቅጅ
-      prevention: አጠቃቀም
     required_field: '{አስፈላጊ መስክ}'
     select_label: ምረጥ
     settings: ማስተካካያ

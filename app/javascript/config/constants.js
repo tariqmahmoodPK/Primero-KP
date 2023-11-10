@@ -51,56 +51,21 @@ export const INCIDENT = "incident";
 export const INCIDENTS = "incidents";
 export const REGISTRY_RECORD = "registry_record";
 export const REGISTRY_RECORDS = "registry_records";
-export const PREVENTION = "prevention";
-export const PREVENTIONS = "preventions";
 
-// Record Type for when the Module is CP
 // Type of records available singular (key): plural (value)
-// This Constant is used as in the Filter Options now.
 export const RECORD_TYPES = {
   [CASES]: CASE,
   [TRACING_REQUESTS]: TRACING_REQUEST,
   [INCIDENTS]: INCIDENT,
   [REGISTRY_RECORDS]: REGISTRY_RECORD,
-  [PREVENTIONS]: PREVENTION,
   all: "all"
 };
 
-// Record Type for when the Module is CP
 export const RECORD_TYPES_PLURAL = {
   [CASE]: CASES,
   [TRACING_REQUEST]: TRACING_REQUESTS,
   [INCIDENT]: INCIDENTS,
-  [REGISTRY_RECORD]: REGISTRY_RECORDS,
-  [PREVENTION]: PREVENTIONS
-};
-
-export const CP_RECORD_TYPES = {
-  [CASES]: CASE,
-  [TRACING_REQUESTS]: TRACING_REQUEST,
-  [INCIDENTS]: INCIDENT,
-  [REGISTRY_RECORDS]: REGISTRY_RECORD,
-  all: "all"
-};
-
-// Record Type for when the Module is CP
-export const CP_RECORD_TYPES_PLURAL = {
-  [CASE]: CASES,
-  [TRACING_REQUEST]: TRACING_REQUESTS,
-  [INCIDENT]: INCIDENTS,
   [REGISTRY_RECORD]: REGISTRY_RECORDS
-};
-
-// Record Type for when the Module is PC
-// Type of records available singular (key): plural (value)
-export const PC_RECORD_TYPES = {
-  [PREVENTIONS]: PREVENTION,
-  all: "all"
-};
-
-// Record Type for when the Module is PC
-export const PC_RECORD_TYPES_PLURAL = {
-  [PREVENTION]: PREVENTIONS
 };
 
 // Max Age allowed in age ranges
@@ -108,7 +73,6 @@ export const AGE_MAX = 999;
 
 export const MODULES = Object.freeze({
   CP: "primeromodule-cp",
-  PC: "primeromodule-pc",
   GBV: "primeromodule-gbv",
   MRM: "primeromodule-mrm"
 });
@@ -160,8 +124,7 @@ export const RECORD_PATH = {
   user_groups: "user_groups",
   users: "users",
   activity_log: "activity_log",
-  registry_records: "registry_records",
-  prevention: "prevention"
+  registry_records: "registry_records"
 };
 
 export const RECORD_INFORMATION_GROUP = "record_information";
