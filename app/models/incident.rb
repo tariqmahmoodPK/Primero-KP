@@ -17,6 +17,8 @@ class Incident < ApplicationRecord
   include GenderBasedViolence
   include MonitoringReportingMechanism
   include LocationCacheable
+  extend IncidentGraphs
+  extend IncidentGraphHelpers
 
   store_accessor(
     :data,
