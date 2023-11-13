@@ -7,8 +7,6 @@ class PrimeroModule < ApplicationRecord
   CP = 'primeromodule-cp'
   GBV = 'primeromodule-gbv'
   MRM = 'primeromodule-mrm'
-  # Prevention Components
-  PC = 'primeromodule-pc'
 
   # allow_searchable_ids: TODO document
   # selectable_approval_types: TODO document
@@ -61,7 +59,7 @@ class PrimeroModule < ApplicationRecord
   end
 
   def core_resource
-    [CP, GBV, MRM, PC].include?(id)
+    [CP, GBV, MRM].include?(id)
   end
 
   def self.cp
@@ -74,10 +72,6 @@ class PrimeroModule < ApplicationRecord
 
   def self.mrm
     find_by(unique_id: MRM)
-  end
-
-  def self.pc
-    find_by(unique_id: PC)
   end
 
   def form_section_unique_ids
