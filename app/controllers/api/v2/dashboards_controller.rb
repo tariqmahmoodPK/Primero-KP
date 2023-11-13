@@ -158,4 +158,14 @@ class Api::V2::DashboardsController < ApplicationApiController
 
     @stats = concerns
   end
+
+  # 'Community based Child Protection Committees'
+  def community_based_child_protection_committees
+    @stats = Incident.community_based_child_protection_committees_stats(current_user)
+  end
+
+  # 'Community Engagement Sessions'
+  def community_engagement_sessions
+    @stats = Incident.community_engagement_sessions_stats(current_user)
+  end
 end

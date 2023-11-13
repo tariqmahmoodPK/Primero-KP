@@ -30,6 +30,12 @@ const reducer = (state = DEFAULT_STATE, { type, payload }) => {
     // 'Registered Cases by Protection Concern'
     case actions.REGISTERED_CASES_BY_PROTECTION_CONCERN_SUCCESS:
       return state.set("registeredCasesByProtectionConcern", fromJS(payload));
+    // 'Community based Child Protection Committees'
+    case actions.COMMUNITY_BASED_CHILD_PROTECTION_COMMITTEES_SUCCESS:
+      return state.set("communityBasedChildProtectionCommittees", fromJS(payload));
+    // 'Community Engagement Sessions'
+    case actions.COMMUNITY_ENGAGEMENT_SESSIONS_SUCCESS:
+      return state.set("communityEngagementSessions", fromJS(payload));
     case actions.DASHBOARD_FLAGS:
       return state.set("flags", fromJS(payload));
     case actions.CASES_BY_STATUS:

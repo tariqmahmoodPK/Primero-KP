@@ -184,3 +184,13 @@ export const getHighRiskCasesByProtectionConcern = state => {
 export const getRegisteredCasesByProtectionConcern = state => {
   return state.getIn(["records", NAMESPACE, "registeredCasesByProtectionConcern"], fromJS({}));
 };
+
+// 'Community based Child Protection Committees'
+export const getCommunityBasedChildProtectionCommittees = state => {
+  return state.getIn(["records", NAMESPACE, "communityBasedChildProtectionCommittees"], fromJS({}));
+};
+
+// 'Community Engagement Sessions'
+export const getCommunityEngagementSessions = state => {
+  return state.getIn(["records", NAMESPACE, "communityEngagementSessions"], fromJS({}));
+};

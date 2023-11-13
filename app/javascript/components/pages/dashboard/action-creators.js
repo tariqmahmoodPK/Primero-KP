@@ -182,3 +182,19 @@ export const fetchRegisteredCasesByProtectionConcern = () => ({
     path: "dashboards/registered_cases_by_protection_concern"
   }
 });
+
+// 'Community based Child Protection Committees'
+export const fetchCommunityBasedChildProtectionCommittees = () => ({
+  type: actions.COMMUNITY_BASED_CHILD_PROTECTION_COMMITTEES,
+  api: {
+    path: "dashboards/community_based_child_protection_committees"
+  }
+});
+
+// 'Community Engagement Sessions'
+export const fetchCommunityEngagementSessions = () => ({
+  type: actions.COMMUNITY_ENGAGEMENT_SESSIONS,
+  api: {
+    path: "dashboards/community_engagement_sessions"
+  }
+});
