@@ -1417,6 +1417,7 @@ en:
     zh: 中文
   incident:
     code: Prevention Code
+    prevention_component: "Prevention Component"
     associated_case: "Associated Case:"
     messages:
       creation_success: Prevention record successfully created.

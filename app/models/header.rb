@@ -8,6 +8,7 @@ class Header < ValueObject
   attr_accessor :name, :field_name, :id_search
 
   SHORT_ID = Header.new(name: 'id', field_name: 'short_id', id_search: true)
+  PREVENTION_COMPONENT = Header.new(name: 'prevention_component', field_name: 'prevention_component_e9cad5a')
   CASE_ID_DISPLAY = Header.new(name: 'id', field_name: 'case_id_display', id_search: true)
   CASE_NAME = Header.new(name: 'name', field_name: 'name')
   SURVIVOR_CODE = Header.new(name: 'survivor_code', field_name: 'survivor_code_no')
@@ -102,6 +103,7 @@ class Header < ValueObject
       # NOTE: If headers are updated they will also need to be updated on indexeddb.
       header_list = []
       header_list << SHORT_ID
+      header_list << PREVENTION_COMPONENT if user.module?(PrimeroModule::CP)
       # header_list << PREVENTION_ID if user.module?(PrimeroModule::PC)
       # header_list << PREVENTION_ID_DISPLAY if user.module?(PrimeroModule::PC)
       # header_list << DATE_OF_INCIDENT if user.module?(PrimeroModule::MRM)

@@ -62,7 +62,7 @@ class Incident < ApplicationRecord
 
     def summary_field_names
       common_summary_fields + %w[
-        prevention_id prevention_id_display
+        prevention_id prevention_id_display prevention_component
         date_of_interview date_of_incident violence_type
         incident_location violations social_worker date_of_first_report
         cp_incident_violence_type reporting_location_hierarchy
