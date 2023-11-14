@@ -114,21 +114,46 @@ const Dashboard = () => {
             <WorkflowIndividualCases loadingIndicator={indicatorProps} />
             {/* 'Percentage of Children who received Child Protection Services' */}
             <PercentageChildrenReceivedChildProtectionServices />
-            <ResolvedCasesByGenderAndReason /> {/* 'Closed Cases by Sex and Reason' */}
-            <CasesReferralsToAgency /> {/* 'Cases Referrals (To Agency)' */}
+            {/*<ResolvedCasesByGenderAndReason /> {/* 'Closed Cases by Sex and Reason' */}
+            {/*<CasesReferralsToAgency /> {/* 'Cases Referrals (To Agency)' */}
             {/* 'Cases requiring Alternative Care Placement Services' */}
-            <CasesRequiringAlternativeCarePlacementServices />
-            <MonthlyRegisteredAndResolvedCases /> {/* Registered and Closed Cases by Month */}
-            <HighRiskCasesByProtectionConcern /> {/* 'High Risk Cases by Protection Concern' */}
-            <RegisteredCasesByProtectionConcern /> {/* 'Registered Cases by Protection Concern' */}
+            {/*<CasesRequiringAlternativeCarePlacementServices />*/}
+            {/*<MonthlyRegisteredAndResolvedCases /> {/* Registered and Closed Cases by Month */}
+            {/*<HighRiskCasesByProtectionConcern /> {/* 'High Risk Cases by Protection Concern' */}
+            {/*<RegisteredCasesByProtectionConcern /> {/* 'Registered Cases by Protection Concern' */}
             {/* 'Community based Child Protection Committees' */}
-            <CommunityBasedChildProtectionCommittees />
+            {/*<CommunityBasedChildProtectionCommittees />*/}
             {/* 'Community Engagement Sessions' */}
-            <CommunityEngagementSessions />
+            {/*<CommunityEngagementSessions />*/}
           </Grid>
-
           <Grid item xl={3} md={4} xs={12}>
             <Flags loadingIndicator={flagsIndicators} />
+          </Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid item xl={6} md={6} xs={6}>
+            <ResolvedCasesByGenderAndReason />
+          </Grid>
+          <Grid item xl={6} md={6} xs={6}>
+            <CasesReferralsToAgency />
+          </Grid>
+          <Grid item xl={6} md={6} xs={6}>
+            <CasesRequiringAlternativeCarePlacementServices />
+          </Grid>
+          <Grid item xl={6} md={6} xs={6}>
+            <MonthlyRegisteredAndResolvedCases /> {/* Registered and Closed Cases by Month */}
+          </Grid>
+          <Grid item xl={6} md={6} xs={6}>
+            <HighRiskCasesByProtectionConcern /> {/* 'High Risk Cases by Protection Concern' */}
+          </Grid>
+          <Grid item xl={6} md={6} xs={6}>
+            <RegisteredCasesByProtectionConcern /> {/* 'Registered Cases by Protection Concern' */}
+          </Grid>
+          <Grid item xl={6} md={6} xs={6}>
+            <CommunityBasedChildProtectionCommittees />
+          </Grid>
+          <Grid item xl={6} md={6} xs={6}>
+            <CommunityEngagementSessions />
           </Grid>
         </Grid>
       </PageContent>
