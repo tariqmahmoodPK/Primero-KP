@@ -11,8 +11,7 @@ module IncidentGraphs
     # User Roles allowed
     return { permission: false } unless name.in? [
       'CPO',
-      'CP Manager',
-      'Superuser'
+      'CP Manager'
     ]
 
     # Counters for calculating the number of participents for each type of paritcipant, and the total participents
@@ -42,8 +41,7 @@ module IncidentGraphs
     # User Roles allowed
     return { permission: false } unless name.in? [
       'CPO',
-      'CP Manager',
-      'Superuser'
+      'CP Manager'
     ]
 
     boys_participants = Incident.get_boys_participants_records
