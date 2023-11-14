@@ -1443,6 +1443,7 @@ en:
         military_use: Military use of school(s) and/or hospital(s)
         denial_humanitarian_access: Denial of humanitarian access for children
   incidents:
+    prevention_component: "Prevention Component"
     disable_dialog: Clicking OK will change the status of this incident to Disabled.
     disable_dialog_title: Disable Incident
     disable_success: Successfully disabled incident
