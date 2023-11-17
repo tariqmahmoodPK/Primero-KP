@@ -194,3 +194,28 @@ export const getCommunityBasedChildProtectionCommittees = state => {
 export const getCommunityEngagementSessions = state => {
   return state.getIn(["records", NAMESPACE, "communityEngagementSessions"], fromJS({}));
 };
+
+// 'Cases at a Glance'
+export const getCasesAtAGlance = state => {
+  return state.getIn(["records", NAMESPACE, "casesAtAGlance"], fromJS({}));
+};
+
+// 'Cases Source'
+export const getCasesSource = state => {
+  return state.getIn(["records", NAMESPACE, "casesSource"], fromJS({}));
+};
+
+// 'Custody with Court Order'
+export const getCustodyWithCourtOrder = state => {
+  return state.getIn(["records", NAMESPACE, "custodyWithCourtOrder"], fromJS({}));
+};
+
+// 'Police Cases'
+export const getPoliceCases = state => {
+  return state.getIn(["records", NAMESPACE, "policeCases"], fromJS({}));
+};
+
+// 'Cases Requiring Special Consideration'
+export const getCasesRequiringSpecialConsideration = state => {
+  return state.getIn(["records", NAMESPACE, "casesRequiringSpecialConsideration"], fromJS({}));
+};

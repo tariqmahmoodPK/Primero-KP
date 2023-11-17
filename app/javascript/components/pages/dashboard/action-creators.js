@@ -198,3 +198,43 @@ export const fetchCommunityEngagementSessions = () => ({
     path: "dashboards/community_engagement_sessions"
   }
 });
+
+// 'Cases at a Glance'
+export const fetchCasesAtAGlance = () => ({
+  type: actions.CASES_AT_A_GLANCE,
+  api: {
+    path: "dashboards/cases_at_a_glance"
+  }
+});
+
+// 'Cases Source'
+export const fetchCasesSource = () => ({
+  type: actions.CASES_SOURCE,
+  api: {
+    path: "dashboards/cases_source"
+  }
+});
+
+// 'Custody with Court Order'
+export const fetchCustodyWithCourtOrder = () => ({
+  type: actions.CUSTODY_WITH_COURT_ORDER,
+  api: {
+    path: "dashboards/custody_with_court_order"
+  }
+});
+
+// 'Police Cases'
+export const fetchPoliceCases = () => ({
+  type: actions.POLICE_CASES,
+  api: {
+    path: "dashboards/police_cases"
+  }
+});
+
+// 'Cases Requiring Special Consideration'
+export const fetchCasesRequiringSpecialConsideration = () => ({
+  type: actions.CASES_REQUIRING_SPECIAL_CONSIDERATION,
+  api: {
+    path: "dashboards/cases_requiring_special_consideration"
+  }
+});

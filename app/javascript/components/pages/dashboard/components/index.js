@@ -36,3 +36,17 @@ export { default as RegisteredCasesByProtectionConcern } from "./registered-case
 export { default as CommunityBasedChildProtectionCommittees } from "./community-based-child-protection-committees";
 // 'Community Engagement Sessions'
 export { default as CommunityEngagementSessions } from "./community-engagement-sessions";
+// 'Cases at a Glance'
+export { default as CasesAtAGlance } from "./cases-at-a-glance";
+// 'Cases Source'
+export { default as CasesSource } from "./cases-source";
+// 'Custody with Court Order'
+export { default as CustodyWithCourtOrder } from "./custody-with-court-order";
+// 'Police Cases'
+export { default as PoliceCases } from "./police-cases";
+// 'Cases Requiring Special Consideration'
+export { default as CasesRequiringSpecialConsideration } from "./cases-requiring-special-consideration";
+
+/* ====================================== */
+/*             End of Graphs              */
+/* ====================================== */

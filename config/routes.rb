@@ -147,6 +147,16 @@ Rails.application.routes.draw do
           get :community_based_child_protection_committees
           # 'Community Engagement Sessions'
           get :community_engagement_sessions
+          # 'Cases at a Glance'
+          get :cases_at_a_glance
+          # 'Cases Source'
+          get :cases_source
+          # 'Custody with Court Order'
+          get :custody_with_court_order
+          # 'Police Cases'
+          get :police_cases
+          # 'Cases Requiring Special Consideration'
+          get :cases_requiring_special_consideration
         end
       end
 

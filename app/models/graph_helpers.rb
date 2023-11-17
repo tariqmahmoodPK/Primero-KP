@@ -160,13 +160,6 @@ module GraphHelpers
   end
 
   # Get all Child records where 'assigned_user_names' in not nil
-
-
-
-
-
-
-
   def get_referred_cases(open_cases = false)
     search = Child.search do
       without(:assigned_user_names, nil)

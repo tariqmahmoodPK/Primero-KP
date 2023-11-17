@@ -36,6 +36,22 @@ const reducer = (state = DEFAULT_STATE, { type, payload }) => {
     // 'Community Engagement Sessions'
     case actions.COMMUNITY_ENGAGEMENT_SESSIONS_SUCCESS:
       return state.set("communityEngagementSessions", fromJS(payload));
+    // 'Cases at a Glance'
+    case actions.CASES_AT_A_GLANCE_SUCCESS:
+      return state.set("casesAtAGlance", fromJS(payload));
+    // 'Cases Source'
+    case actions.CASES_SOURCE_SUCCESS:
+      return state.set("casesSource", fromJS(payload));
+    // 'Custody with Court Order'
+    case actions.CUSTODY_WITH_COURT_ORDER_SUCCESS:
+      return state.set("custodyWithCourtOrder", fromJS(payload));
+    // 'Police Cases'
+    case actions.POLICE_CASES_SUCCESS:
+      return state.set("policeCases", fromJS(payload));
+    // 'Cases Requiring Special Consideration'
+    case actions.CASES_REQUIRING_SPECIAL_CONSIDERATION_SUCCESS:
+      return state.set("casesRequiringSpecialConsideration", fromJS(payload));
+    // 'Dashboard Flags'
     case actions.DASHBOARD_FLAGS:
       return state.set("flags", fromJS(payload));
     case actions.CASES_BY_STATUS:
