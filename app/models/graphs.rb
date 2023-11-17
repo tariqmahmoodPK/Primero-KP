@@ -582,6 +582,66 @@ module Graphs
       'CPWC'
     ]
 
+    cases = Child.get_case_records(user)
+
+    stats = {
+      'Registered' => 0,
+      'Pakistani' => 0,
+      'Other Nationality' => 0,
+      'High' => 0,
+      'Medium' => 0,
+      'Low' => 0,
+      'Closed Cases' => 0,
+      'Assigned to Me' => 0,
+    }
+
+    registered_records = cases.search do
+      with(:status, 'open')
+    end
+
+    closed_records = cases.search do
+      with(:status, 'closed')
+    end
+
+    pakistani_national_records = cases.search do
+      with(:status, 'open')
+      with(:nationality_b80911e, 'nationality1')
+    end
+
+    other_national_records = cases.search do
+      with(:nationality_b80911e, 'nationality2' ) # Afgani
+      with(:nationality_b80911e, 'nationality3' ) # Irani
+      with(:nationality_b80911e, 'nationality10') # Other
+    end
+
+    high_risk_records = cases.search do
+      with(:risk_level, 'high')
+    end
+
+    medium_risk_records = cases.search do
+      with(:risk_level, 'medium')
+    end
+
+    low_risk_records = cases.search do
+      with(:risk_level, 'low')
+    end
+
+    assigned_to_me_records = cases.search do
+      any_of do
+        with(:assigned_user_names, user_name)
+      end
+    end
+
+    stats['Registered'] = registered_records.count
+    stats['Pakistani'] = pakistani_national_records.count
+    stats['Other Nationality'] = other_national_records.count
+    stats['High'] = high_risk_records.count
+    stats['Medium'] = medium_risk_records.count
+    stats['Low'] = low_risk_records.count
+    stats['Closed Cases'] = closed_records.count
+    stats['Assigned to Me'] = assigned_to_me_records.count
+
+    stats
   end
 
   # 'Cases Source'

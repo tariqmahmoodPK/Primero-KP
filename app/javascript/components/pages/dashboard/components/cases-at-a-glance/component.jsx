@@ -67,9 +67,9 @@ const Component = () => {
       labels,
       datasets: [
         {
-          label: "Cases",
+          label: "Case Status",
           data: reg,
-          backgroundColor: ["blue", "red", "green", "orange", "purple", "cyan"]
+          backgroundColor: ["blue", "green", "orange", "red", "yellow", "sky", "grey", "cyan"]
         }
       ]
     };

@@ -176,21 +176,25 @@ class Api::V2::DashboardsController < ApplicationApiController
 
   # 'Cases Source'
   def cases_source
-    @stats = Child.cases_source_stats(current_user)
+    # @stats = Child.cases_source_stats(current_user)
+    @stats = {}
   end
 
   # 'Custody with Court Order'
   def custody_with_court_order
-    @stats = Child.custody_with_court_order_stats(current_user)
+    # @stats = Child.custody_with_court_order_stats(current_user)
+    @stats = {}
   end
 
   # 'Police Cases'
   def police_cases
-    @stats = Child.police_cases_stats(current_user)
+    # @stats = Child.police_cases_stats(current_user)
+    @stats = {}
   end
 
   # 'Cases Requiring Special Consideration'
   def cases_requiring_special_consideration
-    @stats = Child.cases_requiring_special_consideration_stats(current_user)
+    # @stats = Child.cases_requiring_special_consideration_stats(current_user)
+    @stats = {}
   end
 end

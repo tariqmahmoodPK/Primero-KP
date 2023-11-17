@@ -961,4 +961,196 @@ module GraphHelpers
   end
 
   # -------------------------------------------------------------------------------------------------
+
+  # Used by:
+    # 'Cases at a Glance'
+  #
+  # Assigned to Me # Note: Not to be shown for CPO AND Member CPWC
+
+  def get_case_records(user)
+    # User's role
+    role = user.role.name
+
+    # Getting records based on the Permissions of Each Role to View the Graphs
+    case role
+    # View Cases of a User
+    when 'Social Case Worker', 'Psychologist', 'Child Helpline Officer'
+      get_case_records_assigned_to_specific_user(user)
+    # View Cases of all Districts (Provincial data)
+    when 'CPWC'
+      get_case_records_assigned_to_specific_location(user)
+    # View Cases of
+      # Users with Roles:
+        # Social Case Worker
+        # Psychologist
+        # Child Helpline Operator
+      # That are Working in his UserGroup.
+    when 'CPO'
+      get_case_records_for_particular_user_group(user)
+    # View Cases Referred to User
+    when 'Referral'
+      get_case_records_referred_to_user(user)
+    else
+      # All Cases that are owned by the users under an Agency and are also owned by a particular location
+      get_case_records_with_location_and_agency(user)
+    end
+  end
+
+  def get_case_records_assigned_to_specific_user(user)
+    username = user.user_name
+
+    cases = Child.search do
+      with(:owned_by, username) # Assigned to Me
+
+      any_of do
+        with(:nationality_b80911e, 'nationality1' ) # Pakistani
+        with(:nationality_b80911e, 'nationality2' ) # Afgani
+        with(:nationality_b80911e, 'nationality3' ) # Irani
+        with(:nationality_b80911e, 'nationality10') # Other
+        with(:status, "open") # Registered
+        with(:status, "closed") # Closed Cases
+        with(:risk_level, 'high') # High
+        with(:risk_level, 'medium') # Medium
+        with(:risk_level, 'low') # Low
+      end
+    end
+
+    cases
+  end
+
+  def get_case_records_assigned_to_specific_location(user)
+    username = user.user_name
+    # User's Location Code
+    location_code = user.location
+
+    cases = nil
+
+    # If the location of the each record matches the User's Location then get those records
+    if location_code.present?
+      cases = Child.search do
+        with(:location_current, location_code)
+        any_of do
+          with(:nationality_b80911e, 'nationality1' ) # Pakistani
+          with(:nationality_b80911e, 'nationality2' ) # Afgani
+          with(:nationality_b80911e, 'nationality3' ) # Irani
+          with(:nationality_b80911e, 'nationality10') # Other
+          with(:status, "open") # Registered
+          with(:status, "closed") # Closed Cases
+          with(:risk_level, 'high') # High
+          with(:risk_level, 'medium') # Medium
+          with(:risk_level, 'low') # Low
+        end
+      end
+    # If there is no User location present then get all the records with location in 'Khyber Pakhtunkhwa'/KPK
+    else
+      cases = Child.search do
+        with_province # Checks if the location_current has 'KPK' in it
+        any_of do
+          with(:nationality_b80911e, 'nationality1' ) # Pakistani
+          with(:nationality_b80911e, 'nationality2' ) # Afgani
+          with(:nationality_b80911e, 'nationality3' ) # Irani
+          with(:nationality_b80911e, 'nationality10') # Other
+          with(:status, "open") # Registered
+          with(:status, "closed") # Closed Cases
+          with(:risk_level, 'high') # High
+          with(:risk_level, 'medium') # Medium
+          with(:risk_level, 'low') # Low
+        end
+      end
+    end
+
+    cases
+  end
+
+  def get_case_records_for_particular_user_group(user)
+    # Find users with the specified roles ('Social Case Worker', 'Psychologist', 'Child Helpline Officer')
+    role_names = [
+      'Social Case Worker',
+      'Psychologist',
+      'Child Helpline Officer'
+    ]
+
+    users_with_roles = User.joins(:role).where(roles: { name: role_names })
+
+    # Find the user group of the cpo user
+    cpo_user_group_ids = cpo_user.user_groups.pluck(:id)
+
+    # Find users with the specified roles who are in the same user group as the cpo user
+    users_in_same_user_group = users_with_roles.joins(:user_groups).where(user_groups: { id: cpo_user_group_ids })
+
+    # Extract the usernames of users in the same user group
+    usernames = users_in_same_user_group.pluck(:user_name)
+
+    cases = Child.search do
+      with(:owned_by, usernames)
+      any_of do
+        with(:nationality_b80911e, 'nationality1' ) # Pakistani
+        with(:nationality_b80911e, 'nationality2' ) # Afgani
+        with(:nationality_b80911e, 'nationality3' ) # Irani
+        with(:nationality_b80911e, 'nationality10') # Other
+        with(:status, "open") # Registered
+        with(:status, "closed") # Closed Cases
+        with(:risk_level, 'high') # High
+        with(:risk_level, 'medium') # Medium
+        with(:risk_level, 'low') # Low
+      end
+    end
+
+    cases
+  end
+
+  def get_case_records_referred_to_user(user)
+    user_name = user.name
+
+    cases = Child.search do
+      without(:assigned_user_names, nil)
+      any_of do
+        with(:nationality_b80911e, 'nationality1' ) # Pakistani
+        with(:nationality_b80911e, 'nationality2' ) # Afgani
+        with(:nationality_b80911e, 'nationality3' ) # Irani
+        with(:nationality_b80911e, 'nationality10') # Other
+        with(:status, 'open') # Registered
+        with(:status, 'closed') # Closed Cases
+        with(:risk_level, 'high') # High
+        with(:risk_level, 'medium') # Medium
+        with(:risk_level, 'low') # Low
+        any_of do
+          with(:assigned_user_names, user_name)
+        end
+      end
+    end
+
+    cases
+  end
+
+  def get_case_records_with_location_and_agency(user)
+    # User's Location Code
+    location_code = user.location
+
+    # Users under an Agency that another User created.
+    usernames = user.agency.users.pluck(:user_name)
+
+    cases = Child.search do
+      all_of do
+        any_of do
+          with(:owned_by, usernames)
+          with(:location_current, location_code)
+        end
+
+        any_of do
+          with(:nationality_b80911e, 'nationality1' ) # Pakistani
+          with(:nationality_b80911e, 'nationality2' ) # Afgani
+          with(:nationality_b80911e, 'nationality3' ) # Irani
+          with(:nationality_b80911e, 'nationality10') # Other
+          with(:status, "open") # Registered
+          with(:status, "closed") # Closed Cases
+          with(:risk_level, 'high') # High
+          with(:risk_level, 'medium') # Medium
+          with(:risk_level, 'low') # Low
+        end
+      end
+    end
+
+    cases
+  end
 end
