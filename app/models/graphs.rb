@@ -630,6 +630,11 @@ module Graphs
     stats['Closed Cases'     ] = closed_records.count
     stats['Assigned to Me'   ] = assigned_to_me_records.count
 
+    # Assigned to Me # Not to be shown for CPO AND Member CPWC
+    if user.role.name == 'CPO' || user.role.name == 'CPWC'
+      stats.delete('Assigned to Me')
+    end
+
     stats
   end
 

@@ -965,8 +965,6 @@ module GraphHelpers
   # Used by:
     # 'Cases at a Glance'
   #
-  # Assigned to Me # Note: Not to be shown for CPO AND Member CPWC
-
   def get_case_records(user)
     # User's role
     role = user.role.name
