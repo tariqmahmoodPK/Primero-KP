@@ -734,6 +734,50 @@ module Graphs
       'CPWC'
     ]
 
+    cases = Child.get_police_case_records(user)
+
+    stats = {
+      'Violence' =>      { male: 0, female: 0, transgender: 0 },
+      'Exploitation' =>  { male: 0, female: 0, transgender: 0 },
+      'Neglect' =>       { male: 0, female: 0, transgender: 0 },
+      'Harmful Practice(s)' => { male: 0, female: 0, transgender: 0 },
+      'Abuse' =>         { male: 0, female: 0, transgender: 0 },
+      'Other' =>         { male: 0, female: 0, transgender: 0 },
+    }
+
+    cases.each do |child|
+      # Getting 'transgender_a797d7e' for child.data["sex"].
+      # That exactly match with the 'transgender' word.
+      # So, using this line.
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
+      next unless gender
+
+      if child.data["other"].present?
+        stats['Violence'][gender.to_sym] += 1
+      end
+
+      if child.data["exploitation_b9352d1"].present?
+        stats['Exploitation'][gender.to_sym] += 1
+      end
+
+      if child.data["neglect_a7b48b2"].present?
+        stats['Neglect'][gender.to_sym] += 1
+      end
+
+      if child.data["harmful_practice_s__d1f7955"].present?
+        stats['Harmful Practice(s)'][gender.to_sym] += 1
+      end
+
+      if child.data["other_b637c39"].present?
+        stats['Abuse'][gender.to_sym] += 1
+      end
+
+      if child.data["other_7b13407"].present?
+        stats['Other'][gender.to_sym] += 1
+      end
+    end
+
+    stats
   end
 
   # 'Cases Requiring Special Consideration'

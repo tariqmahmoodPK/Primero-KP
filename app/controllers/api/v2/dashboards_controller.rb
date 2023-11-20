@@ -187,8 +187,7 @@ class Api::V2::DashboardsController < ApplicationApiController
 
   # 'Police Cases'
   def police_cases
-    # @stats = Child.police_cases_stats(current_user)
-    @stats = {}
+    @stats = Child.police_cases_stats(current_user)
   end
 
   # 'Cases Requiring Special Consideration'

@@ -53,7 +53,6 @@ const Component = () => {
 
   if (stats) {
     const labels = [];
-    const cases = [];
     const male = [];
     const female = [];
     const transgender = [];
@@ -63,7 +62,6 @@ const Component = () => {
     }
 
     for (const key in stats) {
-      cases.push(stats[key].cases);
       male.push(stats[key].male);
       female.push(stats[key].female);
       transgender.push(stats[key].transgender);
@@ -98,7 +96,7 @@ const Component = () => {
       {graphData && (
         <Grid item xl={6} md={6} xs={12}>
           <div className={css.container}>
-            <h2>Registered Cases by Protection Concern</h2>
+            <h2>Police Cases</h2>
             <div className={css.card} flat>
               <BarChart options={chartOptions} data={graphData} showDetails />
             </div>
