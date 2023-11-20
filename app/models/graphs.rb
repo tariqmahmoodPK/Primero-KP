@@ -655,6 +655,47 @@ module Graphs
       'CPWC'
     ]
 
+    cases = Child.get_case_records_with_sources(user)
+
+    case_identification_form = FormSection.where("form_group_id = ? AND name_i18n ->> ? = ?", "identification_registration", "en", 'Case Identification')[0]
+    source_of_report_options = case_identification_form.fields.where("name = ?", "source_of_report_25665ab")[0].option_strings_text_i18n
+
+    # Initialize a hash to store the statistics
+    stats_hash = Hash.new(0)
+
+    source_of_report_options.each do |option_hash|
+      stats_hash[option_hash['display_text']['en']] = 0;
+    end
+
+    # stats_hash is:
+    # {
+    #   "Helpline"=>0,
+    #   "Police"=>0,
+    #   "KPCPWC-CPUs"=>0,
+    #   "Walk-in"=>0,
+    #   "Social media"=>0,
+    #   "Pakistan Citizen Portal"=>0,
+    #   "Referred by District CP"=>0,
+    #   "Other Province"=>0,
+    #   "Other District"=>0,
+    #   "Newspaper"=>0,
+    #   "Child Protection Court"=>0,
+    #   "District Vigilance"=>0,
+    #   "Other CPU"=>0,
+    #   "Other"=>0
+    # }
+
+    # Iterate through records and update the stats hash
+    cases.each do |record|
+      source_value = record.data['source_of_report_25665ab']
+      # Find the corresponding display_text hash based on source_value
+      display_text_hash = source_of_report_options.find { |option| option['id'] == source_value }&.dig('display_text')
+      # Use the English display_text as the key in the stats hash
+      stats_key = display_text_hash ? display_text_hash['en'] : 'Unknown'
+      stats_hash[stats_key] += 1
+    end
+
+    stats_hash
   end
 
   # 'Custody with Court Order'

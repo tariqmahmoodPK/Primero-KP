@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import { Grid } from "@material-ui/core";
 
-import { Chart } from "../../../../charts";
+import { BarChart } from "../../../../charts";
 import { fetchCasesSource } from "../../action-creators";
 import { getCasesSource } from "../../selectors";
 import { useMemoizedSelector } from "../../../../../libs";
@@ -20,41 +20,30 @@ const Component = () => {
   const css = useStyles();
   const dispatch = useDispatch();
   const data = useMemoizedSelector(state => getCasesSource(state));
-  const stats = data ? data.toJS() : null;
+  const stats = data.getIn(["data", "stats"]) ? data.getIn(["data", "stats"]).toJS() : null;
 
   useEffect(() => {
     dispatch(fetchCasesSource());
   }, []);
 
   let graphData;
-  const options = {
+
+  const chartOptions = {
     scales: {
       xAxes: [
         {
-          ticks: {
-            display: false
-          },
-          gridLines: {
-            display: false
-          },
           scaleLabel: {
-            display: false,
-            labelString: "Time in Seconds",
+            display: true,
+            labelString: "Case Sources",
             fontColor: "red"
           }
         }
       ],
       yAxes: [
         {
-          ticks: {
-            display: false
-          },
-          gridLines: {
-            display: false
-          },
           scaleLabel: {
-            display: false,
-            labelString: "Speed in Miles per Hour",
+            display: true,
+            labelString: "Number Of Cases",
             fontColor: "green"
           }
         }
@@ -62,33 +51,57 @@ const Component = () => {
     }
   };
 
-  if (stats && stats.data) {
+  if (stats) {
+    const data = stats;
+    const labels = [];
+    const values = [];
+
+    for (const key in data) {
+      labels.push(key);
+    }
+
+    for (const key in data) {
+      values.push(data[key]);
+    }
+
     graphData = {
-      labels: stats.labels,
+      labels,
       datasets: [
         {
-          label: stats.labels,
-          data: stats.data,
-          backgroundColor: ["rgb(54, 162, 235)"],
-          hoverOffset: 6
+          label: "Case Sources",
+          data: values,
+          backgroundColor: [
+            "rgb(0, 0, 255)", // Blue
+            "rgb(255, 0, 0)", // Red
+            "rgb(0, 255, 0)", // Green
+            "rgb(255, 255, 0)", // Yellow
+            "rgb(255, 0, 255)", // Magenta
+            "rgb(0, 255, 255)", // Cyan
+            "rgb(255, 165, 0)", // Orange
+            "rgb(0, 128, 0)", // Dark Green
+            "rgb(225, 221, 0)",
+            "rgb(100, 0, 255)",
+            "rgb(128, 0, 128)", // Purple
+            "rgb(128, 0, 0)", // Maroon
+            "rgb(0, 128, 128)", // Teal
+            "rgb(255, 140, 0)" // Dark Orange
+          ]
         }
       ]
     };
   }
 
   return (
-    <>
-      {graphData && (
-        <Grid item xl={6} md={6} xs={12}>
-          <div className={css.container}>
-            <h2>Source of Cases</h2>
-            <div className={css.card} flat>
-              <Chart type="pie" options={options} data={graphData} showDetails />
-            </div>
+    stats && (
+      <Grid item md={6} xl={6}>
+        <div className={css.container}>
+          <h2>Source of Cases</h2>
+          <div className={css.card} flat>
+            <BarChart data={graphData} options={chartOptions} showDetails showLegend={false} />
           </div>
-        </Grid>
-      )}
-    </>
+        </div>
+      </Grid>
+    )
   );
 };
 

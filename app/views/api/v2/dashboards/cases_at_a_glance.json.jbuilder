@@ -2,7 +2,7 @@
 
 # TODO Add the stats format
 # Received Stats Format:
-# "stats" => {
+# @stats => {
 #   "Registered"        => 1,
 #   "Pakistani"         => 0,
 #   "Other Nationality" => 0,
