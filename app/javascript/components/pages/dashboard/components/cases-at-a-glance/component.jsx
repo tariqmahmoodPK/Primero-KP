@@ -76,7 +76,7 @@ const Component = () => {
             "rgb(255, 165, 0)", // Orange
             "rgb(255, 0, 0)", // Red
             "rgb(255, 255, 0)", // Yellow
-            "rgb(173, 216, 230)", // Light Blue
+            "rgb(32, 195, 255)", // Light Blue
             "rgb(128, 128, 128)", // Grey
             "rgb(139, 0, 0)" // Dark Red
           ]
