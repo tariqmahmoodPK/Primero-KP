@@ -1015,7 +1015,7 @@ module GraphHelpers
       end
     end
 
-    cases
+    cases.results
   end
 
   def get_case_records_assigned_to_specific_location(user)
@@ -1059,7 +1059,7 @@ module GraphHelpers
       end
     end
 
-    cases
+    cases.results
   end
 
   def get_case_records_for_particular_user_group(user)
@@ -1096,7 +1096,7 @@ module GraphHelpers
       end
     end
 
-    cases
+    cases.results
   end
 
   def get_case_records_referred_to_user(user)
@@ -1120,7 +1120,7 @@ module GraphHelpers
       end
     end
 
-    cases
+    cases.results
   end
 
   def get_case_records_with_location_and_agency(user)
@@ -1151,6 +1151,9 @@ module GraphHelpers
       end
     end
 
-    cases
+    cases.results
   end
+
+  # -------------------------------------------------------------------------------------------------
+
 end

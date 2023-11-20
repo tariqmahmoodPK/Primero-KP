@@ -52,24 +52,34 @@ const Component = () => {
   };
 
   if (stats) {
-    const { data } = stats;
+    const data = stats;
     const labels = [];
-    const reg = [];
+    const values = [];
 
     for (const key in data) {
       labels.push(key);
     }
+
     for (const key in data) {
-      reg.push(data[key]);
+      values.push(data[key]);
     }
 
     graphData = {
       labels,
       datasets: [
         {
-          label: "Case Status",
-          data: reg,
-          backgroundColor: ["blue", "green", "orange", "red", "yellow", "sky", "grey", "cyan"]
+          label: "Cases at a Glance",
+          data: values,
+          backgroundColor: [
+            "rgb(0, 0, 255)", // Blue
+            "rgb(0, 128, 0)", // Green
+            "rgb(255, 165, 0)", // Orange
+            "rgb(255, 0, 0)", // Red
+            "rgb(255, 255, 0)", // Yellow
+            "rgb(173, 216, 230)", // Light Blue
+            "rgb(128, 128, 128)", // Grey
+            "rgb(139, 0, 0)" // Dark Red
+          ]
         }
       ]
     };

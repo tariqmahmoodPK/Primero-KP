@@ -595,51 +595,40 @@ module Graphs
       'Assigned to Me' => 0,
     }
 
-    registered_records = cases.search do
-      with(:status, 'open')
+    registered_records = cases.select { |record| record.data['status'] == 'open' if record.data.key?('status') }
+
+    closed_records = cases.select { |record| record.data['status'] == 'closed' if record.data.key?('status') }
+
+    pakistani_national_records = cases.select do |record|
+      record.data.key?('status') && record.data.key?('nationality_b80911e') &&
+      record.data['status'] == 'open' && record.data['nationality_b80911e'] == 'nationality1'
     end
 
-    closed_records = cases.search do
-      with(:status, 'closed')
+    other_national_records = cases.select do |record|
+      record.data.key?('status') && record.data.key?('nationality_b80911e') &&
+      record.data['status'] == 'open' &&
+      ['nationality2', 'nationality3', 'nationality10'].include?(record.data['nationality_b80911e'])
     end
 
-    pakistani_national_records = cases.search do
-      with(:status, 'open')
-      with(:nationality_b80911e, 'nationality1')
+    high_risk_records = cases.select { |record| record.data['risk_level'] == 'high' if record.data.key?('risk_level') }
+
+    medium_risk_records = cases.select { |record| record.data['risk_level'] == 'medium' if record.data.key?('risk_level') }
+
+    low_risk_records = cases.select { |record| record.data['risk_level'] == 'low' if record.data.key?('risk_level') }
+
+    assigned_to_me_records = cases.select do |record|
+      record.data.key?('assigned_user_names') &&
+      record.data['assigned_user_names'].include?(user.name)
     end
 
-    other_national_records = cases.search do
-      with(:nationality_b80911e, 'nationality2' ) # Afgani
-      with(:nationality_b80911e, 'nationality3' ) # Irani
-      with(:nationality_b80911e, 'nationality10') # Other
-    end
-
-    high_risk_records = cases.search do
-      with(:risk_level, 'high')
-    end
-
-    medium_risk_records = cases.search do
-      with(:risk_level, 'medium')
-    end
-
-    low_risk_records = cases.search do
-      with(:risk_level, 'low')
-    end
-
-    assigned_to_me_records = cases.search do
-      any_of do
-        with(:assigned_user_names, user_name)
-      end
-    end
-
-    stats['Registered'] = registered_records.count
-    stats['Pakistani'] = pakistani_national_records.count
+    stats['Registered'       ] = registered_records.count
+    stats['Pakistani'        ] = pakistani_national_records.count
     stats['Other Nationality'] = other_national_records.count
-    stats['High'] = high_risk_records.count
-    stats['Medium'] = medium_risk_records.count
-    stats['Low'] = low_risk_records.count
-    stats['Closed Cases'] = closed_records.count
-    stats['Assigned to Me'] = assigned_to_me_records.count
+    stats['High'             ] = high_risk_records.count
+    stats['Medium'           ] = medium_risk_records.count
+    stats['Low'              ] = low_risk_records.count
+    stats['Closed Cases'     ] = closed_records.count
+    stats['Assigned to Me'   ] = assigned_to_me_records.count
 
     stats
   end
