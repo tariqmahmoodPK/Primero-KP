@@ -132,70 +132,70 @@ const Dashboard = () => {
         </Grid>
 
         <Grid container spacing={3}>
-          <Grid item xl={6} md={6} xs={6}>
-            {/* 'Closed Cases by Sex and Reason' */}
-            <ResolvedCasesByGenderAndReason />
-          </Grid>
+          {/* <Grid item xl={6} md={6} xs={6}> */}
+          {/* 'Closed Cases by Sex and Reason' */}
+          <ResolvedCasesByGenderAndReason />
+          {/* </Grid> */}
 
-          <Grid item xl={6} md={6} xs={6}>
-            {/* 'Cases Referrals (To Agency)' */}
-            <CasesReferralsToAgency />
-          </Grid>
+          {/* <Grid item xl={6} md={6} xs={6}> */}
+          {/* 'Cases Referrals (To Agency)' */}
+          <CasesReferralsToAgency />
+          {/* </Grid> */}
 
-          <Grid item xl={6} md={6} xs={6}>
-            {/* 'Cases requiring Alternative Care Placement Services' */}
-            <CasesRequiringAlternativeCarePlacementServices />
-          </Grid>
+          {/* <Grid item xl={6} md={6} xs={6}> */}
+          {/* 'Cases requiring Alternative Care Placement Services' */}
+          <CasesRequiringAlternativeCarePlacementServices />
+          {/* </Grid> */}
 
-          <Grid item xl={6} md={6} xs={6}>
-            {/* Registered and Closed Cases by Month */}
-            <MonthlyRegisteredAndResolvedCases />
-          </Grid>
+          {/* <Grid item xl={6} md={6} xs={6}> */}
+          {/* Registered and Closed Cases by Month */}
+          <MonthlyRegisteredAndResolvedCases />
+          {/* </Grid> */}
 
-          <Grid item xl={6} md={6} xs={6}>
-            {/* 'High Risk Cases by Protection Concern' */}
-            <HighRiskCasesByProtectionConcern />
-          </Grid>
+          {/* <Grid item xl={6} md={6} xs={6}> */}
+          {/* 'High Risk Cases by Protection Concern' */}
+          <HighRiskCasesByProtectionConcern />
+          {/* </Grid> */}
 
-          <Grid item xl={6} md={6} xs={6}>
-            {/* 'Registered Cases by Protection Concern' */}
-            <RegisteredCasesByProtectionConcern />
-          </Grid>
+          {/* <Grid item xl={6} md={6} xs={6}> */}
+          {/* 'Registered Cases by Protection Concern' */}
+          <RegisteredCasesByProtectionConcern />
+          {/* </Grid> */}
 
-          <Grid item xl={6} md={6} xs={6}>
-            {/* 'Community based Child Protection Committees' */}
-            <CommunityBasedChildProtectionCommittees />
-          </Grid>
+          {/* <Grid item xl={6} md={6} xs={6}> */}
+          {/* 'Community based Child Protection Committees' */}
+          <CommunityBasedChildProtectionCommittees />
+          {/* </Grid> */}
 
-          <Grid item xl={6} md={6} xs={6}>
-            {/* 'Community Engagement Sessions' */}
-            <CommunityEngagementSessions />
-          </Grid>
+          {/* <Grid item xl={6} md={6} xs={6}> */}
+          {/* 'Community Engagement Sessions' */}
+          <CommunityEngagementSessions />
+          {/* </Grid> */}
 
-          <Grid item xl={6} md={6} xs={6}>
-            {/* 'Cases at a Glance' */}
-            <CasesAtAGlance />
-          </Grid>
+          {/* <Grid item xl={6} md={6} xs={6}> */}
+          {/* 'Cases at a Glance' */}
+          <CasesAtAGlance />
+          {/* </Grid> */}
 
-          <Grid item xl={6} md={6} xs={6}>
-            {/* 'Cases Source' */}
-            <CasesSource />
-          </Grid>
+          {/* <Grid item xl={6} md={6} xs={6}> */}
+          {/* 'Cases Source' */}
+          <CasesSource />
+          {/* </Grid> */}
 
-          <Grid item xl={6} md={6} xs={6}>
-            {/* 'Custody with Court Order' */}
-            <CustodyWithCourtOrder />
-          </Grid>
+          {/* <Grid item xl={6} md={6} xs={6}> */}
+          {/* 'Custody with Court Order' */}
+          <CustodyWithCourtOrder />
+          {/* </Grid> */}
 
-          <Grid item xl={6} md={6} xs={6}>
-            {/* 'Police Cases' */}
-            <PoliceCases />
-          </Grid>
+          {/* <Grid item xl={6} md={6} xs={6}> */}
+          {/* 'Police Cases' */}
+          <PoliceCases />
+          {/* </Grid> */}
 
-          <Grid item xl={6} md={6} xs={6}>
-            {/* 'Cases Requiring Special Consideration' */}
-            <CasesRequiringSpecialConsideration />
-          </Grid>
+          {/* <Grid item xl={6} md={6} xs={6}> */}
+          {/* 'Cases Requiring Special Consideration' */}
+          <CasesRequiringSpecialConsideration />
+          {/* </Grid> */}
         </Grid>
       </PageContent>
     </PageContainer>
