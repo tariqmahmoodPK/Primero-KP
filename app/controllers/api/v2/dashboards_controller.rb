@@ -192,7 +192,6 @@ class Api::V2::DashboardsController < ApplicationApiController
 
   # 'Cases Requiring Special Consideration'
   def cases_requiring_special_consideration
-    # @stats = Child.cases_requiring_special_consideration_stats(current_user)
-    @stats = {}
+    @stats = Child.cases_requiring_special_consideration_stats(current_user)
   end
 end

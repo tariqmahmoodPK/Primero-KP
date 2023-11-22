@@ -797,5 +797,128 @@ module Graphs
       'CPWC'
     ]
 
+    cases = Child.get_special_consideration_case_records(user)
+
+    stats = {
+      'Minority Cases by Gender'        => { male: 0, female: 0, transgender: 0 },
+      'CwD Cases'                       => { male: 0, female: 0, transgender: 0 },
+      'Cases with BISP Benf. by Gender' => { male: 0, female: 0, transgender: 0 },
+      'Ophans'                          => { male: 0, female: 0, transgender: 0 },
+      'Afghan Refuges'                  => { male: 0, female: 0, transgender: 0 },
+      'Legal Aid'                       => { male: 0, female: 0, transgender: 0 },
+      'Guardianship Awarded'            => { male: 0, female: 0, transgender: 0 },
+      'Other Provinces'                 => { male: 0, female: 0, transgender: 0 },
+    }
+
+    minority_cases_by_gender = cases.select do |record|
+      record.data.key?('status') && record.data.key?('does_the_child_belong_to_an_ethnic_minority__cddc53f') &&
+      record.data['status'] == 'open' && record.data['does_the_child_belong_to_an_ethnic_minority__cddc53f'] == 'true'
+    end
+
+    cwd_cases = cases.select do |record|
+      record.data.key?('status') && record.data.key?('does_the_child_have_any_disability__ef809a3') &&
+      record.data['status'] == 'open' && record.data['does_the_child_have_any_disability__ef809a3'] == 'true'
+    end
+
+    cases_with_bisp_benf_by_gender = cases.select do |record|
+      record.data.key?('status') && record.data["parent_guardian_38aba74"][0].key?('beneficiary_of_social_protection_programs__b2367d9') &&
+      record.data['status'] == 'open' &&
+      ['bisp_146081', 'ehsaas_820053', 'other_214066'].include?(record.data["parent_guardian_38aba74"][0]['beneficiary_of_social_protection_programs__b2367d9'])
+    end
+
+    orphan = cases.select do |record|
+      record.data["parent_guardian_38aba74"][0].key?('parent_guardian_b481d19') &&
+      record.data["parent_guardian_38aba74"][0].key?('status_d359d3a') &&
+      record.data["parent_guardian_38aba74"][0]['status_d359d3a'] == 'dead_765780' &&
+      record.data["parent_guardian_38aba74"][0]['parent_guardian_b481d19'] == 'biological_father_219674'
+    end
+
+    afghan_refuges = cases.select do |record|
+      record.data.key?('status') && record.data.key?('nationality_b80911e') &&
+      record.data['status'] == 'open' &&
+      record.data["nationality_b80911e"].any? {|nationality| nationality == "nationality2" }
+    end
+
+    legal_aid = cases.select do |record|
+      record.data.key?('status') && record.data.key?('free_legal_support__through_pro_bono_lawyer__6e227bc') &&
+      record.data['status'] == 'open' && record.data['free_legal_support__through_pro_bono_lawyer__6e227bc'] == 'true'
+    end
+
+    other_provinces = cases.select do |record|
+      record.data.key?('status') && record.data.key?('source_of_report_25665ab') &&
+      record.data['status'] == 'open' && record.data['source_of_report_25665ab'] == 'other_province_556823'
+    end
+
+    minority_cases_by_gender.each do |child|
+      # Getting 'transgender_a797d7e' for child.data["sex"].
+      # That exactly match with the 'transgender' word.
+      # So, using this line.
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
+      next unless gender
+
+      stats['Minority Cases by Gender'][gender.to_sym] += 1
+    end
+
+    cwd_cases.each do |child|
+      # Getting 'transgender_a797d7e' for child.data["sex"].
+      # That exactly match with the 'transgender' word.
+      # So, using this line.
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
+      next unless gender
+
+      stats['CwD Cases'][gender.to_sym] += 1
+    end
+
+    cases_with_bisp_benf_by_gender.each do |child|
+      # Getting 'transgender_a797d7e' for child.data["sex"].
+      # That exactly match with the 'transgender' word.
+      # So, using this line.
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
+      next unless gender
+
+      stats['Cases with BISP Benf. by Gender'][gender.to_sym] += 1
+    end
+
+    orphan.each do |child|
+      # Getting 'transgender_a797d7e' for child.data["sex"].
+      # That exactly match with the 'transgender' word.
+      # So, using this line.
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
+      next unless gender
+
+      stats['Ophans'][gender.to_sym] += 1
+    end
+
+    afghan_refuges.each do |child|
+      # Getting 'transgender_a797d7e' for child.data["sex"].
+      # That exactly match with the 'transgender' word.
+      # So, using this line.
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
+      next unless gender
+
+      stats['Afghan Refuges'][gender.to_sym] += 1
+    end
+
+    legal_aid.each do |child|
+      # Getting 'transgender_a797d7e' for child.data["sex"].
+      # That exactly match with the 'transgender' word.
+      # So, using this line.
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
+      next unless gender
+
+      stats['Legal Aid'][gender.to_sym] += 1
+    end
+
+    other_provinces.each do |child|
+      # Getting 'transgender_a797d7e' for child.data["sex"].
+      # That exactly match with the 'transgender' word.
+      # So, using this line.
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
+      next unless gender
+
+      stats['Other Provinces'][gender.to_sym] += 1
+    end
+
+    stats
   end
 end

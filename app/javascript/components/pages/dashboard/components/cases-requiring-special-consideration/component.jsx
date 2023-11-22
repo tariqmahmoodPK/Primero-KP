@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import { Grid } from "@material-ui/core";
 
-import { Chart } from "../../../../charts";
+import { BarChart } from "../../../../charts";
 import { fetchCasesRequiringSpecialConsideration } from "../../action-creators";
 import { getCasesRequiringSpecialConsideration } from "../../selectors";
 import { useMemoizedSelector } from "../../../../../libs";
@@ -20,14 +20,14 @@ const Component = () => {
   const css = useStyles();
   const dispatch = useDispatch();
   const data = useMemoizedSelector(state => getCasesRequiringSpecialConsideration(state));
-  const stats = data ? data.toJS() : null;
+  const stats = data.getIn(["data", "stats"]) ? data.getIn(["data", "stats"]).toJS() : null;
 
   useEffect(() => {
     dispatch(fetchCasesRequiringSpecialConsideration());
   }, []);
 
   let graphData;
-  const options = {
+  const chartOptions = {
     scales: {
       xAxes: [
         {
@@ -39,7 +39,7 @@ const Component = () => {
           },
           scaleLabel: {
             display: false,
-            labelString: "Time in Seconds",
+            labelString: "Record Types",
             fontColor: "red"
           }
         }
@@ -54,7 +54,7 @@ const Component = () => {
           },
           scaleLabel: {
             display: false,
-            labelString: "Speed in Miles per Hour",
+            labelString: "No. of Cases",
             fontColor: "green"
           }
         }
@@ -62,22 +62,41 @@ const Component = () => {
     }
   };
 
-  if (stats && stats.data) {
+  if (stats) {
+    const labels = [];
+    const male = [];
+    const female = [];
+    const transgender = [];
+
+    for (const key in stats) {
+      labels.push(key);
+    }
+
+    for (const key in stats) {
+      male.push(stats[key].male);
+      female.push(stats[key].female);
+      transgender.push(stats[key].transgender);
+    }
     graphData = {
-      labels: stats.labels,
+      labels,
       datasets: [
         {
-          label: stats.labels,
-          data: stats.data,
-          backgroundColor: [
-            "rgb(255, 99, 132)",
-            "rgb(54, 162, 235)",
-            "rgb(255, 205, 86)",
-            "rgb(128, 0, 128)",
-            "rgb(150,75,0)",
-            "rgb(54, 170, 89)"
-          ],
-          hoverOffset: 6
+          label: "Male",
+          data: male,
+          backgroundColor: "rgba(54, 162, 235)",
+          stack: "Stack 0"
+        },
+        {
+          label: "Female",
+          data: female,
+          backgroundColor: "rgb(255, 99, 132)",
+          stack: "Stack 0"
+        },
+        {
+          label: "Transgender",
+          data: transgender,
+          backgroundColor: "rgba(255, 159, 64)",
+          stack: "Stack 0"
         }
       ]
     };
@@ -90,7 +109,7 @@ const Component = () => {
           <div className={css.container}>
             <h2>Cases Requiring Special Considerations</h2>
             <div className={css.card} flat>
-              <Chart type="pie" options={options} data={graphData} showDetails />
+              <BarChart options={chartOptions} data={graphData} showDetails />
             </div>
           </div>
         </Grid>
