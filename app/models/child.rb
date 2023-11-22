@@ -167,6 +167,18 @@ class Child < ApplicationRecord
     text :nationality_b80911e do
       data["nationality_b80911e"]
     end
+
+    text :beneficiary_of_social_protection_programs__b2367d9 do
+      data["parent_guardian_38aba74"].map { |item| item["beneficiary_of_social_protection_programs__b2367d9"] }[0]
+    end
+
+    text :parent_guardian_b481d19 do
+      data["parent_guardian_38aba74"].map { |item| item["parent_guardian_b481d19"] }[0]
+    end
+
+    text :status_d359d3a do
+      data["parent_guardian_38aba74"].map { |item| item["status_d359d3a"] }[0]
+    end
   end
 
   # Validations

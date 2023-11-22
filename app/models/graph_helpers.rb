@@ -1287,141 +1287,6 @@ module GraphHelpers
 
   # -------------------------------------------------------------------------------------------------
 
-  # # Used by:
-  #   # 'Custody with Court Order'
-  # #
-  # def get_case_records_with_court_order(user)
-  #   # User's role
-  #   role = user.role.name
-
-  #   # Getting records based on the Permissions of Each Role to View the Graphs
-  #   case role
-  #   # View Cases of a User
-  #   when 'Social Case Worker', 'Psychologist', 'Child Helpline Officer'
-  #     get_cases_with_court_order_assigned_to_specific_user(user)
-  #   # View Cases of all Districts (Provincial data)
-  #   when 'CPWC'
-  #     get_cases_with_court_order_assigned_to_specific_location(user)
-  #   # View Cases of
-  #     # Users with Roles:
-  #       # Social Case Worker
-  #       # Psychologist
-  #       # Child Helpline Operator
-  #     # That are Working in his UserGroup.
-  #   when 'CPO'
-  #     get_cases_with_court_order_for_particular_user_group(user)
-  #   # View Cases Referred to User
-  #   when 'Referral'
-  #     get_cases_with_court_order_referred_to_user(user)
-  #   else
-  #     # All Cases that are owned by the users under an Agency and are also owned by a particular location
-  #     get_cases_with_court_order_with_location_and_agency(user)
-  #   end
-  # end
-
-  # def get_cases_with_court_order_assigned_to_specific_user(user)
-  #   username = user.user_name
-
-  #   # is_an_emergency_protection_order_required_for_this_case__d07d3f2
-
-  #   cases = Child.search do
-  #     with(:owned_by, username)
-  #     without(:source_of_report_25665ab, nil)
-  #   end
-
-  #   cases.results
-  # end
-
-  # def get_cases_with_court_order_assigned_to_specific_location(user)
-  #   username = user.user_name
-  #   # User's Location Code
-  #   location_code = user.location
-
-  #   cases = nil
-
-  #   # If the location of the each record matches the User's Location then get those records
-  #   if location_code.present?
-  #     cases = Child.search do
-  #       with(:location_current, location_code)
-  #       without(:source_of_report_25665ab, nil)
-  #     end
-  #   # If there is no User location present then get all the records with location in 'Khyber Pakhtunkhwa'/KPK
-  #   else
-  #     cases = Child.search do
-  #       with_province # Checks if the location_current has 'KPK' in it
-  #       without(:source_of_report_25665ab, nil)
-  #     end
-  #   end
-
-  #   cases.results
-  # end
-
-  # def get_cases_with_court_order_for_particular_user_group(user)
-  #   # Find users with the specified roles ('Social Case Worker', 'Psychologist', 'Child Helpline Officer')
-  #   role_names = [
-  #     'Social Case Worker',
-  #     'Psychologist',
-  #     'Child Helpline Officer'
-  #   ]
-
-  #   users_with_roles = User.joins(:role).where(roles: { name: role_names })
-
-  #   # Find the user group of the cpo user
-  #   cpo_user_group_ids = cpo_user.user_groups.pluck(:id)
-
-  #   # Find users with the specified roles who are in the same user group as the cpo user
-  #   users_in_same_user_group = users_with_roles.joins(:user_groups).where(user_groups: { id: cpo_user_group_ids })
-
-  #   # Extract the usernames of users in the same user group
-  #   usernames = users_in_same_user_group.pluck(:user_name)
-
-  #   cases = Child.search do
-  #     with(:owned_by, usernames)
-  #     without(:source_of_report_25665ab, nil)
-  #   end
-
-  #   cases.results
-  # end
-
-  # def get_cases_with_court_order_referred_to_user(user)
-  #   user_name = user.name
-
-  #   cases = Child.search do
-  #     without(:assigned_user_names, nil)
-  #     all_of do
-  #       without(:source_of_report_25665ab, nil)
-  #       with(:assigned_user_names, user_name)
-  #     end
-  #   end
-
-  #   cases.results
-  # end
-
-  # def get_cases_with_court_order_with_location_and_agency(user)
-  #   # User's Location Code
-  #   location_code = user.location
-
-  #   # Users under an Agency that another User created.
-  #   usernames = user.agency.users.pluck(:user_name)
-
-  #   cases = Child.search do
-  #     all_of do
-  #       any_of do
-  #         with(:owned_by, usernames)
-  #         with(:location_current, location_code)
-  #       end
-
-  #       any_of do
-  #         without(:source_of_report_25665ab, nil)
-  #       end
-  #     end
-  #   end
-
-  #   cases.results
-  # end
-
-  # -------------------------------------------------------------------------------------------------
-
   # Used by:
     # 'Police Cases'
   #
@@ -1552,6 +1417,212 @@ module GraphHelpers
         all_of do
           with(:status, "open")
           with(:source_of_report_25665ab, "police_646813")
+        end
+      end
+    end
+
+    cases.results
+  end
+
+  # -------------------------------------------------------------------------------------------------
+
+  # Used by:
+    # 'Cases Requiring Special Consideration'
+  #
+  def get_special_consideration_case_records(user)
+    # User's role
+    role = user.role.name
+
+    # Getting records based on the Permissions of Each Role to View the Graphs
+    case role
+    # View Cases of a User
+    when 'Social Case Worker', 'Psychologist', 'Child Helpline Officer'
+      get_special_consideration_cases_assigned_to_specific_user(user)
+    # View Cases of all Districts (Provincial data)
+    when 'CPWC'
+      get_special_consideration_cases_assigned_to_specific_location(user)
+    # View Cases of
+      # Users with Roles:
+        # Social Case Worker
+        # Psychologist
+        # Child Helpline Operator
+      # That are Working in his UserGroup.
+    when 'CPO'
+      get_special_consideration_cases_for_particular_user_group(user)
+    # View Cases Referred to User
+    when 'Referral'
+      get_special_consideration_cases_referred_to_user(user)
+    else
+      # All Cases that are owned by the users under an Agency and are also owned by a particular location
+      get_special_consideration_cases_with_location_and_agency(user)
+    end
+  end
+
+  def get_special_consideration_cases_assigned_to_specific_user(user)
+    username = user.user_name
+
+    cases = Child.search do
+      with(:owned_by, username)
+      with(:status, "open")
+
+      any_of do
+        with(:does_the_child_belong_to_an_ethnic_minority__cddc53f, "true")
+        with(:does_the_child_have_any_disability__ef809a3, "true")
+        with(:beneficiary_of_social_protection_programs__b2367d9, "bisp_146081") # BISP
+        with(:beneficiary_of_social_protection_programs__b2367d9, "ehsaas_820053") # Ehsaas
+        with(:beneficiary_of_social_protection_programs__b2367d9, "other_214066") # Other
+        with(:parent_guardian_b481d19, "biological_father_219674")
+        with(:status_d359d3a, "dead_765780")
+        with(:nationality_b80911e, "nationality2") # Afghani
+        with(:free_legal_support__through_pro_bono_lawyer__6e227bc, "true")
+        with(:source_of_report_25665ab, "other_province_556823")
+      end
+    end
+
+    cases.results
+  end
+
+  def get_special_consideration_cases_assigned_to_specific_location(user)
+    username = user.user_name
+    # User's Location Code
+    location_code = user.location
+
+    cases = nil
+
+    # If the location of the each record matches the User's Location then get those records
+    if location_code.present?
+      cases = Child.search do
+        with(:location_current, location_code)
+        with(:status, "open")
+        any_of do
+          with(:does_the_child_belong_to_an_ethnic_minority__cddc53f, "true")
+          with(:does_the_child_have_any_disability__ef809a3, "true")
+          with(:beneficiary_of_social_protection_programs__b2367d9, "bisp_146081") # BISP
+          with(:beneficiary_of_social_protection_programs__b2367d9, "ehsaas_820053") # Ehsaas
+          with(:beneficiary_of_social_protection_programs__b2367d9, "other_214066") # Other
+          with(:parent_guardian_b481d19, "biological_father_219674")
+          with(:status_d359d3a, "dead_765780")
+          with(:nationality_b80911e, "nationality2") # Afghani
+          with(:free_legal_support__through_pro_bono_lawyer__6e227bc, "true")
+          with(:source_of_report_25665ab, "other_province_556823")
+        end
+      end
+    # If there is no User location present then get all the records with location in 'Khyber Pakhtunkhwa'/KPK
+    else
+      cases = Child.search do
+        with_province # Checks if the location_current has 'KPK' in it
+        with(:status, "open")
+        any_of do
+          with(:does_the_child_belong_to_an_ethnic_minority__cddc53f, "true")
+          with(:does_the_child_have_any_disability__ef809a3, "true")
+          with(:beneficiary_of_social_protection_programs__b2367d9, "bisp_146081") # BISP
+          with(:beneficiary_of_social_protection_programs__b2367d9, "ehsaas_820053") # Ehsaas
+          with(:beneficiary_of_social_protection_programs__b2367d9, "other_214066") # Other
+          with(:parent_guardian_b481d19, "biological_father_219674")
+          with(:status_d359d3a, "dead_765780")
+          with(:nationality_b80911e, "nationality2") # Afghani
+          with(:free_legal_support__through_pro_bono_lawyer__6e227bc, "true")
+          with(:source_of_report_25665ab, "other_province_556823")
+        end
+      end
+    end
+
+    cases.results
+  end
+
+  def get_special_consideration_cases_for_particular_user_group(user)
+    # Find users with the specified roles ('Social Case Worker', 'Psychologist', 'Child Helpline Officer')
+    role_names = [
+      'Social Case Worker',
+      'Psychologist',
+      'Child Helpline Officer'
+    ]
+
+    users_with_roles = User.joins(:role).where(roles: { name: role_names })
+
+    # Find the user group of the cpo user
+    cpo_user_group_ids = cpo_user.user_groups.pluck(:id)
+
+    # Find users with the specified roles who are in the same user group as the cpo user
+    users_in_same_user_group = users_with_roles.joins(:user_groups).where(user_groups: { id: cpo_user_group_ids })
+
+    # Extract the usernames of users in the same user group
+    usernames = users_in_same_user_group.pluck(:user_name)
+
+    cases = Child.search do
+      with(:owned_by, usernames)
+      with(:status, "open")
+      any_of do
+        with(:does_the_child_belong_to_an_ethnic_minority__cddc53f, "true")
+        with(:does_the_child_have_any_disability__ef809a3, "true")
+        with(:beneficiary_of_social_protection_programs__b2367d9, "bisp_146081") # BISP
+        with(:beneficiary_of_social_protection_programs__b2367d9, "ehsaas_820053") # Ehsaas
+        with(:beneficiary_of_social_protection_programs__b2367d9, "other_214066") # Other
+        with(:parent_guardian_b481d19, "biological_father_219674")
+        with(:status_d359d3a, "dead_765780")
+        with(:nationality_b80911e, "nationality2") # Afghani
+        with(:free_legal_support__through_pro_bono_lawyer__6e227bc, "true")
+        with(:source_of_report_25665ab, "other_province_556823")
+      end
+    end
+
+    cases.results
+  end
+
+  def get_special_consideration_cases_referred_to_user(user)
+    user_name = user.name
+
+    cases = Child.search do
+      without(:assigned_user_names, nil)
+      all_of do
+        with(:status, "open")
+        with(:source_of_report_25665ab, "police_646813")
+        any_of do
+          with(:does_the_child_belong_to_an_ethnic_minority__cddc53f, "true")
+          with(:does_the_child_have_any_disability__ef809a3, "true")
+          with(:beneficiary_of_social_protection_programs__b2367d9, "bisp_146081") # BISP
+          with(:beneficiary_of_social_protection_programs__b2367d9, "ehsaas_820053") # Ehsaas
+          with(:beneficiary_of_social_protection_programs__b2367d9, "other_214066") # Other
+          with(:parent_guardian_b481d19, "biological_father_219674")
+          with(:status_d359d3a, "dead_765780")
+          with(:nationality_b80911e, "nationality2") # Afghani
+          with(:free_legal_support__through_pro_bono_lawyer__6e227bc, "true")
+          with(:source_of_report_25665ab, "other_province_556823")
+        end
+      end
+    end
+
+    cases.results
+  end
+
+  def get_special_consideration_cases_with_location_and_agency(user)
+    # User's Location Code
+    location_code = user.location
+
+    # Users under an Agency that another User created.
+    usernames = user.agency.users.pluck(:user_name)
+
+    cases = Child.search do
+      all_of do
+        any_of do
+          with(:owned_by, usernames)
+          with(:location_current, location_code)
+        end
+
+        all_of do
+          with(:status, "open")
+          any_of do
+            with(:does_the_child_belong_to_an_ethnic_minority__cddc53f, "true")
+            with(:does_the_child_have_any_disability__ef809a3, "true")
+            with(:beneficiary_of_social_protection_programs__b2367d9, "bisp_146081") # BISP
+            with(:beneficiary_of_social_protection_programs__b2367d9, "ehsaas_820053") # Ehsaas
+            with(:beneficiary_of_social_protection_programs__b2367d9, "other_214066") # Other
+            with(:parent_guardian_b481d19, "biological_father_219674")
+            with(:status_d359d3a, "dead_765780")
+            with(:nationality_b80911e, "nationality2") # Afghani
+            with(:free_legal_support__through_pro_bono_lawyer__6e227bc, "true")
+            with(:source_of_report_25665ab, "other_province_556823")
+          end
         end
       end
     end
