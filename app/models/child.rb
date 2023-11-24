@@ -193,8 +193,10 @@ class Child < ApplicationRecord
   # Allows to get the current_user object in model's lifecycle
   after_update   :get_current_user
   after_create   :get_current_user
-
+  # Send a mail when Child record is created
   after_create  :send_case_registration_message
+  # Method that send mails when specific 'conditions are met' / 'events are triggered'
+  after_update  :send_case_event_emails
   after_save    :save_incidents
 
   class << self
@@ -277,7 +279,40 @@ class Child < ApplicationRecord
       # Getting cpo_user whose locaion matches the case's location
       @cpo_user = User.joins(:role).where(role: { unique_id: "role-cp-administrator" }).find_by(location: location)
 
-      CaseRegisteredNotificationMailer.send_case_registered_notification(created_case, @cpo_user).deliver_later
+      CaseLifecycleEventsNotificationMailer.send_case_registered_notification(created_case, @cpo_user).deliver_later
+    end
+  end
+
+  def send_case_event_emails
+    updated_record = self
+
+    data_before_update = previous_changes
+    data_after_update = updated_record['data']
+
+    # Define a configuration hash mapping condition keys to mailer methods
+    event_config = {
+      'declaration_by_case_worker_9ac8a1d' => :send_case_registration_completed_notification,
+      # Add more conditions as needed
+    }
+
+    event_config.each do |event_key, mailer_method|
+      declaration_value = nil
+
+      if data_before_update.key?(event_key) && data_after_update.key?(event_key)
+        original_data = data_before_update[event_key]
+        new_data = data_after_update[event_key]
+
+        declaration_value = new_data if original_data != new_data
+      elsif data_after_update.key?(event_key)
+        declaration_value = data_after_update[event_key]
+      end
+
+      if declaration_value && mailer_method && CaseLifecycleEventsNotificationMailer.respond_to?(mailer_method)
+        CaseLifecycleEventsNotificationMailer.send(mailer_method, record, @current_user, declaration_value)
+      else
+        # Handle the case where the mailer method is not found
+        raise "Unknown mailer method for event: #{event_key}"
+      end
     end
   end
 
@@ -393,7 +428,7 @@ class Child < ApplicationRecord
   private
 
   # Access the @current_user set in the set_current_user method
-  def set_user_after_create
+  def get_current_user
     user = @current_user
   end
 end
