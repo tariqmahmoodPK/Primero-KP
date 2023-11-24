@@ -191,7 +191,9 @@ class Child < ApplicationRecord
   before_save   :calculate_has_case_plan
   before_create :hide_name
   # Allows to get the current_user object in model's lifecycle
-  after_create  :set_user_after_create
+  after_update   :get_current_user
+  after_create   :get_current_user
+
   after_create  :send_case_registration_message
   after_save    :save_incidents
 
