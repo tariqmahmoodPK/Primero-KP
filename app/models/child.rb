@@ -286,12 +286,13 @@ class Child < ApplicationRecord
   def send_case_event_emails
     updated_record = self
 
-    data_before_update = previous_changes
+    data_before_update = previous_changes["data"][0]
     data_after_update = updated_record['data']
 
     # Define a configuration hash mapping condition keys to mailer methods
     event_config = {
       'declaration_by_case_worker_9ccdf48' => :send_case_registration_completed_notification,
+      'i_declare_that_to_the_best_of_my_knowledge_the_above_stated_facts_are_true_404f861' => :send_case_registration_verified_notification,
     }
 
     event_config.each do |event_key, mailer_method|
