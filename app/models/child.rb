@@ -190,6 +190,9 @@ class Child < ApplicationRecord
   before_save   :stamp_registry_fields
   before_save   :calculate_has_case_plan
   before_create :hide_name
+  # Allows to get the current_user object in model's lifecycle
+  after_create  :set_user_after_create
+  after_create  :send_case_registration_message
   after_save    :save_incidents
 
   class << self
@@ -262,6 +265,18 @@ class Child < ApplicationRecord
       end
       incident.has_changes_to_save? ? incident : nil
     end.compact
+  end
+
+  def send_case_registration_message
+    if @current_user.role.name == "CPHO"
+      created_case = self
+      # Getting location of current_user as the location of the case would be the same.
+      location = @current_user.location
+      # Getting cpo_user whose locaion matches the case's location
+      @cpo_user = User.joins(:role).where(role: { unique_id: "role-cp-administrator" }).find_by(location: location)
+
+      CaseRegisteredNotificationMailer.send_case_registered_notification(created_case, @cpo_user).deliver_later
+    end
   end
 
   def save_incidents
@@ -366,6 +381,18 @@ class Child < ApplicationRecord
 
   def associations_as_data_keys
     %w[incident_details]
+  end
+
+  # Save the Current User in an Instance variable for use in the Model
+  def set_current_user(current_user)
+    @current_user = current_user
+  end
+
+  private
+
+  # Access the @current_user set in the set_current_user method
+  def set_user_after_create
+    user = @current_user
   end
 end
 
