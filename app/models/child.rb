@@ -291,8 +291,7 @@ class Child < ApplicationRecord
 
     # Define a configuration hash mapping condition keys to mailer methods
     event_config = {
-      'declaration_by_case_worker_9ac8a1d' => :send_case_registration_completed_notification,
-      # Add more conditions as needed
+      'declaration_by_case_worker_9ccdf48' => :send_case_registration_completed_notification,
     }
 
     event_config.each do |event_key, mailer_method|
@@ -307,11 +306,13 @@ class Child < ApplicationRecord
         declaration_value = data_after_update[event_key]
       end
 
-      if declaration_value && mailer_method && CaseLifecycleEventsNotificationMailer.respond_to?(mailer_method)
-        CaseLifecycleEventsNotificationMailer.send(mailer_method, record, @current_user, declaration_value)
-      else
-        # Handle the case where the mailer method is not found
-        raise "Unknown mailer method for event: #{event_key}"
+      if declaration_value
+        if mailer_method && CaseLifecycleEventsNotificationMailer.respond_to?(mailer_method)
+          CaseLifecycleEventsNotificationMailer.send(mailer_method, updated_record, @current_user, declaration_value).deliver_now
+        else
+          # Handle the case where the mailer method is not found
+          raise "Unknown mailer method for event: #{event_key}"
+        end
       end
     end
   end
