@@ -60,5 +60,4 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
       Rails.logger.warn("No CPOs found for case registration verification notification.")
     end
   end
-  end
 end
