@@ -1,14 +1,41 @@
 class CaseLifecycleEventsNotificationMailer < ApplicationMailer
-  def send_case_registered_notification(case_record, cpo_user)
+  # 1a
+  # Case Registered | Case Reffered to CPO | Mail CPO
+  # Case id | CPO User Email
+  def send_case_registered_cpo_notification(case_record, cpo_user)
     @case_id = case_record
     @cpo_user = cpo_user
 
     mail(to: @cpo_user.email, subject: 'Case Registration through Helpline (CPHO)') do |format|
-      format.html { render 'send_case_registered_notification' }
-      format.text { render 'send_case_registered_notification' }
+      format.html { render 'send_case_registered_cpo_notification' }
+      format.text { render 'send_case_registered_cpo_notification' }
     end
   end
 
+  # 1b
+  # Case Registered | Case Assigned to SCW/Psychologist | Mail to SCW/Psychologist
+  # Case id | SCW/Psychologist User Email | CPO Name
+  def send_case_registered_scw_psychologist_notification(case_record, cpo_user)
+
+  end
+
+  # 1a ii
+  # Case Transfered | Transfered to CPO | Mail to CPO
+  # Case id | Referrer Username | Referral Location | Workflow Stage
+  def send_case_transfered_cpo_notification
+
+  end
+
+  # 1b ii
+  # Case Transfered | Transfered to SCW/Psychologist | Mail to SCW/Psychologist
+  # Case id | CPO Name | Transfer/Refffer Location | Workflow Stage
+  def send_case_transfered_scw_psychologist_notification
+
+  end
+
+  # 2a
+  # Case Registration Completed | Mail to CPO
+  # Case id | SCW/Psychologist | CPO User Email
   def send_case_registration_completed_notification(case_record, current_user, declaration_value)
     # SCW/Psy
     @owned_by_user_name = case_record.data['owned_by']
@@ -24,20 +51,25 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
 
     cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
 
-    cpo_users_emails = cpo_users.pluck(:email)
+    users_emails = cpo_users.pluck(:email)
 
     @case_id = case_record
 
-    if cpo_users_emails.present?
-      mail(to: cpo_users_emails, subject: 'Case Registration Completed') do |format|
-        format.html { render 'send_case_registration_completed_notification' }
-        format.text { render 'send_case_registration_completed_notification' }
+    subject = "Case Registration Completed"
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
       end
     else
-      Rails.logger.warn("No CPOs found for case registration completion notification.")
+      Rails.logger.warn("No Emails Found.")
     end
   end
 
+  # 2b
+  # Case Registration Verified | Mail to SCW/Psychologist
+  # Case id | SCW/Psychologist Email | CPO Username
   def send_case_registration_verified_notification(case_record, current_user, declaration_value)
     # SCW/Psy
     @owned_by_user_name = case_record.data['owned_by']
@@ -45,19 +77,141 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
 
     cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
 
-    cpo_users_emails = cpo_users.pluck(:email)
+    users_emails = cpo_users.pluck(:email)
 
     @case_id = case_record
 
     @cpo_user = cpo_users[0]
 
-    if cpo_users_emails.present?
-      mail(to: cpo_users_emails, subject: 'Case Registration Verified') do |format|
-        format.html { render 'send_case_registration_verified_notification' }
-        format.text { render 'send_case_registration_verified_notification' }
+    subject = "Case Registration Verified"
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
       end
     else
-      Rails.logger.warn("No CPOs found for case registration verification notification.")
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
+
+  # 3a
+  # Initial Assessment Completed | Mail to CPO
+  # Case id | SCW/Psychologist Username | CPO Email
+  def send_initial_assessment_completed_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
+
+  # 3a
+  # Initial Assessment Verified | Mail to SCW/Psychologist
+  # Case id | SCW/Psychologist Email | CPO Username
+  def send_initial_assessment_verified_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
+
+  # 4a
+  # Comprehensive Assessment Completed | Mail to CPO
+  # Case id | SCW/Psychologist Username | CPO Email
+  def send_comprehensive_assessment_completed_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
+
+  # 4b
+  # Comprehensive Assessment Verified | Mail to SCW/Psychologist
+  # Case id | SCW/Psychologist Email | CPO Username
+  def send_comprehensive_assessment_verified_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
+
+  # 5a
+  # Case Plan Completed | Mail to CPO
+  # Case id | SCW/Psychologist Username | CPO Email
+  def send_case_plan_completed_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
+
+  # 5b
+  # Case Plan Verified | Mail to SCW/Psychologist
+  # Case id | SCW/Psychologist Email | CPO Username
+  def send_case_plan_verified_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
+
+  # 6a
+  # Alternative Care Placement Completed | Mail to CPO
+  # Case id | SCW/Psychologist Username | CPO Email
+  def send_alternative_care_placement_completed_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
+
+  # 6b
+  # Alternative Care Placement | Mail to SCW/Psychologist
+  # Case id | SCW/Psychologist Email | CPO Username
+  def send_alternative_care_placement_verified_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
     end
   end
 end

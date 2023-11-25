@@ -271,6 +271,7 @@ class Child < ApplicationRecord
     end.compact
   end
 
+  # TODO Verify if this logic is valid
   def send_case_registration_message
     if @current_user.role.name == "CPHO"
       created_case = self
@@ -279,7 +280,7 @@ class Child < ApplicationRecord
       # Getting cpo_user whose locaion matches the case's location
       @cpo_user = User.joins(:role).where(role: { unique_id: "role-cp-administrator" }).find_by(location: location)
 
-      CaseLifecycleEventsNotificationMailer.send_case_registered_notification(created_case, @cpo_user).deliver_later
+      CaseLifecycleEventsNotificationMailer.send_case_registered_cpo_notification(created_case, @cpo_user).deliver_later
     end
   end
 
@@ -291,8 +292,16 @@ class Child < ApplicationRecord
 
     # Define a configuration hash mapping condition keys to mailer methods
     event_config = {
-      'declaration_by_case_worker_9ccdf48' => :send_case_registration_completed_notification,
+      'declaration_by_case_worker_9ccdf48'                   => :send_case_registration_completed_notification,
       'i_declare_that_to_the_best_of_my_knowledge_the_above_stated_facts_are_true_404f861' => :send_case_registration_verified_notification,
+      'declaration_by_case_worker_9ac8a1d'                   => :send_initial_assessment_completed_notification        ,
+      'verification_of_initial_assessment_560f3ed'           => :send_initial_assessment_verified_notification         ,
+      'declaration_from_case_worker_5bb55e3'                 => :send_comprehensive_assessment_completed_notification  ,
+      'verification_of_comprehensive_assessment_3201713'     => :send_comprehensive_assessment_verified_notification   ,
+      'declaration_from_case_worker_ec811f6'                 => :send_case_plan_completed_notification                 ,
+      'verification_of_case_plan_e2b7c06'                    => :send_case_plan_verified_notification                  ,
+      'declaration_by_case_worker_f2bdb12'                   => :send_alternative_care_placement_completed_notification,
+      'verification_by_the_child_protection_officer_67b3fbb' => :send_alternative_care_placement_verified_notification ,
     }
 
     event_config.each do |event_key, mailer_method|
