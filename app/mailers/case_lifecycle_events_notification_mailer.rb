@@ -38,8 +38,8 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # Case id | SCW/Psychologist | CPO User Email
   def send_case_registration_completed_notification(case_record, current_user, declaration_value)
     # SCW/Psy
-    @owned_by_user_name = case_record.data['owned_by']
-    user = User.find_by(user_name: @owned_by_user_name)
+    @user_name = case_record.data['owned_by']
+    user = User.find_by(user_name: @user_name)
 
     # User.joins(user_groups: { users: :role }):
       # This part sets up the SQL join, starting from the User model and joining UserGroup, User, and Role tables.
@@ -72,8 +72,8 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # Case id | SCW/Psychologist Email | CPO Username
   def send_case_registration_verified_notification(case_record, current_user, declaration_value)
     # SCW/Psy
-    @owned_by_user_name = case_record.data['owned_by']
-    user = User.find_by(user_name: @owned_by_user_name)
+    user_name = case_record.data['owned_by']
+    user = User.find_by(user_name: user_name)
 
     cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
 
@@ -81,7 +81,8 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
 
     @case_id = case_record
 
-    @cpo_user = cpo_users[0]
+    cpo_user = cpo_users[0]
+    @user_name = @cpo_user.user_name
 
     subject = "Case Registration Verified"
 
@@ -110,7 +111,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     end
   end
 
-  # 3a
+  # 3b
   # Initial Assessment Verified | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username
   def send_initial_assessment_verified_notification(case_record, current_user, declaration_value)
