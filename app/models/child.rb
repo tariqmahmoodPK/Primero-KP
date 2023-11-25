@@ -285,11 +285,6 @@ class Child < ApplicationRecord
   end
 
   def send_case_event_emails
-    updated_record = self
-
-    data_before_update = previous_changes["data"][0]
-    data_after_update = updated_record['data']
-
     # Define a configuration hash mapping condition keys to mailer methods
     event_config = {
       'declaration_by_case_worker_9ccdf48'                   => :send_case_registration_completed_notification,
@@ -302,18 +297,38 @@ class Child < ApplicationRecord
       'verification_of_case_plan_e2b7c06'                    => :send_case_plan_verified_notification                  ,
       'declaration_by_case_worker_f2bdb12'                   => :send_alternative_care_placement_completed_notification,
       'verification_by_the_child_protection_officer_67b3fbb' => :send_alternative_care_placement_verified_notification ,
+      'follow_up_information_and_findings_fc87338' => :monitoring_and_follow_up_subform_completed ,
     }
+
+    updated_record = self
+
+    data_before_update = previous_changes["data"][0]
+    data_after_update = updated_record['data']
 
     event_config.each do |event_key, mailer_method|
       declaration_value = nil
 
-      if data_before_update.key?(event_key) && data_after_update.key?(event_key)
-        original_data = data_before_update[event_key]
-        new_data = data_after_update[event_key]
+      case event_key
+      when "follow_up_information_and_findings_fc87338"
+        if data_before_update.key?(event_key) && data_after_update.key?(event_key)
+          original_data = data_before_update[event_key][0]["date_of_follow_up_fb341ff"]
+          new_data = data_after_update[event_key][0]["date_of_follow_up_fb341ff"]
 
-        declaration_value = new_data if original_data != new_data
-      elsif data_after_update.key?(event_key)
-        declaration_value = data_after_update[event_key]
+          if new_data.present? && original_data != new_data
+            declaration_value = true
+          end
+        elsif data_after_update.key?(event_key) && data_after_update[event_key][0].key?("date_of_follow_up_fb341ff")
+          declaration_value = true
+        end
+      else
+        if data_before_update.key?(event_key) && data_after_update.key?(event_key)
+          original_data = data_before_update[event_key]
+          new_data = data_after_update[event_key]
+
+          declaration_value = new_data if original_data != new_data
+        elsif data_after_update.key?(event_key)
+          declaration_value = data_after_update[event_key]
+        end
       end
 
       if declaration_value

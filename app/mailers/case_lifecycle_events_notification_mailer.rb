@@ -215,4 +215,19 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
       Rails.logger.warn("No Emails Found.")
     end
   end
+
+  # 7a
+  # Monitoring and Follow up Sub form | Mail to CPO
+  # Case id | SCW/Psychologist Username | CPO Email
+  def monitoring_and_follow_up_subform_completed(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
 end
