@@ -297,7 +297,8 @@ class Child < ApplicationRecord
       'verification_of_case_plan_e2b7c06'                    => :send_case_plan_verified_notification                  ,
       'declaration_by_case_worker_f2bdb12'                   => :send_alternative_care_placement_completed_notification,
       'verification_by_the_child_protection_officer_67b3fbb' => :send_alternative_care_placement_verified_notification ,
-      'follow_up_information_and_findings_fc87338' => :monitoring_and_follow_up_subform_completed ,
+      'follow_up_information_and_findings_fc87338'           => :monitoring_and_follow_up_subform_completed            ,
+      'verification_of_follow_up_findings_53492a4'           => :monitoring_and_follow_up_subform_verified_notification,
     }
 
     updated_record = self
