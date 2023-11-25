@@ -219,7 +219,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 7a
   # Monitoring and Follow up Sub form | Mail to CPO
   # Case id | SCW/Psychologist Username | CPO Email
-  def monitoring_and_follow_up_subform_completed(case_record, current_user, declaration_value)
+  def send_monitoring_and_follow_up_subform_completed_notification(case_record, current_user, declaration_value)
 
     if users_emails.present?
       mail(to: users_emails, subject: subject) do |format|
@@ -234,7 +234,52 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 7b
   # Monitoring and Follow up Sub form | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username
-  def monitoring_and_follow_up_subform_verified_notification(case_record, current_user, declaration_value)
+  def send_monitoring_and_follow_up_subform_verified_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
+
+  # 8a
+  # Case Referred | Mail to some Recipient
+  # Case id | SCW/Psychologist Username | Email of Recipient
+  def send_case_referred_to_user_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
+
+  # 8b
+  # Case Referred | Mail to some Recipient
+  # Case id | SCW/Psychologist Username | Email of Recipient
+  def send_case_referred_revoked_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
+
+  # 8c
+  # Case Referred | Mail to SCW/Psychologist
+  # Case id | Referral Partner Username | Email of SCW/Psychologist
+  def send_case_referred_accepted_notification(case_record, current_user, declaration_value)
 
     if users_emails.present?
       mail(to: users_emails, subject: subject) do |format|
