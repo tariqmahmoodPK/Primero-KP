@@ -396,6 +396,10 @@ GEM
     thor (1.2.1)
     timeout (0.3.1)
     ttfunk (1.5.1)
+    twilio-ruby (6.8.2)
+      faraday (>= 0.9, < 3.0)
+      jwt (>= 1.5, < 3.0)
+      nokogiri (>= 1.6, < 2.0)
     twitter_cldr (4.4.4)
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.0)
@@ -492,6 +496,7 @@ DEPENDENCIES
   sunspot_rails (~> 2.5)
   sunspot_solr (~> 2.5)
   sunspot_test (~> 0.4)
+  twilio-ruby (~> 6.8.2)
   twitter_cldr (~> 4.4)
   tzinfo-data (~> 1.2021)
   will_paginate (~> 3.1)
