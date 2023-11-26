@@ -5,7 +5,7 @@
   </head>
   <body>
     <p>
-      <%= t("email_notification.#{@transition.key}_html",
+      <%= t( @email_content_html_yml_key,
           user_role_name: @transition&.transitioned_to_user&.role.name,
           user: @transition.transitioned_by,
           agency: @transition&.transitioned_by_user&.agency&.name,

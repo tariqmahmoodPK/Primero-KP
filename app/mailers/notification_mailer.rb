@@ -28,9 +28,9 @@ class NotificationMailer < ApplicationMailer
          subject: t('email_notification.approval_response_subject', id: @child.short_id, locale: @locale_email))
   end
 
-  # 1-b | # 1-a ii
+  # 1-b | 1-b ii| 1-a ii |
   # Case Assigned to SCW/Psychologist
-  # Case Transfered | Transfered to CPO
+  # Case Transfered | Transfered to CPO | Transfered to SCW/Psychologist |
   # And other Notifications too
   def transition_notify(transition_id)
     load_transition_for_email(Transition, transition_id)
@@ -40,6 +40,22 @@ class NotificationMailer < ApplicationMailer
     @location = transitioned_by_user.location
     @workflow_stage = @transition&.record.workflow
 
+    send_to_user = @transition&.transitioned_to_user
+    send_to_role_name = send_to_user.role.name
+
+    if @transition.key == "transfer"
+      if send_to_role_name == "Child Helpline Officer"
+        @email_content_html_yml_key = "email_notification.#{@transition.key}_cpo_html"
+        @email_content_text_yml_key = "email_notification.#{@transition.key}_cpo"
+      elsif send_to_role_name == "Psychologist" || send_to_role_name == "Social Case Worker"
+        @email_content_html_yml_key = "email_notification.#{@transition.key}_scw_psy_html"
+        @email_content_text_yml_key = "email_notification.#{@transition.key}_scw_psy"
+      else
+        @email_content_html_yml_key = "email_notification.#{@transition.key}_html"
+        @email_content_text_yml_key = "email_notification.#{@transition.key}"
+      end
+    end
+
     if assert_notifications_enabled(@transition&.transitioned_to_user)
       mail(to: @transition&.transitioned_to_user&.email, subject: transition_subject(@transition&.record))
     end
@@ -47,8 +63,10 @@ class NotificationMailer < ApplicationMailer
     cpo_user = User.joins(:role).where(role: { unique_id: "role-cp-administrator" }).find_by(user_name: @transition.transitioned_by)
 
     # Send Whatsapp Notifications
-    if cpo_user.present? && cpo_user&.phone
+    if send_to_user.present? && send_to_user&.phone ||
       twilio_service = TwilioWhatsAppService.new
+      to_phone_number = nil
+      message_body = nil
 
       case @transition.key
       when "assign"
@@ -70,11 +88,19 @@ class NotificationMailer < ApplicationMailer
           workflow_stage: @workflow_stage
         }.with_indifferent_access
 
-        file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_transfered_cpo_notification.text.erb"
-        message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+        if send_to_role_name == "Child Helpline Officer"
+          file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_transfered_cpo_notification.text.erb"
+          message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
 
-        to_phone_number = cpo_user.phone
-        message_body = message_content
+          to_phone_number = cpo_user.phone
+          message_body = message_content
+        elsif send_to_role_name == "Psychologist" || send_to_role_name == "Social Case Worker"
+          file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_transfered_scw_psychologist_notification.text.erb"
+          message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+          to_phone_number = send_to_user.phone
+          message_body = message_content
+        end
       end
 
       twilio_service.send_whatsapp_message(to_phone_number, message_body)

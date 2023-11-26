@@ -15,13 +15,6 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     end
   end
 
-  # 1b ii
-  # Case Transfered | Transfered to SCW/Psychologist | Mail to SCW/Psychologist
-  # Case id | CPO Name | Transfer/Refffer Location | Workflow Stage
-  def send_case_transfered_scw_psychologist_notification
-
-  end
-
   # 2a
   # Case Registration Completed | Mail to CPO
   # Case id | SCW/Psychologist | CPO User Email

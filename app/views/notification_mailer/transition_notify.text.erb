@@ -1,6 +1,6 @@
 ===============================================
 
-<%= t("email_notification.#{@transition.key}",
+<%= t( @email_content_text_yml_key,
     user: @transition.transitioned_by,
     agency: @transition&.transitioned_by_user&.agency&.name,
     record_type: t("forms.record_types.#{@transition&.record.class.parent_form}"),
