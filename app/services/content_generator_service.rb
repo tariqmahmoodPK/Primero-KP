@@ -11,6 +11,9 @@ class ContentGeneratorService
     @scw_psy_user = message_params.dig('scw_psy_user')
     @scw_psy_user_name = @scw_psy_user.user_name || message_params.dig('scw_psy_user_name')
 
+    @user = message_params.dig('user')
+    @user_name = @user.user_name || message_params.dig('user_name')
+
     @transfered_by_user = message_params.dig('transfered_by_user')
     @transfered_by_user_name = @transfered_by_user.user_name || message_params.dig('transfered_by_user_name')
 

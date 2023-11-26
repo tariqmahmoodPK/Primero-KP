@@ -30,17 +30,18 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     # roles: { unique_id: "role-cp-administrator" }:
       # It filters for the role with the unique ID "role-cp-administrator."
     #
-
     cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
 
-    users_emails = cpo_users.pluck(:email)
+    return unless assert_notifications_enabled(cpo_users[0])
+
+    users_email = cpo_users[0].email
 
     @case_id = case_record
 
     subject = "Case Registration Completed"
 
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
+    if users_email.present?
+      mail(to: users_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
