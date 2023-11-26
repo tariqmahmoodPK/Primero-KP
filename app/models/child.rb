@@ -271,16 +271,32 @@ class Child < ApplicationRecord
     end.compact
   end
 
-  # TODO Verify if this logic is valid
+  # Sending a Notification on Case Record Being Created
+  # Assuming, New Casre Record Creation in done through Helpline Only
   def send_case_registration_message
-    if @current_user.role.name == "CPHO"
-      created_case = self
-      # Getting location of current_user as the location of the case would be the same.
-      location = @current_user.location
-      # Getting cpo_user whose locaion matches the case's location
-      @cpo_user = User.joins(:role).where(role: { unique_id: "role-cp-administrator" }).find_by(location: location)
+    registered_case = self
 
-      CaseLifecycleEventsNotificationMailer.send_case_registered_cpo_notification(created_case, @cpo_user).deliver_later
+    # TODO Verify this is the right way to get the CPO
+    # Getting CPO of the Case
+    cpo_user = User.joins(:role).where(role: { unique_id: "role-cp-administrator" }).find_by(location: registered_case.data["owned_by_location"])
+
+    CaseLifecycleEventsNotificationMailer.send_case_registered_cpo_notification(registered_case, cpo_user).deliver_later
+
+    # Send Whatsapp Notification
+    if cpo_user.phone
+      message_params = {
+        case: registered_case,
+        cpo_user: cpo_user,
+      }.with_indifferent_access
+
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_registered_cpo_notification.text.erb"
+      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+      twilio_service = TwilioWhatsAppService.new
+      to_phone_number = cpo_user.phone
+      message_body = message_content
+
+      twilio_service.send_whatsapp_message(to_phone_number, message_body)
     end
   end
 

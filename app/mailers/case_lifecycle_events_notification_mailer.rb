@@ -1,12 +1,14 @@
 class CaseLifecycleEventsNotificationMailer < ApplicationMailer
-  # 1a
-  # Case Registered | Case Reffered to CPO | Mail CPO
-  # Case id | CPO User Email
-  def send_case_registered_cpo_notification(case_record, cpo_user)
-    @case_id = case_record
-    @cpo_user = cpo_user
+  # 1-a # Case Registered Through Helpline
+  def send_case_registered_cpo_notification(child_record, cpo_user)
+    @case_id = child_record.short_id
+    cpo_user = cpo_user
 
-    mail(to: @cpo_user.email, subject: 'Case Registration through Helpline (CPHO)') do |format|
+    return unless assert_notifications_enabled(cpo_user)
+
+    subject = "Case #{@case_id} Referred to you via Helpline"
+
+    mail(to: cpo_user.email, subject: subject) do |format|
       format.html { render 'send_case_registered_cpo_notification' }
       format.text { render 'send_case_registered_cpo_notification' }
     end
@@ -441,5 +443,14 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     else
       Rails.logger.warn("No Emails Found.")
     end
+  end
+
+  private
+
+  def assert_notifications_enabled(user)
+    (user&.email && user&.send_mail) ||
+      Rails.logger.info(
+        "Mail not sent. Notifications disabled for #{user&.user_name || 'nil user'}"
+      )
   end
 end
