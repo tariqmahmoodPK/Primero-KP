@@ -320,4 +320,52 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
       Rails.logger.warn("No Emails Found.")
     end
   end
+
+
+  # 9a
+  # Case Transfer Completes | Mail to CPO
+  # Case id | SCW/Psychologist Username | CPO Email
+  def send_case_transfer_completes_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
+
+
+  # 9b
+  # Case Transfer Verified | Mail to SCW/Psychologist
+  # Case id | SCW/Psychologist Email | CPO Username
+  def send_case_transfer_verified_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
+
+
+  # 9c
+  # Case Transfer Approved | Mail to SCW/Psychologist
+  # Case id | SCW/Psychologist Email | CPO Username
+  def send_case_transfer_approved_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
 end
