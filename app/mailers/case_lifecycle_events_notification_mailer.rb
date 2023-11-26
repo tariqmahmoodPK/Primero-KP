@@ -427,4 +427,19 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
       Rails.logger.warn("No Emails Found.")
     end
   end
+
+  # 12a
+  # Case Flags | Mail to SCW/Psychologist
+  # Case id | SCW/Psychologist Email | CPO Username | Workflow Stage
+  def send_case_flags_notification(case_record, current_user, declaration_value)
+
+    if users_emails.present?
+      mail(to: users_emails, subject: subject) do |format|
+        format.html { render __method__.to_s }
+        format.text { render __method__.to_s }
+      end
+    else
+      Rails.logger.warn("No Emails Found.")
+    end
+  end
 end
