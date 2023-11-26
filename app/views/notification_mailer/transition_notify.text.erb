@@ -8,7 +8,9 @@
       @transition&.record&.short_id, url_for_v2(@transition&.record)
     ),
     service_type: @transition.service,
-    locale: @locale_email
+    locale: @locale_email,
+    location: @location,
+    workflow_stage: @transition&.record.workflow
   ).html_safe
 %>
 
