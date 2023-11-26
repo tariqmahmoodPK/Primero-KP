@@ -822,10 +822,10 @@ en:
     # transfer_html: '<strong>%{user}</strong> has transferred the following %{record_type} to you: <strong>%{record_id}</strong>.'
     # transfer: '%{user} has transferred the following %{record_type} to you: %{record_id}.'
     transfer_html: |
-      <p>Dear CPO,</p>
+      <p>Dear %{user_role_name},</p>
       <p>A case <strong>%{record_id}</strong> has been referred to you from <strong>%{user}</strong> at location <strong>%{location}</strong>. This case is currently at the <strong>%{workflow_stage}</strong> stage. Kindly allocate it to either a SCW or Psychologist</p>
     transfer: |
-      Dear CPO,
+      Dear %{user_role_name},
       A case %{record_id} has been referred to you from %{user} at location %{location}. This case is currently at the %{workflow_stage} stage. Kindly allocate it to either a SCW or Psychologist
     assign_subject: '%{record_type}: %{id} - Assigned to you'
     approval_request: 'The user %{user} is requesting approval for %{approval_type} on case %{case_id}.'
