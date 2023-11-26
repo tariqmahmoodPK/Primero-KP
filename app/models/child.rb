@@ -283,7 +283,7 @@ class Child < ApplicationRecord
     CaseLifecycleEventsNotificationMailer.send_case_registered_cpo_notification(registered_case, cpo_user).deliver_later
 
     # Send Whatsapp Notification
-    if cpo_user.phone
+    if cpo_user&.phone
       message_params = {
         case: registered_case,
         cpo_user: cpo_user,

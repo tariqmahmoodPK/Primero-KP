@@ -811,7 +811,14 @@ en:
       disabled: Disabled
       enabled: Enabled
   email_notification:
-    assign: '%{user} has assigned the following %{record_type} to you: %{record_id}.'
+    # assign: '%{user} has assigned the following %{record_type} to you: %{record_id}.'
+    # assign_html: '<strong>%{user}</strong> has assigned the following %{record_type} to you: <strong>%{record_id}</strong>.'
+    assign_html: |
+      <p>Dear SCW / Psychologist,</p>
+      <p>A new case <strong>%{record_id%}</strong> has been %{record_type} to you by CPO <strong>%{user}</strong>. Please proceed to register the case immediately, by logging into your CP-IMS account.</p>
+    assign: |
+      Dear SCW / Psychologist,
+      A new case %{record_id} has been %{record_type} to you by CPO %{user}. Please proceed to register the case immediately, by logging into your CP-IMS account.
     assign_subject: '%{record_type}: %{id} - Assigned to you'
     approval_request: 'The user %{user} is requesting approval for %{approval_type} on case %{case_id}.'
     approval_request_subject: 'Case: %{id} - Approval Request'
@@ -827,7 +834,6 @@ en:
     approval_response_html: '<strong>%{user}</strong> has <strong>%{status}</strong> the request for approval for <strong>%{approval_type}</strong> for case <strong>%{case_id}</strong>.'
     referral_html: '<strong>%{user}</strong> from %{agency} has referred the following %{record_type} to you: <strong>%{record_id}</strong> for %{service_type}.'
     transfer_html: '<strong>%{user}</strong> has transferred the following %{record_type} to you: <strong>%{record_id}</strong>.'
-    assign_html: '<strong>%{user}</strong> has assigned the following %{record_type} to you: <strong>%{record_id}</strong>.'
     transfer_request_html: 'Primero user <strong>%{user}</strong> from %{agency} is requesting that you transfer ownership of this %{record_type} record <strong>%{record_id}</strong> so that they can provide %{record_type} management services for the individual in their area. If this transfer is acceptable to you, please click on the %{record_type} ID link in this email to open the %{record_type} in Primero and initiate the transfer.'
     transfer_request_notes_html: 'Notes from the individual making the request: %{request_transfer_notes}'
   encrypt:

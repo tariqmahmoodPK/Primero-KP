@@ -1,6 +1,7 @@
 class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 1-a # Case Registered Through Helpline
   def send_case_registered_cpo_notification(child_record, cpo_user)
+    @case_record = child_record
     @case_id = child_record.short_id
     cpo_user = cpo_user
 
@@ -12,13 +13,6 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
       format.html { render 'send_case_registered_cpo_notification' }
       format.text { render 'send_case_registered_cpo_notification' }
     end
-  end
-
-  # 1b
-  # Case Registered | Case Assigned to SCW/Psychologist | Mail to SCW/Psychologist
-  # Case id | SCW/Psychologist User Email | CPO Name
-  def send_case_registered_scw_psychologist_notification(case_record, cpo_user)
-
   end
 
   # 1a ii
