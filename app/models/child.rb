@@ -318,7 +318,6 @@ class Child < ApplicationRecord
       'verification_by_the_child_protection_officer_67b3fbb' => :send_alternative_care_placement_verified_notification ,
       'follow_up_information_and_findings_fc87338'           => :send_monitoring_and_follow_up_subform_completed_notification,
       'verification_of_follow_up_findings_53492a4'           => :send_monitoring_and_follow_up_subform_verified_notification,
-      'verification_of_follow_up_findings_53492a4'           => :send_monitoring_and_follow_up_subform_verified_notification,
       'declaration_by_case_worker_6f6c306'                   => :send_case_transfer_completes_notification,
       'verification_by_child_protection_officer_21e7bd8'     => :send_case_transfer_verified_notification,
       'approval_for_case_transfer_3a58692'                   => :send_case_transfer_approved_notification,
@@ -458,6 +457,7 @@ class Child < ApplicationRecord
 
             to_phone_number = scw_psy_user.phone
             message_body = message_content
+          end
         when "send_comprehensive_assessment_completed_notification"
           # SCW/Psy
           user_name = updated_record.data['owned_by']
@@ -480,6 +480,7 @@ class Child < ApplicationRecord
 
             to_phone_number = cpo_user.phone
             message_body = message_content
+          end
         when "send_comprehensive_assessment_verified_notification"
           # SCW/Psy
           user_name = updated_record.data['owned_by']
@@ -501,6 +502,7 @@ class Child < ApplicationRecord
 
             to_phone_number = scw_psy_user.phone
             message_body = message_content
+          end
         when "send_case_plan_completed_notification"
           # SCW/Psy
           user_name = updated_record.data['owned_by']
