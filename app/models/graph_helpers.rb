@@ -1060,7 +1060,7 @@ module GraphHelpers
     cases.results
   end
 
-  def get_case_records_for_particular_user_group(user)
+  def get_case_records_for_particular_user_group(cpo_user)
     # Find users with the specified roles ('Social Case Worker', 'Psychologist', 'Child Helpline Officer')
     role_names = [
       'Social Case Worker',
@@ -1221,7 +1221,7 @@ module GraphHelpers
     cases.results
   end
 
-  def get_cases_with_sources_for_particular_user_group(user)
+  def get_cases_with_sources_for_particular_user_group(cpo_user)
     # Find users with the specified roles ('Social Case Worker', 'Psychologist', 'Child Helpline Officer')
     role_names = [
       'Social Case Worker',
@@ -1357,7 +1357,7 @@ module GraphHelpers
     cases.results
   end
 
-  def get_police_cases_for_particular_user_group(user)
+  def get_police_cases_for_particular_user_group(cpo_user)
     # Find users with the specified roles ('Social Case Worker', 'Psychologist', 'Child Helpline Officer')
     role_names = [
       'Social Case Worker',
@@ -1530,7 +1530,7 @@ module GraphHelpers
     cases.results
   end
 
-  def get_special_consideration_cases_for_particular_user_group(user)
+  def get_special_consideration_cases_for_particular_user_group(cpo_user)
     # Find users with the specified roles ('Social Case Worker', 'Psychologist', 'Child Helpline Officer')
     role_names = [
       'Social Case Worker',
