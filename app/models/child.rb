@@ -193,6 +193,13 @@ class Child < ApplicationRecord
   before_save   :stamp_registry_fields
   before_save   :calculate_has_case_plan
   before_create :hide_name
+  # Allows to get the current_user object in model's lifecycle
+  after_update   :get_current_user
+  after_create   :get_current_user
+  # Send a mail when Child record is created
+  after_create  :send_case_registration_message
+  # Method that send mails when specific 'conditions are met' / 'events are triggered'
+  after_update  :send_case_event_emails
   after_save    :save_incidents
 
   class << self
@@ -265,6 +272,439 @@ class Child < ApplicationRecord
       end
       incident.has_changes_to_save? ? incident : nil
     end.compact
+  end
+
+  # Sending a Notification on Case Record Being Created
+  # Assuming, New Casre Record Creation in done through Helpline Only
+  def send_case_registration_message
+    registered_case = self
+
+    # TODO Verify this is the right way to get the CPO
+    # Getting CPO of the Case
+    cpo_user = User.joins(:role).where(role: { unique_id: "role-cp-administrator" }).find_by(location: registered_case.data["owned_by_location"])
+
+    CaseLifecycleEventsNotificationMailer.send_case_registered_cpo_notification(registered_case, cpo_user).deliver_later
+
+    # Send Whatsapp Notification
+    if cpo_user&.phone
+      message_params = {
+        case: registered_case,
+        cpo_user: cpo_user,
+      }.with_indifferent_access
+
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_registered_cpo_notification.text.erb"
+      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+      twilio_service = TwilioWhatsAppService.new
+      to_phone_number = cpo_user.phone
+      message_body = message_content
+
+      twilio_service.send_whatsapp_message(to_phone_number, message_body)
+    end
+  end
+
+  def send_case_event_emails
+    # Define a configuration hash mapping condition keys to mailer methods
+    event_config = {
+      'declaration_by_case_worker_9ccdf48'                   => :send_case_registration_completed_notification,
+      'i_declare_that_to_the_best_of_my_knowledge_the_above_stated_facts_are_true_404f861' => :send_case_registration_verified_notification,
+      'declaration_by_case_worker_9ac8a1d'                   => :send_initial_assessment_completed_notification        ,
+      'verification_of_initial_assessment_560f3ed'           => :send_initial_assessment_verified_notification         ,
+      'declaration_from_case_worker_5bb55e3'                 => :send_comprehensive_assessment_completed_notification  ,
+      'verification_of_comprehensive_assessment_3201713'     => :send_comprehensive_assessment_verified_notification   ,
+      'declaration_from_case_worker_ec811f6'                 => :send_case_plan_completed_notification                 ,
+      'verification_of_case_plan_e2b7c06'                    => :send_case_plan_verified_notification                  ,
+      'declaration_by_case_worker_f2bdb12'                   => :send_alternative_care_placement_completed_notification,
+      'verification_by_the_child_protection_officer_67b3fbb' => :send_alternative_care_placement_verified_notification ,
+      'follow_up_information_and_findings_fc87338'           => :send_monitoring_and_follow_up_subform_completed_notification,
+      'verification_of_follow_up_findings_53492a4'           => :send_monitoring_and_follow_up_subform_verified_notification,
+      'verification_of_follow_up_findings_53492a4'           => :send_monitoring_and_follow_up_subform_verified_notification,
+      'declaration_by_case_worker_6f6c306'                   => :send_case_transfer_completes_notification,
+      'verification_by_child_protection_officer_21e7bd8'     => :send_case_transfer_verified_notification,
+      'approval_for_case_transfer_3a58692'                   => :send_case_transfer_approved_notification,
+    }
+
+    updated_record = self
+
+    data_before_update = previous_changes["data"][0]
+    data_after_update = updated_record['data']
+
+    event_config.each do |event_key, mailer_method|
+      declaration_value = nil
+
+      case event_key
+      when "follow_up_information_and_findings_fc87338"
+        if data_before_update.key?(event_key) && data_after_update.key?(event_key)
+          original_data = data_before_update[event_key][0]["date_of_follow_up_fb341ff"]
+          new_data = data_after_update[event_key][0]["date_of_follow_up_fb341ff"]
+
+          if new_data.present? && original_data != new_data
+            declaration_value = true
+          end
+        elsif data_after_update.key?(event_key) && data_after_update[event_key][0].key?("date_of_follow_up_fb341ff")
+          declaration_value = true
+        end
+      else
+        if data_before_update.key?(event_key) && data_after_update.key?(event_key)
+          original_data = data_before_update[event_key]
+          new_data = data_after_update[event_key]
+
+          declaration_value = new_data if original_data != new_data
+        elsif data_after_update.key?(event_key)
+          declaration_value = data_after_update[event_key]
+        end
+      end
+
+      if declaration_value
+        if mailer_method && CaseLifecycleEventsNotificationMailer.respond_to?(mailer_method)
+          CaseLifecycleEventsNotificationMailer.send(mailer_method, updated_record, @current_user, declaration_value).deliver_now
+        else
+          # Handle the case where the mailer method is not found
+          raise "Unknown mailer method for event: #{event_key}"
+        end
+
+        twilio_service = TwilioWhatsAppService.new
+        to_phone_number = nil
+        message_body = nil
+
+        # Send Whatsapp Notification
+        case mailer_method.to_s
+        when "send_case_registration_completed_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if cpo_user&.phone
+            message_params = {
+              case: updated_record,
+              user: user,
+              user_name: user_name,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_registration_completed_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = cpo_user.phone
+            message_body = message_content
+          end
+        when "send_case_registration_verified_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          scw_psy_user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: scw_psy_user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if scw_psy_user&.phone
+            message_params = {
+              case: updated_record,
+              user: cpo_user,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_registration_verified_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = scw_psy_user.phone
+            message_body = message_content
+          end
+        when "send_initial_assessment_completed_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if cpo_user&.phone
+            message_params = {
+              case: updated_record,
+              user: user,
+              user_name: user_name,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_initial_assessment_completed_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = cpo_user.phone
+            message_body = message_content
+          end
+        when "send_initial_assessment_verified_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          scw_psy_user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: scw_psy_user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if scw_psy_user&.phone
+            message_params = {
+              case: updated_record,
+              user: cpo_user,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_initial_assessment_verified_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = scw_psy_user.phone
+            message_body = message_content
+        when "send_comprehensive_assessment_completed_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if cpo_user&.phone
+            message_params = {
+              case: updated_record,
+              user: user,
+              user_name: user_name,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_comprehensive_assessment_completed_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = cpo_user.phone
+            message_body = message_content
+        when "send_comprehensive_assessment_verified_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          scw_psy_user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: scw_psy_user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if scw_psy_user&.phone
+            message_params = {
+              case: updated_record,
+              user: cpo_user,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_comprehensive_assessment_verified_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = scw_psy_user.phone
+            message_body = message_content
+        when "send_case_plan_completed_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if cpo_user&.phone
+            message_params = {
+              case: updated_record,
+              user: user,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_plan_completed_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = cpo_user.phone
+            message_body = message_content
+          end
+        when "send_case_plan_verified_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          scw_psy_user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: scw_psy_user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if scw_psy_user&.phone
+            message_params = {
+              case: updated_record,
+              user: cpo_user,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_plan_verified_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = scw_psy_user.phone
+            message_body = message_content
+          end
+        when "send_alternative_care_placement_completed_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if cpo_user&.phone
+            message_params = {
+              case: updated_record,
+              user: user,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_alternative_care_placement_completed_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = cpo_user.phone
+            message_body = message_content
+          end
+        when "send_alternative_care_placement_verified_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          scw_psy_user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: scw_psy_user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if scw_psy_user&.phone
+            message_params = {
+              case: updated_record,
+              user: cpo_user,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_alternative_care_placement_verified_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = scw_psy_user.phone
+            message_body = message_content
+          end
+        when "send_monitoring_and_follow_up_subform_completed_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if cpo_user&.phone
+            message_params = {
+              case: updated_record,
+              user: user,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_monitoring_and_follow_up_subform_completed_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = cpo_user.phone
+            message_body = message_content
+          end
+        when "send_monitoring_and_follow_up_subform_verified_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          scw_psy_user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: scw_psy_user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if scw_psy_user&.phone
+            message_params = {
+              case: updated_record,
+              user: cpo_user,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_monitoring_and_follow_up_subform_verified_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = scw_psy_user.phone
+            message_body = message_content
+          end
+        when "send_case_transfer_completes_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if cpo_user&.phone
+            message_params = {
+              case: updated_record,
+              user: user,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_transfer_completes_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = cpo_user.phone
+            message_body = message_content
+          end
+        when "send_case_transfer_verified_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          scw_psy_user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: scw_psy_user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if scw_psy_user&.phone
+            message_params = {
+              case: updated_record,
+              user: cpo_user,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_transfer_verified_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = scw_psy_user.phone
+            message_body = message_content
+          end
+        when "send_case_transfer_approved_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          scw_psy_user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: scw_psy_user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if scw_psy_user&.phone
+            message_params = {
+              case: updated_record,
+              user: cpo_user,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_transfer_approved_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = scw_psy_user.phone
+            message_body = message_content
+          end
+        else
+        end
+
+        twilio_service.send_whatsapp_message(to_phone_number, message_body)
+      end
+    end
   end
 
   def save_incidents
@@ -369,6 +809,18 @@ class Child < ApplicationRecord
 
   def associations_as_data_keys
     %w[incident_details]
+  end
+
+  # Save the Current User in an Instance variable for use in the Model
+  def set_current_user(current_user)
+    @current_user = current_user
+  end
+
+  private
+
+  # Access the @current_user set in the set_current_user method
+  def get_current_user
+    user = @current_user
   end
 end
 

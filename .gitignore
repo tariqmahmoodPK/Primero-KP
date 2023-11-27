@@ -87,3 +87,5 @@ configuration_translation_export*
 /ansible/inventory/inventory.yml
 /ansible/roles/application-primero/files/local.env
 /ansible/secrets.yml
+
+/config/master.key
