@@ -821,7 +821,6 @@ en:
       A new case %{record_id} has been %{record_type} to you by CPO %{user}. Please proceed to register the case immediately, by logging into your CP-IMS account.
     transfer_html: '<strong>%{user}</strong> has transferred the following %{record_type} to you: <strong>%{record_id}</strong>.'
     ransfer: '%{user} has transferred the following %{record_type} to you: %{record_id}.'
-    scw_psy
     transfer_cpo_html: |
       <p>Dear %{user_role_name},</p>
       <p>A case <strong>%{record_id}</strong> has been referred to you from <strong>%{user}</strong> at location <strong>%{location}</strong>. This case is currently at the <strong>%{workflow_stage}</strong> stage. Kindly allocate it to either a SCW or Psychologist</p>

@@ -315,7 +315,6 @@ class Child < ApplicationRecord
       'verification_by_the_child_protection_officer_67b3fbb' => :send_alternative_care_placement_verified_notification ,
       'follow_up_information_and_findings_fc87338'           => :send_monitoring_and_follow_up_subform_completed_notification,
       'verification_of_follow_up_findings_53492a4'           => :send_monitoring_and_follow_up_subform_verified_notification,
-      'verification_of_follow_up_findings_53492a4'           => :send_monitoring_and_follow_up_subform_verified_notification,
       'declaration_by_case_worker_6f6c306'                   => :send_case_transfer_completes_notification,
       'verification_by_child_protection_officer_21e7bd8'     => :send_case_transfer_verified_notification,
       'approval_for_case_transfer_3a58692'                   => :send_case_transfer_approved_notification,
