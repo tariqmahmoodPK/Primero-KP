@@ -22,7 +22,7 @@ class ContentGeneratorService
 
     specific_body_content = File.read("#{Rails.root}/#{file_path}")
 
-    erb_specific_body = ERB.new(specific_body_template)
+    erb_specific_body = ERB.new(specific_body_content)
     specific_body_content = erb_specific_body.result(binding)
   end
 end
