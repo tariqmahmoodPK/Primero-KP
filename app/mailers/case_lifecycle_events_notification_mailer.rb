@@ -583,21 +583,6 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     end
   end
 
-  # 10a
-  # Case Closure Request | Mail to CPO
-  # Case id | SCW/Psychologist Username | CPO Email
-  def send_case_closure_request_notification(case_record, current_user, declaration_value)
-
-    if users_email.present?
-      mail(to: users_emails, subject: subject) do |format|
-        format.html { render __method__.to_s }
-        format.text { render __method__.to_s }
-      end
-    else
-      Rails.logger.warn("No Emails Found.")
-    end
-  end
-
   # 10b
   # Case Closure Request | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username

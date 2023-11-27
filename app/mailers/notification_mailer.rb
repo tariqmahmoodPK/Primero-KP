@@ -6,16 +6,40 @@
 class NotificationMailer < ApplicationMailer
   helper :application
 
+  # 10-a
+  # Case Closure Request | Mail to CPO/Mangers
   def manager_approval_request(record_id, approval_type, manager_user_name)
     @manager = User.find_by(user_name: manager_user_name) || (return log_not_found('Manager user', manager_user_name))
     @child = Child.find_by(id: record_id) || (return log_not_found('Case', record_id))
     @user = @child.owner || (return log_not_found('User', @child.owned_by))
     @approval_type = Lookup.display_value('lookup-approval-type', approval_type)
     @locale_email = @manager.locale || I18n.locale
-    return unless assert_notifications_enabled(@manager)
+    @role_name = @manager.role.name
 
-    mail(to: @manager.email, subject: t('email_notification.approval_request_subject', id: @child.short_id,
-                                                                                       locale: @locale_email))
+    @email_content_html_yml_key = 'email_notification.approval_request_html'
+    @email_content_text_yml_key = 'email_notification.approval_request'
+
+    if assert_notifications_enabled(@manager)
+      mail(to: @manager.email, subject: t('email_notification.approval_request_subject', id: @child.short_id, locale: @locale_email))
+    end
+
+    # Send Whatsapp Notifications
+    if @manager.present? && @manager&.phone
+      twilio_service = TwilioWhatsAppService.new
+
+      message_params = {
+        case: @transition&.record,
+        cpo_user: manager,
+      }.with_indifferent_access
+
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_closure_request_notification.text.erb"
+      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+      to_phone_number = manager.phone
+      message_body = message_content
+
+      twilio_service.send_whatsapp_message(to_phone_number, message_body)
+    end
   end
 
   def manager_approval_response(record_id, approved, approval_type, manager_user_name)
@@ -63,7 +87,7 @@ class NotificationMailer < ApplicationMailer
     cpo_user = User.joins(:role).where(role: { unique_id: "role-cp-administrator" }).find_by(user_name: @transition.transitioned_by)
 
     # Send Whatsapp Notifications
-    if send_to_user.present? && send_to_user&.phone ||
+    if send_to_user.present? && send_to_user&.phone
       twilio_service = TwilioWhatsAppService.new
       to_phone_number = nil
       message_body = nil
@@ -105,7 +129,6 @@ class NotificationMailer < ApplicationMailer
 
       twilio_service.send_whatsapp_message(to_phone_number, message_body)
     end
-
   end
 
   def transfer_request(transfer_request_id)

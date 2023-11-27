@@ -34,6 +34,8 @@ module Approvable
     return if approval_subforms.blank? || saved_changes_to_record.keys.exclude?('approval_subforms')
 
     approval = approval_subforms.last
+    # {"approval_requested_for"=>"closure", "approval_date"=>Mon, 27 Nov 2023, "approval_status"=>"requested", "requested_by"=>"primero", "unique_id"=>"3c828cf5-8698-4a77-879f-910b11a6a7da"}
+
     if approval['approval_requested_for'].present?
       send_approval_request_mail(approval)
     else
