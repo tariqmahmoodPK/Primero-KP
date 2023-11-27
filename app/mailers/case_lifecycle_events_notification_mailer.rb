@@ -583,36 +583,6 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     end
   end
 
-  # 10b
-  # Case Closure Request | Mail to SCW/Psychologist
-  # Case id | SCW/Psychologist Email | CPO Username
-  def send_case_closure_approved_notification(case_record, current_user, declaration_value)
-
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
-        format.html { render __method__.to_s }
-        format.text { render __method__.to_s }
-      end
-    else
-      Rails.logger.warn("No Emails Found.")
-    end
-  end
-
-  # 10c
-  # Case Closure Request | Mail to SCW/Psychologist
-  # Case id | SCW/Psychologist Email | CPO Username
-  def send_case_closure_not_approved_notification(case_record, current_user, declaration_value)
-
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
-        format.html { render __method__.to_s }
-        format.text { render __method__.to_s }
-      end
-    else
-      Rails.logger.warn("No Emails Found.")
-    end
-  end
-
   # 11a
   # Case Notes | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username | Workflow Stage
