@@ -302,7 +302,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
 
     @case_id = case_record
 
-    subject = "Case Plan Completed"
+    subject = "Alternative Care Placement Completed"
 
     if user_email.present?
       mail(to: users_emails, subject: subject) do |format|
@@ -333,7 +333,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     cpo_user = cpo_users[0]
     @user_name = @cpo_user.user_name
 
-    subject = "Case Plan Verified"
+    subject = "Alternative Care Placement"
 
     if user_email.present?
       mail(to: users_emails, subject: subject) do |format|
@@ -345,10 +345,32 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     end
   end
 
-  # 7a
+  # 7-a
   # Monitoring and Follow up Sub form | Mail to CPO
   # Case id | SCW/Psychologist Username | CPO Email
   def send_monitoring_and_follow_up_subform_completed_notification(case_record, current_user, declaration_value)
+    # SCW/Psy
+    @user_name = case_record.data['owned_by']
+    user = User.find_by(user_name: @user_name)
+
+    # User.joins(user_groups: { users: :role }):
+      # This part sets up the SQL join, starting from the User model and joining UserGroup, User, and Role tables.
+    # user_groups: { users: { id: user.id } }:
+      # It ensures that we only consider user groups to which the given user (user) belongs.
+    # roles: { unique_id: "role-cp-administrator" }:
+      # It filters for the role with the unique ID "role-cp-administrator."
+    #
+    cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+    return unless assert_notifications_enabled(cpo_users[0])
+
+    user_email = cpo_users[0].email
+
+    @case_id = case_record
+
+    subject = "Monitoring and Follow up Sub form"
+
+    if user_email.present?
 
     if users_emails.present?
       mail(to: users_emails, subject: subject) do |format|
