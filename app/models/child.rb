@@ -316,7 +316,8 @@ class Child < ApplicationRecord
       'follow_up_information_and_findings_fc87338'           => :send_monitoring_and_follow_up_subform_completed_notification,
       'verification_of_follow_up_findings_53492a4'           => :send_monitoring_and_follow_up_subform_verified_notification,
       'verification_of_follow_up_findings_53492a4'           => :send_monitoring_and_follow_up_subform_verified_notification,
-      'declaration_by_case_worker_6f6c306' => :send_case_transfer_completes_notification
+      'declaration_by_case_worker_6f6c306' => :send_case_transfer_completes_notification,
+      'verification_by_child_protection_officer_21e7bd8' => :send_case_transfer_verified_notification,
     }
 
     updated_record = self
@@ -644,10 +645,32 @@ class Child < ApplicationRecord
               user: user,
             }.with_indifferent_access
 
-            file_path = "app/views/case_lifecycle_events_notification_mailer/send_monitoring_and_follow_up_subform_completed_notification.text.erb"
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_transfer_completes_notification.text.erb"
             message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
 
             to_phone_number = cpo_user.phone
+            message_body = message_content
+          end
+        when "send_case_transfer_verified_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          scw_psy_user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: scw_psy_user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if scw_psy_user&.phone
+            message_params = {
+              case: updated_record,
+              user: cpo_user,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_transfer_verified_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = scw_psy_user.phone
             message_body = message_content
           end
         else
