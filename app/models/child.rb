@@ -454,6 +454,7 @@ class Child < ApplicationRecord
 
             to_phone_number = scw_psy_user.phone
             message_body = message_content
+          end
         when "send_comprehensive_assessment_completed_notification"
           # SCW/Psy
           user_name = updated_record.data['owned_by']
@@ -476,6 +477,7 @@ class Child < ApplicationRecord
 
             to_phone_number = cpo_user.phone
             message_body = message_content
+          end
         when "send_comprehensive_assessment_verified_notification"
           # SCW/Psy
           user_name = updated_record.data['owned_by']
@@ -497,6 +499,7 @@ class Child < ApplicationRecord
 
             to_phone_number = scw_psy_user.phone
             message_body = message_content
+          end
         when "send_case_plan_completed_notification"
           # SCW/Psy
           user_name = updated_record.data['owned_by']
