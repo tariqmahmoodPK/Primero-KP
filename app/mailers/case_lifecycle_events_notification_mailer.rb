@@ -83,8 +83,28 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # Initial Assessment Completed | Mail to CPO
   # Case id | SCW/Psychologist Username | CPO Email
   def send_initial_assessment_completed_notification(case_record, current_user, declaration_value)
+    # SCW/Psy
+    @user_name = case_record.data['owned_by']
+    user = User.find_by(user_name: @user_name)
 
-    if users_emails.present?
+    # User.joins(user_groups: { users: :role }):
+      # This part sets up the SQL join, starting from the User model and joining UserGroup, User, and Role tables.
+    # user_groups: { users: { id: user.id } }:
+      # It ensures that we only consider user groups to which the given user (user) belongs.
+    # roles: { unique_id: "role-cp-administrator" }:
+      # It filters for the role with the unique ID "role-cp-administrator."
+    #
+    cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+    return unless assert_notifications_enabled(cpo_users[0])
+
+    user_email = cpo_users[0].email
+
+    @case_id = case_record
+
+    subject = "Initial Assessment Completed"
+
+    if user_email.present?
       mail(to: users_emails, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
