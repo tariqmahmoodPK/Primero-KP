@@ -34,14 +34,14 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
 
     return unless assert_notifications_enabled(cpo_users[0])
 
-    users_email = cpo_users[0].email
+    user_email = cpo_users[0].email
 
     @case_id = case_record
 
     subject = "Case Registration Completed"
 
-    if users_email.present?
-      mail(to: users_email, subject: subject) do |format|
+    if user_email.present?
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -60,7 +60,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
 
     cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
 
-    users_emails = cpo_users.pluck(:email)
+    user_email = cpo_users[0].email
 
     @case_id = case_record
 
@@ -69,8 +69,8 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
 
     subject = "Case Registration Verified"
 
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
+    if user_email.present?
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
