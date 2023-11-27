@@ -451,6 +451,28 @@ class Child < ApplicationRecord
 
             to_phone_number = scw_psy_user.phone
             message_body = message_content
+        when "send_comprehensive_assessment_completed_notification"
+          # SCW/Psy
+          user_name = updated_record.data['owned_by']
+          user = User.find_by(user_name: user_name)
+
+          cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
+
+          cpo_user = cpo_users[0]
+
+          # Send Whatsapp Notification
+          if cpo_user&.phone
+            message_params = {
+              case: updated_record,
+              user: user,
+              user_name: user_name,
+            }.with_indifferent_access
+
+            file_path = "app/views/case_lifecycle_events_notification_mailer/send_comprehensive_assessment_completed_notification.text.erb"
+            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+            to_phone_number = cpo_user.phone
+            message_body = message_content
         end
 
         twilio_service.send_whatsapp_message(to_phone_number, message_body)
