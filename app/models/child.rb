@@ -275,7 +275,7 @@ class Child < ApplicationRecord
   end
 
   # Sending a Notification on Case Record Being Created
-  # Assuming, New Casre Record Creation in done through Helpline Only
+  # Assuming, New Case Record Creation in done through Helpline Only
   def send_case_registration_message
     registered_case = self
 
