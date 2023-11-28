@@ -586,10 +586,19 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 11a
   # Case Notes | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username | Workflow Stage
-  def send_case_query_notification(case_record, current_user, declaration_value)
+  def send_case_query_notification(case_record, cpo_user)
+    @case_id = case_record.data["case_id"]
+    user_name = case_record.data['owned_by']
+    user = User.find_by(user_name: user_name)
+    user_email = user.email
 
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
+    @workflow_stage = case_record.data["workflow"]
+    @user_name = cpo_user.user_name
+
+    subject = "Case Notes Added to #{@case_id}"
+
+    if user_email.present?
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -601,10 +610,18 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 12a
   # Case Flags | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username | Workflow Stage
-  def send_case_flags_notification(case_record, current_user, declaration_value)
+  def send_case_flags_notification(case_record, cpo_user)
+    @case_id = case_record.data["case_id"]
+    user_name = case_record.data['owned_by']
+    user = User.find_by(user_name: user_name)
+    user_email = user.email
 
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
+    @workflow_stage = case_record.data["workflow"]
+    @user_name = cpo_user.name
+    subject = "Case Flags Added to #{@case_id}"
+
+    if user_email.present?
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
