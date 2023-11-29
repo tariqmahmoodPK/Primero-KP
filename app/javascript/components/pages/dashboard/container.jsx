@@ -104,6 +104,16 @@ const Dashboard = () => {
         <Grid item xl={6} md={6} xs={12}>
           <PageHeading title={i18n.t("navigation.home")} />
         </Grid>
+        <Grid item xl={6} md={6} xs={12} style={{ textAlign: 'right' }}>
+          <a
+            style={{ fontSize: 20, fontWeight: 600, textAlign: 'right' }}
+            href="/download_package.zip"
+            download
+            target="_blank"
+          >
+            Resources
+          </a>
+        </Grid>
       </Grid>
       <PageContent>
         <OfflineAlert text={i18n.t("messages.dashboard_offline")} />
