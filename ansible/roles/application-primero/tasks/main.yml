@@ -35,7 +35,7 @@
   git:
     repo: '{{ primero_repo|default("https://sararaza410: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@github.com/tariqmahmoodPK/Primero-KP") }}'
     dest: '/srv/primero/'
-    version: 'staging'
+    version: 'prod'
     key_file: '/root/.ssh/primero_deployment_key'
     accept_hostkey: 'yes'
   become: yes
