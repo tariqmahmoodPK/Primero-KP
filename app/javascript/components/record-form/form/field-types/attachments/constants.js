@@ -8,7 +8,8 @@ export const ATTACHMENT_FIELDS = Object.freeze({
   fieldName: "field_name",
   fileName: "file_name",
   isCurrent: "is_current",
-  type: "type"
+  type: "type",
+  typeOfDocument: "type_of_document"
 });
 
 export const ATTACHMENT_FIELDS_INITIAL_VALUES = Object.freeze({
@@ -21,7 +22,8 @@ export const ATTACHMENT_FIELDS_INITIAL_VALUES = Object.freeze({
   [ATTACHMENT_FIELDS.fieldName]: "",
   [ATTACHMENT_FIELDS.fileName]: "",
   [ATTACHMENT_FIELDS.isCurrent]: false,
-  [ATTACHMENT_FIELDS.type]: ""
+  [ATTACHMENT_FIELDS.type]: "",
+  [ATTACHMENT_FIELDS.type_of_document]: "undefined"
 });
 
 export const ATTACHMENT_TYPES = Object.freeze({

@@ -43,7 +43,7 @@ class Api::V2::AttachmentsController < Api::V2::RecordResourceController
 
     @attachment_params = params.require(:data).permit(
       :field_name, :date, :description, :is_current,
-      :comments, :attachment, :file_name, :attachment_type
+      :comments, :attachment, :file_name, :attachment_type, :type_of_document
     ).to_h
     @attachment_params[:record] = @record
     @attachment_params
