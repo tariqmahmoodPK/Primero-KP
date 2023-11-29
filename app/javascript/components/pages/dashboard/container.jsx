@@ -54,6 +54,7 @@ import {
   CasesAtAGlance,
   // 'Cases Source'
   CasesSource,
+  CaseStatuses,
   // 'Custody with Court Order'
   CustodyWithCourtOrder,
   // 'Police Cases'
@@ -118,6 +119,7 @@ const Dashboard = () => {
       <PageContent>
         <OfflineAlert text={i18n.t("messages.dashboard_offline")} />
         <Grid container spacing={3}>
+            {/*<CaseStatuses />*/}
             <CasesAtAGlance />
             <RegisteredCasesByProtectionConcern /> {/* 'Registered Cases by Protection Concern' */}
             <HighRiskCasesByProtectionConcern /> {/* 'High Risk Cases by Protection Concern' */}

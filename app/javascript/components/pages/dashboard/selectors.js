@@ -7,6 +7,10 @@ export const selectFlags = state => {
   return state.getIn(["records", NAMESPACE, "flags"], fromJS({}));
 };
 
+export const getCaseStatuses = state => {
+  return state.getIn(["records", NAMESPACE, "caseStatuses"], fromJS({}));
+};
+
 export const selectCasesByStatus = state => {
   return state.getIn(["records", NAMESPACE, "casesByStatus"], fromJS({}));
 };

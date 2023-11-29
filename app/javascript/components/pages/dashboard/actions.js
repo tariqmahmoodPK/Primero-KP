@@ -52,6 +52,8 @@ export default namespaceActions(NAMESPACE, [
   // 'Cases Source'
   "CASES_SOURCE",
   "CASES_SOURCE_SUCCESS",
+  "CASE_STATUSES",
+  "CASE_STATUSES_SUCCESS",
   // 'Custody with Court Order'
   "CUSTODY_WITH_COURT_ORDER",
   "CUSTODY_WITH_COURT_ORDER_SUCCESS",

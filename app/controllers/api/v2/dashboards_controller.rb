@@ -14,6 +14,10 @@ class Api::V2::DashboardsController < ApplicationApiController
     @stats = Child.percentage_children_received_child_protection_services_stats(current_user)
   end
 
+  def get_child_statuses
+    @statuses = Child.get_child_statuses(current_user)
+  end
+
   # 'Closed Cases by Sex and Reason' Graph
   def resolved_cases_by_gender_and_reason
     @stats = Child.resolved_cases_by_gender_and_reason_stats(current_user)
