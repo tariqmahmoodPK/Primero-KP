@@ -2,14 +2,17 @@ require 'twilio-ruby'
 
 class TwilioWhatsappService
   def initialize
-    account_sid = ENV['TWILIO_ACCOUNT_SID']
-    auth_token = ENV['TWILIO_AUTH_TOKEN']
+    account_sid = TWILIO_ACCOUNT_SID
+    auth_token = TWILIO_AUTH_TOKEN
     @client = Twilio::REST::Client.new(account_sid, auth_token)
+    myLogger = Logger.new(STDOUT)
+    myLogger.level = Logger::DEBUG
+    @client.logger = myLogger
   end
 
   def send_whatsapp_message(to, body)
     message = @client.messages.create(
-      from: 'whatsapp:+14155238886', # TODO Change Number Later
+      from: "whatsapp:#{TWILIO_FROM}",
       body: body,
       to: "whatsapp:#{to}"
     )

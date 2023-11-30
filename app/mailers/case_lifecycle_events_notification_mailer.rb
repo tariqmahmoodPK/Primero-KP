@@ -414,10 +414,17 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 8a
   # Case Referred | Mail to some Recipient
   # Case id | SCW/Psychologist Username | Email of Recipient
-  def send_case_referred_to_user_notification(case_record, current_user, declaration_value)
+  def send_case_referred_to_user_notification(case_record, reciever)
+    @reciever_name = reciever.user_name
+    @case_id = case_record.record_id
+    @transfered_by_user_name = case_record["transitioned_by"]
 
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
+    user_email = reciever.email
+
+    subject = "Message to Referral Recipient"
+
+    if user_email.present?
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -429,10 +436,17 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 8b
   # Case Referred | Mail to some Recipient
   # Case id | SCW/Psychologist Username | Email of Recipient
-  def send_case_referred_revoked_notification(case_record, current_user, declaration_value)
+  def send_case_referred_revoked_notification(case_record, reciever)
+    @reciever_name = reciever.user_name
+    @case_id = case_record.record_id
+    @transfered_by_user_name = case_record["transitioned_by"]
 
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
+    user_email = reciever.email
+
+    subject = "Message to Referral Recipient"
+
+    if user_email.present?
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -444,10 +458,17 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 8c
   # Case Referred | Mail to SCW/Psychologist
   # Case id | Referral Partner Username | Email of SCW/Psychologist
-  def send_case_referred_accepted_notification(case_record, current_user, declaration_value)
+  def send_case_referred_accepted_notification(case_record, reciever)
+    @reciever_name = reciever.user_name
+    @case_id = case_record.record_id
+    @transfered_by_user_name = case_record["transitioned_by"]
+    sender = User.find_by(user_name: @transfered_by_user_name)
+    user_email = sender.email
 
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
+    subject = "Message to SCW/Psy  Referral Accepted"
+
+    if user_email.present?
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -459,10 +480,17 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 8d
   # Case Referred | Mail to SCW/Psychologist
   # Case id | Referral Partner Username | Email of SCW/Psychologist
-  def send_case_referred_rejected_notification(case_record, current_user, declaration_value)
+  def send_case_referred_rejected_notification(case_record, reciever)
+    @reciever_name = reciever.user_name
+    @case_id = case_record.record_id
+    @transfered_by_user_name = case_record.data["transitioned_by"]
+    sender = User.find_by(user_name: @transfered_by_user_name)
+    user_email = sender.email
 
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
+    subject = "Message to SCW/Psy  Referral Rejected"
+
+    if user_email.present?
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -474,10 +502,17 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 8e
   # Case Referred Response | Mail to SCW/Psychologist
   # Case id | Referral Partner Username | Email of SCW/Psychologist
-  def send_case_referred_response_notification(case_record, current_user, declaration_value)
+  def send_case_referred_response_notification(case_record, reciever)
+    @reciever_name = reciever.user_name
+    @case_id = case_record.record_id
+    @transfered_by_user_name = case_record.data["transitioned_by"]
+    sender = User.find_by(user_name: @transfered_by_user_name)
+    user_email = sender.email
 
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
+    subject = "Message to SCW/Psy Referral Response"
+
+    if user_email.present?
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -583,43 +618,22 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     end
   end
 
-  # 10b
-  # Case Closure Request | Mail to SCW/Psychologist
-  # Case id | SCW/Psychologist Email | CPO Username
-  def send_case_closure_approved_notification(case_record, current_user, declaration_value)
-
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
-        format.html { render __method__.to_s }
-        format.text { render __method__.to_s }
-      end
-    else
-      Rails.logger.warn("No Emails Found.")
-    end
-  end
-
-  # 10c
-  # Case Closure Request | Mail to SCW/Psychologist
-  # Case id | SCW/Psychologist Email | CPO Username
-  def send_case_closure_not_approved_notification(case_record, current_user, declaration_value)
-
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
-        format.html { render __method__.to_s }
-        format.text { render __method__.to_s }
-      end
-    else
-      Rails.logger.warn("No Emails Found.")
-    end
-  end
-
   # 11a
   # Case Notes | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username | Workflow Stage
-  def send_case_query_notification(case_record, current_user, declaration_value)
+  def send_case_query_notification(case_record, cpo_user)
+    @case_id = case_record.data["case_id"]
+    user_name = case_record.data['owned_by']
+    user = User.find_by(user_name: user_name)
+    user_email = user.email
 
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
+    @workflow_stage = case_record.data["workflow"]
+    @user_name = cpo_user.user_name
+
+    subject = "Case Notes Added to #{@case_id}"
+
+    if user_email.present?
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -631,10 +645,18 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 12a
   # Case Flags | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username | Workflow Stage
-  def send_case_flags_notification(case_record, current_user, declaration_value)
+  def send_case_flags_notification(case_record, cpo_user)
+    @case_id = case_record.data["case_id"]
+    user_name = case_record.data['owned_by']
+    user = User.find_by(user_name: user_name)
+    user_email = user.email
 
-    if users_emails.present?
-      mail(to: users_emails, subject: subject) do |format|
+    @workflow_stage = case_record.data["workflow"]
+    @user_name = cpo_user.name
+    subject = "Case Flags Added to #{@case_id}"
+
+    if user_email.present?
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end

@@ -1,5 +1,5 @@
 Dear SCW/Psy,
-Case closure of <%= @case_id %> has not been Approved by CPO <%= @user_name %>. Please view his comments by logging into your CP-IMS account.
+Case closure of <%= link_to(@case_record.short_id, url_for_v2(@case_record)) %> has not been Approved by CPO <%= @user_name %>. Please view his comments by logging into your CP-IMS account.
 
 Thank you,
 KP CP-IMS

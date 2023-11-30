@@ -1,6 +1,8 @@
 require 'erb'
 
 class ContentGeneratorService
+  include ApplicationHelper
+
   def self.generate_message_content(file_path, message_params = nil)
     @case_record = message_params.dig('case')
     @case_id = @case_record.short_id || message_params.dig('case_id')
@@ -22,7 +24,7 @@ class ContentGeneratorService
 
     specific_body_content = File.read("#{Rails.root}/#{file_path}")
 
-    erb_specific_body = ERB.new(specific_body_template)
+    erb_specific_body = ERB.new(specific_body_content)
     specific_body_content = erb_specific_body.result(binding)
   end
 end

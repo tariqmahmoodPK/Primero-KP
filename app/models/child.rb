@@ -330,7 +330,7 @@ class Child < ApplicationRecord
       file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_registered_cpo_notification.text.erb"
       message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
 
-      twilio_service = TwilioWhatsAppService.new
+      twilio_service = TwilioWhatsappService.new
       to_phone_number = cpo_user.phone
       message_body = message_content
 
@@ -397,7 +397,7 @@ class Child < ApplicationRecord
           raise "Unknown mailer method for event: #{event_key}"
         end
 
-        twilio_service = TwilioWhatsAppService.new
+        twilio_service = TwilioWhatsappService.new
         to_phone_number = nil
         message_body = nil
 
@@ -851,6 +851,31 @@ class Child < ApplicationRecord
   # Save the Current User in an Instance variable for use in the Model
   def set_current_user(current_user)
     @current_user = current_user
+  end
+
+  def send_response_update
+    record = self
+    reciever = User.find_by(user_name: record.data["last_updated_by"])
+
+    CaseLifecycleEventsNotificationMailer.send_case_referred_response_notification(record, reciever).deliver_later
+
+    # Send Whatsapp Notification
+    if cpo_user&.phone
+      message_params = {
+        case: @record,
+        cpo_user: cpo_user,
+        workflow_stage: @record.data["workflow"]
+      }.with_indifferent_access
+
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
+      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+      twilio_service = TwilioWhatsappService.new
+      to_phone_number = cpo_user.phone
+      message_body = message_content
+
+      twilio_service.send_whatsapp_message(to_phone_number, message_body)
+    end
   end
 
   private

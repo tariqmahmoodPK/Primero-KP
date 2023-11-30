@@ -2,6 +2,8 @@
 
 # Model describing a referral of a record from one user to another.
 class Referral < Transition
+  after_create :send_referral_email
+
   def perform
     self.status = Transition::STATUS_INPROGRESS
     mark_service_referred(service_record)
@@ -74,6 +76,81 @@ class Referral < Transition
     end
   end
 
+  def revoke_referral_email
+    record = self
+    reciever = User.find_by(user_name: record["transitioned_to"])
+
+    CaseLifecycleEventsNotificationMailer.send_case_referred_revoked_notification(record, reciever).deliver_later
+
+    # Send Whatsapp Notification
+    if cpo_user&.phone
+      message_params = {
+        case: @record,
+        cpo_user: cpo_user,
+        workflow_stage: @record.data["workflow"]
+      }.with_indifferent_access
+
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
+      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+      twilio_service = TwilioWhatsappService.new
+      to_phone_number = cpo_user.phone
+      message_body = message_content
+
+      twilio_service.send_whatsapp_message(to_phone_number, message_body)
+    end
+  end
+
+  def accept_referral_email
+    record = self
+    reciever = User.find_by(user_name: record["transitioned_to"])
+
+    CaseLifecycleEventsNotificationMailer.send_case_referred_accepted_notification(record, reciever).deliver_later
+
+    # Send Whatsapp Notification
+    if cpo_user&.phone
+      message_params = {
+        case: @record,
+        cpo_user: cpo_user,
+        workflow_stage: @record.data["workflow"]
+      }.with_indifferent_access
+
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
+      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+      twilio_service = TwilioWhatsappService.new
+      to_phone_number = cpo_user.phone
+      message_body = message_content
+
+      twilio_service.send_whatsapp_message(to_phone_number, message_body)
+    end
+  end
+
+  def reject_referral_email
+    record = self
+    reciever = User.find_by(user_name: record["transitioned_to"])
+
+    CaseLifecycleEventsNotificationMailer.send_case_referred_rejected_notification(record, reciever).deliver_later
+
+    # Send Whatsapp Notification
+    if cpo_user&.phone
+      message_params = {
+        case: @record,
+        cpo_user: cpo_user,
+        workflow_stage: @record.data["workflow"]
+      }.with_indifferent_access
+
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
+      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+      twilio_service = TwilioWhatsappService.new
+      to_phone_number = cpo_user.phone
+      message_body = message_content
+
+      twilio_service.send_whatsapp_message(to_phone_number, message_body)
+    end
+  end
+
   private
 
   def mark_rejection(rejection_note, service_object = nil)
@@ -114,4 +191,30 @@ class Referral < Transition
       record.assigned_user_names = [transitioned_to]
     end
   end
+
+  def send_referral_email
+    record = self
+    reciever = User.find_by(user_name: record["transitioned_to"])
+
+    CaseLifecycleEventsNotificationMailer.send_case_referred_to_user_notification(record, reciever).deliver_later
+
+    # Send Whatsapp Notification
+    if cpo_user&.phone
+      message_params = {
+        case: @record,
+        cpo_user: cpo_user,
+        workflow_stage: @record.data["workflow"]
+      }.with_indifferent_access
+
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
+      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+      twilio_service = TwilioWhatsappService.new
+      to_phone_number = cpo_user.phone
+      message_body = message_content
+
+      twilio_service.send_whatsapp_message(to_phone_number, message_body)
+    end
+  end
+
 end

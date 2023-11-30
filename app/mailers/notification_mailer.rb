@@ -25,7 +25,7 @@ class NotificationMailer < ApplicationMailer
 
     # Send Whatsapp Notifications
     if @manager.present? && @manager&.phone
-      twilio_service = TwilioWhatsAppService.new
+      twilio_service = TwilioWhatsappService.new
 
       message_params = {
         case: @transition&.record,
@@ -42,14 +42,69 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
+  # 10-b | # 10-c
+  # Case Closure Request | Mail to SCW/Psychologist
+  # Case id | SCW/Psychologist Email | CPO Username
   def manager_approval_response(record_id, approved, approval_type, manager_user_name)
     @child = Child.find_by(id: record_id) || (return log_not_found('Case', record_id))
     @owner = @child.owner || (return log_not_found('User', @child.owned_by))
-    return unless assert_notifications_enabled(@owner)
 
     load_manager_approval_request(approved, approval_type, manager_user_name)
-    mail(to: @owner.email,
-         subject: t('email_notification.approval_response_subject', id: @child.short_id, locale: @locale_email))
+
+    #cpo
+    user = @manager.user_name
+    #scw/psy
+    send_to_user_email = @owner.email
+    send_to_user_name = @owner.user_name
+
+    if approved == true
+      @email_content_html_yml_key = 'email_notification.approval_response_approved_html'
+      @email_content_text_yml_key = 'email_notification.approval_response_approved'
+    elsif approved == false
+      @email_content_html_yml_key = 'email_notification.approval_response_not_approved_html'
+      @email_content_text_yml_key = 'email_notification.approval_response_not_approved'
+    else
+      @email_content_html_yml_key = 'email_notification.approval_response_html'
+      @email_content_text_yml_key = 'email_notification.approval_response'
+    end
+
+    if assert_notifications_enabled(@owner)
+      mail(to: @owner.email, subject: t('email_notification.approval_response_subject', id: @child.short_id, locale: @locale_email))
+    end
+
+    # Send Whatsapp Notifications
+    if @owner.present? && @owner&.phone
+      twilio_service = TwilioWhatsappService.new
+      to_phone_number = nil
+      message_body = nil
+
+      case approved
+      when true
+        message_params = {
+          case: @child,
+          user_name: @manager.user_name
+        }.with_indifferent_access
+
+        file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_closure_approved_notification.text.erb"
+        message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+        to_phone_number = cpo_user.phone
+        message_body = message_content
+      when false
+        message_params = {
+          case: @child,
+          cpo_user:  @manager.user_name
+        }.with_indifferent_access
+
+        file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_closure_not_approved_notification.text.erb"
+        message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+        to_phone_number = cpo_user.phone
+        message_body = message_content
+      end
+
+      twilio_service.send_whatsapp_message(to_phone_number, message_body)
+    end
   end
 
   # 1-b | 1-b ii| 1-a ii |
@@ -88,7 +143,7 @@ class NotificationMailer < ApplicationMailer
 
     # Send Whatsapp Notifications
     if send_to_user.present? && send_to_user&.phone
-      twilio_service = TwilioWhatsAppService.new
+      twilio_service = TwilioWhatsappService.new
       to_phone_number = nil
       message_body = nil
 
