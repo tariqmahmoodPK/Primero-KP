@@ -24,9 +24,29 @@ class Api::V2::ChildrenController < ApplicationApiController
   private
 
   def check_response_case_params
-    if ((record_params["response_on_referred_case_da89310"][1]["has_the_service_been_provided__23eb99e"].present?) &&
-        (record_params["response_on_referred_case_da89310"][1]["date_and_time_when_service_provided_63fd833"].present?))
-      @record.send_response_update
+    if (record_params["response_on_referred_case_da89310"][1]["has_the_service_been_provided__23eb99e"].present? &&
+        record_params["response_on_referred_case_da89310"][1]["date_and_time_when_service_provided_63fd833"].present?)
+      reciever = User.find_by(user_name: @record.data["last_updated_by"])
+
+      CaseLifecycleEventsNotificationMailer.send_case_referred_response_notification(@record, reciever).deliver_later
+
+      # Send Whatsapp Notification
+      if cpo_user&.phone
+        message_params = {
+          case: @record,
+          cpo_user: cpo_user,
+          workflow_stage: @record.data["workflow"]
+        }.with_indifferent_access
+
+        file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
+        message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+
+        twilio_service = TwilioWhatsappService.new
+        to_phone_number = cpo_user.phone
+        message_body = message_content
+
+        twilio_service.send_whatsapp_message(to_phone_number, message_body)
+      end
     end
   end
 
