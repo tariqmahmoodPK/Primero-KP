@@ -17,9 +17,16 @@ class Api::V2::ReferralsController < Api::V2::RecordResourceController
 
   def update
     authorize_update!(@record)
-    @transition = Referral.find(params[:id])
+    check = @transition = Referral.find(params[:id])
     @transition.process!(current_user, update_params)
     updates_for_record(@transition.record)
+    if check
+      if (update_params["status"] == "accepted")
+        @transition.accept_referral_email
+      elsif (update_params["status"] == "rejected")
+        @transition.reject_referral_email
+      end
+    end
     render 'api/v2/transitions/update'
   end
 
@@ -33,8 +40,9 @@ class Api::V2::ReferralsController < Api::V2::RecordResourceController
   def destroy
     authorize_update!(@record)
     @transition = Referral.find(params[:id])
-    @transition.revoke!(current_user)
+    check = @transition.revoke!(current_user)
     updates_for_record(@transition.record)
+    @transition.revoke_referral_email if check
     render 'api/v2/transitions/destroy'
   end
 

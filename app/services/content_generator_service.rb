@@ -1,6 +1,8 @@
 require 'erb'
 
 class ContentGeneratorService
+  include ApplicationHelper
+
   def self.generate_message_content(file_path, message_params = nil)
     @case_record = message_params.dig('case')
     @case_id = @case_record.short_id || message_params.dig('case_id')

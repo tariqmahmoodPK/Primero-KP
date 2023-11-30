@@ -25,7 +25,7 @@ class NotificationMailer < ApplicationMailer
 
     # Send Whatsapp Notifications
     if @manager.present? && @manager&.phone
-      twilio_service = TwilioWhatsAppService.new
+      twilio_service = TwilioWhatsappService.new
 
       message_params = {
         case: @transition&.record,
@@ -74,7 +74,7 @@ class NotificationMailer < ApplicationMailer
 
     # Send Whatsapp Notifications
     if @owner.present? && @owner&.phone
-      twilio_service = TwilioWhatsAppService.new
+      twilio_service = TwilioWhatsappService.new
       to_phone_number = nil
       message_body = nil
 
@@ -143,7 +143,7 @@ class NotificationMailer < ApplicationMailer
 
     # Send Whatsapp Notifications
     if send_to_user.present? && send_to_user&.phone
-      twilio_service = TwilioWhatsAppService.new
+      twilio_service = TwilioWhatsappService.new
       to_phone_number = nil
       message_body = nil
 

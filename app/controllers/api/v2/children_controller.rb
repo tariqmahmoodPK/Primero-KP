@@ -5,7 +5,7 @@ class Api::V2::ChildrenController < ApplicationApiController
   include Api::V2::Concerns::Pagination
   include Api::V2::Concerns::Record
   after_action :send_email_for_note, only: [:update], if: :note_params_present?
-
+  after_action :check_response_case_params, only: [:update]
 
   def traces
     authorize! :read, Child
@@ -22,6 +22,13 @@ class Api::V2::ChildrenController < ApplicationApiController
   end
 
   private
+
+  def check_response_case_params
+    if ((record_params["response_on_referred_case_da89310"][1]["has_the_service_been_provided__23eb99e"].present?) &&
+        (record_params["response_on_referred_case_da89310"][1]["date_and_time_when_service_provided_63fd833"].present?))
+      @record.send_response_update
+    end
+  end
 
   def note_params_present?
     record_params["notes_section"].present?
