@@ -927,6 +927,13 @@ module Graphs
 
       stats['Other Provinces'][gender.to_sym] += 1
     end
+    guardianship_awarded = Child.attachment_with_specific_type("guardianship")
+    guardianship_awarded.each do |child|
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
+      next unless gender
+
+      stats["Guardianship Awarded"][gender.to_sym] += 1
+    end
 
     stats
   end
