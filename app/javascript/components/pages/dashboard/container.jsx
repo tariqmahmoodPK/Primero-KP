@@ -54,6 +54,7 @@ import {
   CasesAtAGlance,
   // 'Cases Source'
   CasesSource,
+  CaseStatuses,
   // 'Custody with Court Order'
   CustodyWithCourtOrder,
   // 'Police Cases'
@@ -100,102 +101,61 @@ const Dashboard = () => {
 
   return (
     <PageContainer>
-      <PageHeading title={i18n.t("navigation.home")} />
+      <Grid container style={{ alignItems: 'center' }} item xl={12} md={12} xs={12}>
+        <Grid item xl={6} md={6} xs={12}>
+          <PageHeading title={i18n.t("navigation.home")} />
+        </Grid>
+        <Grid item xl={6} md={6} xs={12} style={{ textAlign: 'right' }}>
+          <a
+            style={{ fontSize: 20, fontWeight: 600, textAlign: 'right' }}
+            href="/download_package.zip"
+            download
+            target="_blank"
+          >
+            Resources
+          </a>
+        </Grid>
+      </Grid>
       <PageContent>
         <OfflineAlert text={i18n.t("messages.dashboard_offline")} />
         <Grid container spacing={3}>
-          <Grid item xl={12} md={12} xs={12}>
-            <CasesToAssign loadingIndicator={indicatorProps} />
-            <Approvals loadingIndicator={indicatorProps} />
-            <SharedFromMyTeam loadingIndicator={indicatorProps} />
-            <SharedWithMyTeam loadingIndicator={indicatorProps} />
-            <OverdueTasks loadingIndicator={indicatorProps} />
-            <CasesBySocialWorker loadingIndicator={indicatorProps} />
-            <WorkflowTeamCases loadingIndicator={indicatorProps} />
-            <ReportingLocation loadingIndicator={indicatorProps} />
-            <ProtectionConcern loadingIndicator={indicatorProps} />
-            <ViolationsCategoryVerificationStatus loadingIndicator={indicatorProps} />
-            <ViolationsCategoryRegion loadingIndicator={indicatorProps} />
-            <PerpetratorArmedForceGroupPartyNames loadingIndicator={indicatorProps} />
-          </Grid>
+            {/*<CaseStatuses />*/}
+            <CasesAtAGlance />
+            <RegisteredCasesByProtectionConcern /> {/* 'Registered Cases by Protection Concern' */}
+            <HighRiskCasesByProtectionConcern /> {/* 'High Risk Cases by Protection Concern' */}
+            <MonthlyRegisteredAndResolvedCases /> {/* Registered and Closed Cases by Month */}
+            <CasesSource />
+            <CasesRequiringAlternativeCarePlacementServices />
+            <CasesReferralsToAgency />
+            <CustodyWithCourtOrder />
+            <PoliceCases />
+            <CasesRequiringSpecialConsideration />
+            <ResolvedCasesByGenderAndReason />
+            <CommunityBasedChildProtectionCommittees />
+            <CommunityEngagementSessions />
+            <Grid item xl={12} md={12} xs={12}>
+              <CasesToAssign loadingIndicator={indicatorProps} />
+              <Approvals loadingIndicator={indicatorProps} />
+              <SharedFromMyTeam loadingIndicator={indicatorProps} />
+              <SharedWithMyTeam loadingIndicator={indicatorProps} />
+              <OverdueTasks loadingIndicator={indicatorProps} />
+              <CasesBySocialWorker loadingIndicator={indicatorProps} />
+              <WorkflowTeamCases loadingIndicator={indicatorProps} />
+              <ReportingLocation loadingIndicator={indicatorProps} />
+              <ProtectionConcern loadingIndicator={indicatorProps} />
+              <ViolationsCategoryVerificationStatus loadingIndicator={indicatorProps} />
+              <ViolationsCategoryRegion loadingIndicator={indicatorProps} />
+              <PerpetratorArmedForceGroupPartyNames loadingIndicator={indicatorProps} />
+            </Grid>
 
           <Grid item xl={12} md={12} xs={12}>
             <Overview loadingIndicator={indicatorProps} userPermissions={userPermissions} />
-            <WorkflowIndividualCases loadingIndicator={indicatorProps} />
-            {/* 'Percentage of Children who received Child Protection Services' */}
             <PercentageChildrenReceivedChildProtectionServices />
           </Grid>
 
           <Grid item xl={3} md={4} xs={12}>
             <Flags loadingIndicator={flagsIndicators} />
           </Grid>
-        </Grid>
-
-        <Grid container spacing={3}>
-          {/* <Grid item xl={6} md={6} xs={6}> */}
-          {/* 'Closed Cases by Sex and Reason' */}
-          <ResolvedCasesByGenderAndReason />
-          {/* </Grid> */}
-
-          {/* <Grid item xl={6} md={6} xs={6}> */}
-          {/* 'Cases Referrals (To Agency)' */}
-          <CasesReferralsToAgency />
-          {/* </Grid> */}
-
-          {/* <Grid item xl={6} md={6} xs={6}> */}
-          {/* 'Cases requiring Alternative Care Placement Services' */}
-          <CasesRequiringAlternativeCarePlacementServices />
-          {/* </Grid> */}
-
-          {/* <Grid item xl={6} md={6} xs={6}> */}
-          {/* Registered and Closed Cases by Month */}
-          <MonthlyRegisteredAndResolvedCases />
-          {/* </Grid> */}
-
-          {/* <Grid item xl={6} md={6} xs={6}> */}
-          {/* 'High Risk Cases by Protection Concern' */}
-          <HighRiskCasesByProtectionConcern />
-          {/* </Grid> */}
-
-          {/* <Grid item xl={6} md={6} xs={6}> */}
-          {/* 'Registered Cases by Protection Concern' */}
-          <RegisteredCasesByProtectionConcern />
-          {/* </Grid> */}
-
-          {/* <Grid item xl={6} md={6} xs={6}> */}
-          {/* 'Community based Child Protection Committees' */}
-          <CommunityBasedChildProtectionCommittees />
-          {/* </Grid> */}
-
-          {/* <Grid item xl={6} md={6} xs={6}> */}
-          {/* 'Community Engagement Sessions' */}
-          <CommunityEngagementSessions />
-          {/* </Grid> */}
-
-          {/* <Grid item xl={6} md={6} xs={6}> */}
-          {/* 'Cases at a Glance' */}
-          <CasesAtAGlance />
-          {/* </Grid> */}
-
-          {/* <Grid item xl={6} md={6} xs={6}> */}
-          {/* 'Cases Source' */}
-          <CasesSource />
-          {/* </Grid> */}
-
-          {/* <Grid item xl={6} md={6} xs={6}> */}
-          {/* 'Custody with Court Order' */}
-          <CustodyWithCourtOrder />
-          {/* </Grid> */}
-
-          {/* <Grid item xl={6} md={6} xs={6}> */}
-          {/* 'Police Cases' */}
-          <PoliceCases />
-          {/* </Grid> */}
-
-          {/* <Grid item xl={6} md={6} xs={6}> */}
-          {/* 'Cases Requiring Special Consideration' */}
-          <CasesRequiringSpecialConsideration />
-          {/* </Grid> */}
         </Grid>
       </PageContent>
     </PageContainer>

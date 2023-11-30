@@ -715,6 +715,15 @@ module Graphs
       'CPWC'
     ]
 
+    cases = {
+      "Custody Protection Order" => 0, "Guardianship" => 0, "Other" => 0
+    }
+
+    cases["Custody Protection Order"] = Child.attachment_with_specific_type_and_user(user.user_name, "custody_protection_order").size
+    cases["Guardianship"] = Child.attachment_with_specific_type_and_user(user.user_name, "guardianship").size
+    cases["Other"] = Child.attachment_with_specific_type_and_user(user.user_name, "other").size
+
+    cases
   end
 
   # 'Police Cases'
@@ -917,6 +926,13 @@ module Graphs
       next unless gender
 
       stats['Other Provinces'][gender.to_sym] += 1
+    end
+    guardianship_awarded = Child.attachment_with_specific_type("guardianship")
+    guardianship_awarded.each do |child|
+      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
+      next unless gender
+
+      stats["Guardianship Awarded"][gender.to_sym] += 1
     end
 
     stats

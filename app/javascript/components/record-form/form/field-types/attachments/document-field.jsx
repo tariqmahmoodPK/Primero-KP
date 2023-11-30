@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import { TextField } from "formik-material-ui";
-import { Box, Dialog, Button, DialogContent, DialogActions, DialogTitle, IconButton } from "@material-ui/core";
-import { FastField } from "formik";
+import { Box, Dialog, Button, DialogContent, DialogActions, DialogTitle, IconButton, MenuItem } from "@material-ui/core";
+import { FastField, Field } from "formik";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import CloseIcon from "@material-ui/icons/Close";
@@ -25,6 +25,21 @@ import { MODULES } from "../../../../../config";
 
 import { buildAttachmentFieldsObject } from "./utils";
 import AttachmentInput from "./attachment-input";
+
+const ranges = [
+  {
+    value: "custody_protection_order",
+    label: "Custody Protection Order"
+  },
+  {
+    value: "guardianship",
+    label: "Guardianship"
+  },
+  {
+    value: "other",
+    label: "Other"
+  }
+];
 
 const DocumentField = ({
   attachment,
@@ -180,6 +195,30 @@ const DocumentField = ({
               name={fields.description}
             />
           </Box>
+          {title === "Add If yes, attach a copy of the Court Order" && (
+            <Box my={2}>
+              <Field
+                component={TextField}
+                {...supportingInputsProps}
+                type="text"
+                name={fields.typeOfDocument}
+                label="Type of Document"
+                select
+                variant="standard"
+                helperText="Please select Document Type"
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true
+                }}
+              >
+                {ranges.map(option => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Field>
+            </Box>
+          )}
           <Box my={2}>
             <DateField
               {...supportingInputsProps}

@@ -79,6 +79,9 @@ class Child < ApplicationRecord
   # Scopes
   scope :by_date_of_birth, -> { where.not('data @> ?', { date_of_birth: nil }.to_json) }
   # Search for records in KPK Province
+  scope :attachment_with_specific_type, -> (document_type) { includes(:attachments).where(attachments: { type_of_document: document_type }) }
+  scope :attachment_with_specific_type_and_user, -> (username, document_type) { includes(:attachments).where("data @> ?", { owned_by: username }.to_json).where(attachments: { type_of_document: document_type }) }
+
   scope :with_province, -> {
     where("location_current LIKE ?", "KPK%").where('risk_level = ?', 'high')
   }
@@ -94,6 +97,38 @@ class Child < ApplicationRecord
         ration_card_no icrc_ref_no rc_id_no unhcr_id_no unhcr_individual_no un_no
         other_agency_id survivor_code_no national_id_no other_id_no biometrics_id
         family_count_no dss_id camp_id tent_number nfi_distribution_id oscar_number registry_no ]
+  end
+
+  def self.get_child_statuses(user)
+    role_name = user.role.name
+    return { permission: false } unless ['CPI In-charge', 'CPO', 'CP Manager', 'Referral'].include?(role_name)
+
+    case role_name
+    when "CPO"
+      registered_cases = Child.get_registered_cases_with_user(user.user_name).total
+      harm_cases = Child.get_significant_harm_cases_with_user(user.user_name).total
+    when "CPI In-charge"
+      registered_cases = get_registered_cases_with_user_group(user.user_groups.pluck(:unique_id)).total
+      harm_cases = Child.get_significant_harm_cases_with_user_group(user.user_groups.pluck(:unique_id)).total
+    else
+      registered_cases = Child.get_registered_cases.total
+      harm_cases = Child.get_significant_harm_cases.total
+    end
+
+    if role_name.in? ["CPI In-charge", "CPO"]
+      resolved_cases = role_name.eql?("CPO") ? Child.get_resolved_cases_with_user(user.user_name).total : Child.get_resolved_cases_with_user(user.user_groups.first.users.pluck(:user_name)).total
+      closed_cases = role_name.eql?("CPO") ? Child.get_closed_cases_with_user(user.user_name).total : Child.get_closed_cases_with_user(user.user_groups.first.users.pluck(:user_name)).total
+    end
+    statuses = { "stats" => {} }
+
+    statuses["stats"]["Role"] = role_name
+    statuses["stats"]["Number of Cases"] = Child.count
+    statuses["stats"]["data"] = { "Registered (Open)": registered_cases, "Significant Harm": harm_cases }
+    statuses["stats"]["data"].merge!("Pending Approval for Closure": Child.pending_cases_to_assigned(user.user_groups.first.users.pluck(:user_name)).size) if role_name.eql?("CPI In-charge")
+    statuses["stats"]["data"].merge!("Closed": closed_cases) if role_name.in? ["CPI In-charge", "CPO"]
+    statuses["stats"]["data"].merge!("Assigned to Me": Child.get_cases_assigned_to_specific_user(user).total) if role_name.eql?("CPO")
+
+    statuses
   end
 
   def self.quicksearch_fields

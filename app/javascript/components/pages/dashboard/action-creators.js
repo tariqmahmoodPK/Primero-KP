@@ -29,6 +29,13 @@ export const fetchCasesByStatus = () => {
   };
 };
 
+export const fetchCaseStatuses = () => ({
+  type: actions.CASE_STATUSES,
+  api: {
+    path: "dashboards/get_child_statuses"
+  }
+});
+
 export const fetchCasesByCaseWorker = () => {
   return {
     type: actions.CASES_BY_CASE_WORKER,

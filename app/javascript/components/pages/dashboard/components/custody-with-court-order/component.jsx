@@ -1,12 +1,11 @@
-// 'Custody with Court Order'
-
-/* eslint-disable no-prototype-builtins */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import { Grid } from "@material-ui/core";
 
+import { Chart } from "../../../../charts";
 import { fetchCustodyWithCourtOrder } from "../../action-creators";
 import { getCustodyWithCourtOrder } from "../../selectors";
 import { useMemoizedSelector } from "../../../../../libs";
@@ -25,15 +24,82 @@ const Component = () => {
     dispatch(fetchCustodyWithCourtOrder());
   }, []);
 
+  let graphData;
+  let chart_options = {
+    scales: {
+      xAxes: [
+        {
+          ticks: {
+            display: false
+          },
+          gridLines: {
+            display: false
+          },
+          scaleLabel: {
+            display: false,
+            labelString: "Time in Seconds",
+            fontColor: "red"
+          }
+        }
+      ],
+      yAxes: [
+        {
+          ticks: {
+            display: false
+          },
+          gridLines: {
+            display: false
+          },
+          scaleLabel: {
+            display: false,
+            labelString: "Speed in Miles per Hour",
+            fontColor: "green"
+          }
+        }
+      ]
+    }
+  };
+
+  if (stats) {
+    const labels = [];
+    const data = [];
+
+    for (const key in stats.stats) {
+      labels.push(key);
+      data.push(stats.stats[key]);
+    }
+
+    graphData = {
+      labels: labels,
+      datasets: [
+        {
+          label: labels,
+          data: data,
+          backgroundColor: [
+            "rgb(255, 99, 132)",
+            "rgb(54, 162, 235)",
+            "rgb(255, 205, 86)",
+            "rgb(128, 0, 128)",
+            "rgb(150,75,0)",
+            "rgb(54, 170, 89)"
+          ],
+          hoverOffset: 6
+        }
+      ]
+    };
+  }
+
   return (
     <>
-      {stats && stats.hasOwnProperty("cases_with_custody_order") && (
-        <div>
-          <div flat>
-            <div className={css.num}>{stats.cases_with_custody_order}</div>
-            <div className={css.text}>Cases with custody and placement orders</div>
+      {graphData && (
+        <Grid item xl={6} md={6} xs={12}>
+          <div className={css.container}>
+            <h2>Custody with Court Orders</h2>
+            <div className={css.card} flat>
+              <Chart type="doughnut" options={chart_options} data={graphData} showDetails />
+            </div>
           </div>
-        </div>
+        </Grid>
       )}
     </>
   );
