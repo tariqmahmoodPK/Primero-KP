@@ -79,6 +79,8 @@ class Child < ApplicationRecord
   # Scopes
   scope :by_date_of_birth, -> { where.not('data @> ?', { date_of_birth: nil }.to_json) }
   # Search for records in KPK Province
+  scope :attachment_with_specific_type_and_user, -> (username, document_type) { includes(:attachments).where("data @> ?", { owned_by: username }.to_json).where(attachments: { type_of_document: document_type }) }
+
   scope :with_province, -> {
     where("location_current LIKE ?", "KPK%").where('risk_level = ?', 'high')
   }

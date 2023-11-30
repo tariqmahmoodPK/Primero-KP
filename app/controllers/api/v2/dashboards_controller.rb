@@ -185,8 +185,7 @@ class Api::V2::DashboardsController < ApplicationApiController
 
   # 'Custody with Court Order'
   def custody_with_court_order
-    # @stats = Child.custody_with_court_order_stats(current_user)
-    @stats = {}
+    @stats = Child.custody_with_court_order_stats(current_user)
   end
 
   # 'Police Cases'

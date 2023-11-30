@@ -715,6 +715,15 @@ module Graphs
       'CPWC'
     ]
 
+    cases = {
+      "Custody Protection Order" => 0, "Guardianship" => 0, "Other" => 0
+    }
+
+    cases["Custody Protection Order"] = Child.attachment_with_specific_type_and_user(user.user_name, "custody_protection_order").size
+    cases["Guardianship"] = Child.attachment_with_specific_type_and_user(user.user_name, "guardianship").size
+    cases["Other"] = Child.attachment_with_specific_type_and_user(user.user_name, "other").size
+
+    cases
   end
 
   # 'Police Cases'
