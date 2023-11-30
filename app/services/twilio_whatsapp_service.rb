@@ -2,8 +2,8 @@ require 'twilio-ruby'
 
 class TwilioWhatsappService
   def initialize
-    account_sid = TWILIO_ACCOUNT_SID
-    auth_token = TWILIO_AUTH_TOKEN
+    account_sid = Rails.application.credentials.dig(:TWILIO_ACCOUNT_SID)
+    auth_token = Rails.application.credentials.dig(:TWILIO_AUTH_TOKEN)
     @client = Twilio::REST::Client.new(account_sid, auth_token)
     myLogger = Logger.new(STDOUT)
     myLogger.level = Logger::DEBUG
