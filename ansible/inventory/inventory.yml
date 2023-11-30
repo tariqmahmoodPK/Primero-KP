@@ -23,6 +23,7 @@ all:
       # primero_configuration_repo_branch: 'main'
       # primero_configuration_path: 'directory/of/config/loader/script'
       use_lets_encrypt: 'true'
+      use_external_certs: 'false'
       # The other certbot/lets_encrypt variables are optional. Include only if using Let's Encrypt
       certbot_domain:
       - '{{ primero_host }}'
