@@ -12,7 +12,7 @@ class TwilioWhatsappService
 
   def send_whatsapp_message(to, body)
     message = @client.messages.create(
-      from: "whatsapp:#{TWILIO_FROM}",
+      from: "whatsapp:#{ENV['TWILIO_FROM']}",
       body: body,
       to: "whatsapp:#{to}"
     )

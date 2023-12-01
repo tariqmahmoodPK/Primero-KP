@@ -152,7 +152,7 @@ const Dashboard = () => {
             </Grid>
             <Grid item xl={12} md={12} xs={12}>
               <Overview loadingIndicator={indicatorProps} userPermissions={userPermissions} />
-              <PercentageChildrenReceivedChildProtectionServices text="Percentage of Children who received Child Protection Services"/>
+              <PercentageChildrenReceivedChildProtectionServices text="Percentage of Children who received Child Protection Services" />
             </Grid>
           <Grid item xl={3} md={4} xs={12}>
             <Flags loadingIndicator={flagsIndicators} />

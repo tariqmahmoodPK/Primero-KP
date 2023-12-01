@@ -33,7 +33,7 @@ class NotificationMailer < ApplicationMailer
       }.with_indifferent_access
 
       file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_closure_request_notification.text.erb"
-      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+      message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
       to_phone_number = manager.phone
       message_body = message_content
@@ -86,7 +86,7 @@ class NotificationMailer < ApplicationMailer
         }.with_indifferent_access
 
         file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_closure_approved_notification.text.erb"
-        message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+        message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
         to_phone_number = cpo_user.phone
         message_body = message_content
@@ -97,7 +97,7 @@ class NotificationMailer < ApplicationMailer
         }.with_indifferent_access
 
         file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_closure_not_approved_notification.text.erb"
-        message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+        message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
         to_phone_number = cpo_user.phone
         message_body = message_content
@@ -155,7 +155,7 @@ class NotificationMailer < ApplicationMailer
         }.with_indifferent_access
 
         file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_registered_scw_psychologist_notification.text.erb"
-        message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+        message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
         to_phone_number = cpo_user.phone
         message_body = message_content
@@ -169,13 +169,13 @@ class NotificationMailer < ApplicationMailer
 
         if send_to_role_name == "Child Helpline Officer"
           file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_transfered_cpo_notification.text.erb"
-          message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+          message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
           to_phone_number = cpo_user.phone
           message_body = message_content
         elsif send_to_role_name == "Psychologist" || send_to_role_name == "Social Case Worker"
           file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_transfered_scw_psychologist_notification.text.erb"
-          message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+          message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
           to_phone_number = send_to_user.phone
           message_body = message_content
