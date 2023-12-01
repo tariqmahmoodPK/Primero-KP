@@ -37,7 +37,8 @@ class Api::V2::ChildrenController < ApplicationApiController
       }.with_indifferent_access
 
       file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
-      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+      content_generator_service = ContentGeneratorService.new
+      message_content = content_generator_service.generate_message_content(file_path, message_params)
 
       twilio_service = TwilioWhatsappService.new
       to_phone_number = cpo_user.phone

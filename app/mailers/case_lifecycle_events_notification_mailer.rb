@@ -10,8 +10,8 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     subject = "Case #{@case_id} Referred to you via Helpline"
 
     mail(to: cpo_user.email, subject: subject) do |format|
-      format.html { render 'send_case_registered_cpo_notification' }
-      format.text { render 'send_case_registered_cpo_notification' }
+      format.html { render __method__.to_s }
+      format.text { render __method__.to_s }
     end
   end
 
