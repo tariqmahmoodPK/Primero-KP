@@ -150,7 +150,9 @@ const Dashboard = () => {
               <ViolationsCategoryRegion loadingIndicator={indicatorProps} />
               <PerpetratorArmedForceGroupPartyNames loadingIndicator={indicatorProps} />
             </Grid>
-
+            <Grid item xl={12} md={12} xs={12}>
+              <Overview loadingIndicator={indicatorProps} userPermissions={userPermissions} />
+            </Grid>
           <Grid item xl={3} md={4} xs={12}>
             <Flags loadingIndicator={flagsIndicators} />
           </Grid>

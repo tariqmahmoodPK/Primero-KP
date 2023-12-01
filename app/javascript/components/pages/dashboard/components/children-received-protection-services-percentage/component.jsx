@@ -51,7 +51,7 @@ const Component = () => {
       {stats && (
         <>
           {/* Display a heading */}
-          <h2>Percentage of Children who received Child Protection Services</h2>
+          <h2>Registered Cases</h2>
 
           {/* Create a container for displaying statistics */}
           <div className={css.container}>
