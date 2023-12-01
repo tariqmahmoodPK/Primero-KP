@@ -120,6 +120,9 @@ const Dashboard = () => {
         <OfflineAlert text={i18n.t("messages.dashboard_offline")} />
         <Grid container spacing={3}>
             {/*<CaseStatuses />*/}
+            <Grid item xl={12} md={12} xs={12}>
+              <PercentageChildrenReceivedChildProtectionServices />
+            </Grid>
             <CasesAtAGlance />
             <RegisteredCasesByProtectionConcern /> {/* 'Registered Cases by Protection Concern' */}
             <HighRiskCasesByProtectionConcern /> {/* 'High Risk Cases by Protection Concern' */}
@@ -147,11 +150,6 @@ const Dashboard = () => {
               <ViolationsCategoryRegion loadingIndicator={indicatorProps} />
               <PerpetratorArmedForceGroupPartyNames loadingIndicator={indicatorProps} />
             </Grid>
-
-          <Grid item xl={12} md={12} xs={12}>
-            <Overview loadingIndicator={indicatorProps} userPermissions={userPermissions} />
-            <PercentageChildrenReceivedChildProtectionServices />
-          </Grid>
 
           <Grid item xl={3} md={4} xs={12}>
             <Flags loadingIndicator={flagsIndicators} />
