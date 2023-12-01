@@ -91,7 +91,7 @@ class Referral < Transition
       }.with_indifferent_access
 
       file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
-      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+      message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
       twilio_service = TwilioWhatsappService.new
       to_phone_number = cpo_user.phone
@@ -116,7 +116,7 @@ class Referral < Transition
       }.with_indifferent_access
 
       file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
-      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+      message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
       twilio_service = TwilioWhatsappService.new
       to_phone_number = cpo_user.phone
@@ -141,7 +141,7 @@ class Referral < Transition
       }.with_indifferent_access
 
       file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
-      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+      message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
       twilio_service = TwilioWhatsappService.new
       to_phone_number = cpo_user.phone
@@ -207,7 +207,7 @@ class Referral < Transition
       }.with_indifferent_access
 
       file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
-      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+      message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
       twilio_service = TwilioWhatsappService.new
       to_phone_number = cpo_user.phone

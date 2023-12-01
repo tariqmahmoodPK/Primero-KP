@@ -6,7 +6,7 @@
     user: @manager.user_name, status: @approval.downcase,
     user_role_name: @manager.role.name,
     approval_type: @approval_type&.downcase,
-    case_id: (@whatsapp_check ? @case_record&.short_id : link_to(@case_record&.short_id, url_for_v2(@case_record))),
+    case_id: (@whatsapp_check ? @case_id : link_to(@case_id, url_for_v2(@child))),
     locale: @locale_email
   ).html_safe
 %>
