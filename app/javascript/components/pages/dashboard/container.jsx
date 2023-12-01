@@ -121,7 +121,7 @@ const Dashboard = () => {
         <Grid container spacing={3}>
             {/*<CaseStatuses />*/}
             <Grid item xl={12} md={12} xs={12}>
-              <PercentageChildrenReceivedChildProtectionServices />
+              <PercentageChildrenReceivedChildProtectionServices text="Registered Cases"/>
             </Grid>
             <CasesAtAGlance />
             <RegisteredCasesByProtectionConcern /> {/* 'Registered Cases by Protection Concern' */}
@@ -152,6 +152,7 @@ const Dashboard = () => {
             </Grid>
             <Grid item xl={12} md={12} xs={12}>
               <Overview loadingIndicator={indicatorProps} userPermissions={userPermissions} />
+              <PercentageChildrenReceivedChildProtectionServices text="Percentage of Children who received Child Protection Services"/>
             </Grid>
           <Grid item xl={3} md={4} xs={12}>
             <Flags loadingIndicator={flagsIndicators} />
