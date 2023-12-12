@@ -141,6 +141,107 @@ module Graphs
     total_cases
   end
 
+  # 'Registered Cases'
+  def registered_cases_stats(user)
+    # Getting User's Role to check if they are allowed to view the graph.
+    name = user.role.name
+
+    # User Roles allowed
+    return { permission: false } unless name.in? [
+      'Social Case Worker'    ,
+      'Psychologist'          ,
+      'Child Helpline Officer',
+      'Referral'              ,
+      'CPO'                   ,
+      'CPWC'
+    ]
+
+    # The 'stats' data structure stores statistics for different types of Protection Concerns.
+      # Each Protection Concern is represented as a key-value pair, where:
+      # 'cases' indicates the number of cases associated with that concern.
+      # 'percentage' represents the percentage of cases compared to the total cases that have any of these Protection Concerns
+
+    stats = {
+      violence:          { cases: 0 , percentage: 0 },
+      exploitation:      { cases: 0 , percentage: 0 },
+      neglect:           { cases: 0 , percentage: 0 },
+      harmful_practices: { cases: 0 , percentage: 0 },
+      abuse:             { cases: 0 , percentage: 0 },
+      other:             { cases: 0 , percentage: 0 },
+    }
+
+    # Getting Total Number of Cases that are High Risk
+    high_risk_cases = Child.get_childern_records(user, "high")
+    total_case_count = high_risk_cases.count
+
+    # Calculate Stats
+    high_risk_cases.each do |child|
+      # child.data["response_on_referred_case_da89310"] is an array containing a hash
+      response_on_referred_case = child.data["response_on_referred_case_da89310"]
+
+      # child.data["protection_concerns"] returns an array of strings, Each specifing a Protection Concern
+
+      if child.data["protection_concerns"].include?("other")
+        stats[:violence][:cases] += 1
+      end
+
+      if child.data["protection_concerns"].include?("exploitation_b9352d1")
+        stats[:exploitation][:cases] += 1
+      end
+
+      if child.data["protection_concerns"].include?("neglect_a7b48b2")
+        stats[:neglect][:cases] += 1
+      end
+
+      if child.data["protection_concerns"].include?("harmful_practice_s__d1f7955")
+        stats[:harmful_practices][:cases] += 1
+      end
+
+      if child.data["protection_concerns"].include?("other_b637c39")
+        stats[:abuse][:cases] += 1
+      end
+
+      if child.data["protection_concerns"].include?("other_b637c39")
+        stats[:other][:cases] += 1
+      end
+    end
+
+    # Get Percentages
+    stats.each do |key, value|
+      value[:percentage] = get_percentage(value[:cases], total_case_count) unless total_case_count.eql?(0)
+    end
+
+    # Final Stats
+    total_cases =  {
+      violence: {
+        cases:      stats[:violence][:cases],
+        percentage: stats[:violence][:percentage]
+      },
+      exploitation: {
+        cases:      stats[:exploitation][:cases],
+        percentage: stats[:exploitation][:percentage]
+      },
+      neglect: {
+        cases:      stats[:neglect][:cases],
+        percentage: stats[:neglect][:percentage]
+      },
+      harmful_practices: {
+        cases:      stats[:harmful_practices ][:cases],
+        percentage: stats[:harmful_practices ][:percentage]
+      },
+      abuse: {
+        cases:      stats[:abuse][:cases],
+        percentage: stats[:abuse][:percentage]
+      },
+      other: {
+        cases:      stats[:other][:cases],
+        percentage: stats[:other][:percentage]
+      },
+    }
+
+    total_cases
+  end
+
   # 'Closed Cases by Sex and Reason'
   def resolved_cases_by_gender_and_reason_stats(user)
     # Stats Calculation Formula:

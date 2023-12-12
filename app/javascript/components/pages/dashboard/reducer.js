@@ -12,6 +12,9 @@ const reducer = (state = DEFAULT_STATE, { type, payload }) => {
     // 'Percentage of Children who received Child Protection Services'
     case actions.PERCENTAGE_OF_CHILDREN_WHO_RECEIVED_CHILD_PROTECTION_SERVICES_SUCCESS:
       return state.set("percentageChildrenReceivedChildProtectionServices", fromJS(payload));
+    // 'Registered Cases'
+    case actions.REGISTERED_CASES_SUCCESS:
+      return state.set("registeredCases", fromJS(payload));
     // 'Closed Cases by Sex and Reason'
     case actions.RESOLVED_CASES_BY_GENDER_AND_REASON_SUCCESS:
       return state.set("resolvedCasesByGenderAndReason", fromJS(payload));

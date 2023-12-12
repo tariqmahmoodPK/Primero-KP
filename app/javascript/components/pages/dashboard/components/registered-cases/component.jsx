@@ -1,4 +1,4 @@
-// 'Percentage of Children who received Child Protection Services'
+// 'Registered Cases'
 
 // Hook used for handling side effects in functional components.
 // Used for Fetching data when the component is mounted.
@@ -12,9 +12,9 @@ import { useDispatch } from "react-redux";
 // import makeStyles from "@material-ui/core/styles/makeStyles";
 
 // Import functions for fetching data.
-import { fetchPercentageChildrenReceivedChildProtectionServices } from "../../action-creators";
+import { fetchRegisteredCases } from "../../action-creators";
 // Import functions for selecting data.
-import { getPercentageChildrenReceivedChildProtectionServices } from "../../selectors";
+import { getRegisteredCases } from "../../selectors";
 // Import a custom library function.
 import { useMemoizedSelector } from "../../../../../libs";
 
@@ -34,7 +34,7 @@ const Component = () => {
   // Get access to Redux's dispatch function to trigger actions.
   const dispatch = useDispatch();
   // Use the useMemoizedSelector function to get data from the Redux store.
-  const data = useMemoizedSelector(state => getPercentageChildrenReceivedChildProtectionServices(state));
+  const data = useMemoizedSelector(state => getRegisteredCases(state));
 
   // Extract statistics from the data if it exists, otherwise set it to null.
   const stats = data.getIn(["data", "stats"]) ? data.getIn(["data", "stats"]).toJS() : null;
@@ -42,7 +42,7 @@ const Component = () => {
   // Use the useEffect hook to perform an action when the component is mounted.
   useEffect(() => {
     // Dispatch an action to fetch PercentageChildrenReceivedChildProtectionServices
-    dispatch(fetchPercentageChildrenReceivedChildProtectionServices());
+    dispatch(fetchRegisteredCases());
   }, []);
 
   // Render the following JSX (JavaScript XML) content.
@@ -51,7 +51,7 @@ const Component = () => {
       {stats && (
         <>
           {/* Display a heading */}
-          <h2>Percentage of Children who received Child Protection Services</h2>
+          <h2>Registered Cases</h2>
 
           {/* Create a container for displaying statistics */}
           <div className={css.container}>
@@ -108,7 +108,7 @@ const Component = () => {
 };
 
 // Set a display name for the Component
-Component.displayName = `PercentageChildrenReceivedChildProtectionServices`;
+Component.displayName = `RegisteredCases`;
 
 // Export the Component so it can be used in other parts of the application.
 export default Component;

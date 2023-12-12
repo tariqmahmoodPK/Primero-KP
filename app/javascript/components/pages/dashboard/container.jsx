@@ -30,10 +30,14 @@ import {
   SharedWithMyTeam,
   ViolationsCategoryRegion,
   ViolationsCategoryVerificationStatus,
-  WorkflowIndividualCases,
+  //
+  // WorkflowIndividualCases,
+  //
   WorkflowTeamCases,
   // 'Percentage of Children who received Child Protection Services'
   PercentageChildrenReceivedChildProtectionServices,
+  // 'Registered Cases'
+  RegisteredCases,
   // 'Closed Cases by Sex and Reason'
   ResolvedCasesByGenderAndReason,
   // 'Cases Referrals (To Agency)'
@@ -54,7 +58,8 @@ import {
   CasesAtAGlance,
   // 'Cases Source'
   CasesSource,
-  CaseStatuses,
+  //
+  // CaseStatuses,
   // 'Custody with Court Order'
   CustodyWithCourtOrder,
   // 'Police Cases'
@@ -101,13 +106,13 @@ const Dashboard = () => {
 
   return (
     <PageContainer>
-      <Grid container style={{ alignItems: 'center' }} item xl={12} md={12} xs={12}>
+      <Grid container style={{ alignItems: "center" }} item xl={12} md={12} xs={12}>
         <Grid item xl={6} md={6} xs={12}>
           <PageHeading title={i18n.t("navigation.home")} />
         </Grid>
-        <Grid item xl={6} md={6} xs={12} style={{ textAlign: 'right' }}>
+        <Grid item xl={6} md={6} xs={12} style={{ textAlign: "right" }}>
           <a
-            style={{ fontSize: 20, fontWeight: 600, textAlign: 'right' }}
+            style={{ fontSize: 20, fontWeight: 600, textAlign: "right" }}
             href="/download_package.zip"
             download
             target="_blank"
@@ -119,41 +124,41 @@ const Dashboard = () => {
       <PageContent>
         <OfflineAlert text={i18n.t("messages.dashboard_offline")} />
         <Grid container spacing={3}>
-            {/*<CaseStatuses />*/}
-            <Grid item xl={12} md={12} xs={12}>
-              <PercentageChildrenReceivedChildProtectionServices text="Registered Cases"/>
-            </Grid>
-            <CasesAtAGlance />
-            <RegisteredCasesByProtectionConcern /> {/* 'Registered Cases by Protection Concern' */}
-            <HighRiskCasesByProtectionConcern /> {/* 'High Risk Cases by Protection Concern' */}
-            <MonthlyRegisteredAndResolvedCases /> {/* Registered and Closed Cases by Month */}
-            <CasesSource />
-            <CasesRequiringAlternativeCarePlacementServices />
-            <CasesReferralsToAgency />
-            <CustodyWithCourtOrder />
-            <PoliceCases />
-            <CasesRequiringSpecialConsideration />
-            <ResolvedCasesByGenderAndReason />
-            <CommunityBasedChildProtectionCommittees />
-            <CommunityEngagementSessions />
-            <Grid item xl={12} md={12} xs={12}>
-              <CasesToAssign loadingIndicator={indicatorProps} />
-              <Approvals loadingIndicator={indicatorProps} />
-              <SharedFromMyTeam loadingIndicator={indicatorProps} />
-              <SharedWithMyTeam loadingIndicator={indicatorProps} />
-              <OverdueTasks loadingIndicator={indicatorProps} />
-              <CasesBySocialWorker loadingIndicator={indicatorProps} />
-              <WorkflowTeamCases loadingIndicator={indicatorProps} />
-              <ReportingLocation loadingIndicator={indicatorProps} />
-              <ProtectionConcern loadingIndicator={indicatorProps} />
-              <ViolationsCategoryVerificationStatus loadingIndicator={indicatorProps} />
-              <ViolationsCategoryRegion loadingIndicator={indicatorProps} />
-              <PerpetratorArmedForceGroupPartyNames loadingIndicator={indicatorProps} />
-            </Grid>
-            <Grid item xl={12} md={12} xs={12}>
-              <Overview loadingIndicator={indicatorProps} userPermissions={userPermissions} />
-              <PercentageChildrenReceivedChildProtectionServices text="Percentage of Children who received Child Protection Services" />
-            </Grid>
+          {/* <CaseStatuses /> */}
+          <Grid item xl={12} md={12} xs={12}>
+            <RegisteredCases />
+          </Grid>
+          <CasesAtAGlance />
+          <RegisteredCasesByProtectionConcern /> {/* 'Registered Cases by Protection Concern' */}
+          <HighRiskCasesByProtectionConcern /> {/* 'High Risk Cases by Protection Concern' */}
+          <MonthlyRegisteredAndResolvedCases /> {/* Registered and Closed Cases by Month */}
+          <CasesSource />
+          <CasesRequiringAlternativeCarePlacementServices />
+          <CasesReferralsToAgency />
+          <CustodyWithCourtOrder />
+          <PoliceCases />
+          <CasesRequiringSpecialConsideration />
+          <ResolvedCasesByGenderAndReason />
+          <CommunityBasedChildProtectionCommittees />
+          <CommunityEngagementSessions />
+          <Grid item xl={12} md={12} xs={12}>
+            <CasesToAssign loadingIndicator={indicatorProps} />
+            <Approvals loadingIndicator={indicatorProps} />
+            <SharedFromMyTeam loadingIndicator={indicatorProps} />
+            <SharedWithMyTeam loadingIndicator={indicatorProps} />
+            <OverdueTasks loadingIndicator={indicatorProps} />
+            <CasesBySocialWorker loadingIndicator={indicatorProps} />
+            <WorkflowTeamCases loadingIndicator={indicatorProps} />
+            <ReportingLocation loadingIndicator={indicatorProps} />
+            <ProtectionConcern loadingIndicator={indicatorProps} />
+            <ViolationsCategoryVerificationStatus loadingIndicator={indicatorProps} />
+            <ViolationsCategoryRegion loadingIndicator={indicatorProps} />
+            <PerpetratorArmedForceGroupPartyNames loadingIndicator={indicatorProps} />
+          </Grid>
+          <Grid item xl={12} md={12} xs={12}>
+            <Overview loadingIndicator={indicatorProps} userPermissions={userPermissions} />
+            <PercentageChildrenReceivedChildProtectionServices />
+          </Grid>
           <Grid item xl={3} md={4} xs={12}>
             <Flags loadingIndicator={flagsIndicators} />
           </Grid>

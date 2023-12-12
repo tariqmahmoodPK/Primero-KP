@@ -2,6 +2,7 @@
 module GraphHelpers
   # Used By:
     # 'Percentage of Children who received Child Protection Services'
+    # 'Registered Cases'
     # 'Registered and Closed Cases by Month'
     # 'High Risk Cases by Protection Concern'
     # 'Registered Cases by Protection Concern'

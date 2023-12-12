@@ -159,6 +159,11 @@ export const getPercentageChildrenReceivedChildProtectionServices = state => {
   return state.getIn(["records", NAMESPACE, "percentageChildrenReceivedChildProtectionServices"], fromJS({}));
 };
 
+// 'Registered Cases'
+export const getRegisteredCases = state => {
+  return state.getIn(["records", NAMESPACE, "registeredCases"], fromJS({}));
+};
+
 // 'Closed Cases by Sex and Reason'
 export const getResolvedCasesByGenderAndReason = state => {
   return state.getIn(["records", NAMESPACE, "resolvedCasesByGenderAndReason"], fromJS({}));
