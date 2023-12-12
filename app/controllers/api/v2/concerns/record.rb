@@ -36,7 +36,6 @@ module Api::V2::Concerns::Record
   def create
     authorize_create! && validate_json!
     @record = model_class.new_with_user(current_user, record_params)
-    @record.set_current_user(current_user) if current_user.present?
     @record.save!
     select_updated_fields
     status = params[:data][:id].present? ? 204 : 200
@@ -47,7 +46,6 @@ module Api::V2::Concerns::Record
     @record = find_record
     authorize_update! && validate_json!
     @record.update_properties(current_user, record_params)
-    @record.set_current_user(current_user) if current_user.present?
     @record.save!
     select_updated_fields
     render 'api/v2/records/update'

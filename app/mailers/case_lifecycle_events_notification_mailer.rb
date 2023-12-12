@@ -18,7 +18,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 2-a
   # Case Registration Completed | Mail to CPO
   # Case id | SCW/Psychologist | CPO User Email
-  def send_case_registration_completed_notification(case_record, current_user, declaration_value)
+  def send_case_registration_completed_notification(case_record, declaration_value)
     # SCW/Psy
     @user_name = case_record.data['owned_by']
     user = User.find_by(user_name: @user_name)
@@ -53,7 +53,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 2-b
   # Case Registration Verified | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username
-  def send_case_registration_verified_notification(case_record, current_user, declaration_value)
+  def send_case_registration_verified_notification(case_record, declaration_value)
     # SCW/Psy
     user_name = case_record.data['owned_by']
     user = User.find_by(user_name: user_name)
@@ -84,7 +84,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 3-a
   # Initial Assessment Completed | Mail to CPO
   # Case id | SCW/Psychologist Username | CPO Email
-  def send_initial_assessment_completed_notification(case_record, current_user, declaration_value)
+  def send_initial_assessment_completed_notification(case_record, declaration_value)
     # SCW/Psy
     @user_name = case_record.data['owned_by']
     user = User.find_by(user_name: @user_name)
@@ -119,7 +119,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 3-b
   # Initial Assessment Verified | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username
-  def send_initial_assessment_verified_notification(case_record, current_user, declaration_value)
+  def send_initial_assessment_verified_notification(case_record, declaration_value)
     # SCW/Psy
     user_name = case_record.data['owned_by']
     user = User.find_by(user_name: user_name)
@@ -150,7 +150,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 4-a
   # Comprehensive Assessment Completed | Mail to CPO
   # Case id | SCW/Psychologist Username | CPO Email
-  def send_comprehensive_assessment_completed_notification(case_record, current_user, declaration_value)
+  def send_comprehensive_assessment_completed_notification(case_record, declaration_value)
     # SCW/Psy
     @user_name = case_record.data['owned_by']
     user = User.find_by(user_name: @user_name)
@@ -185,7 +185,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 4-b
   # Comprehensive Assessment Verified | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username
-  def send_comprehensive_assessment_verified_notification(case_record, current_user, declaration_value)
+  def send_comprehensive_assessment_verified_notification(case_record, declaration_value)
     # SCW/Psy
     user_name = case_record.data['owned_by']
     user = User.find_by(user_name: user_name)
@@ -216,7 +216,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 5-a
   # Case Plan Completed | Mail to CPO
   # Case id | SCW/Psychologist Username | CPO Email
-  def send_case_plan_completed_notification(case_record, current_user, declaration_value)
+  def send_case_plan_completed_notification(case_record, declaration_value)
     # SCW/Psy
     @user_name = case_record.data['owned_by']
     user = User.find_by(user_name: @user_name)
@@ -251,7 +251,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 5-b
   # Case Plan Verified | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username
-  def send_case_plan_verified_notification(case_record, current_user, declaration_value)
+  def send_case_plan_verified_notification(case_record, declaration_value)
     # SCW/Psy
     user_name = case_record.data['owned_by']
     user = User.find_by(user_name: user_name)
@@ -282,7 +282,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 6-a
   # Alternative Care Placement Completed | Mail to CPO
   # Case id | SCW/Psychologist Username | CPO Email
-  def send_alternative_care_placement_completed_notification(case_record, current_user, declaration_value)
+  def send_alternative_care_placement_completed_notification(case_record, declaration_value)
     # SCW/Psy
     @user_name = case_record.data['owned_by']
     user = User.find_by(user_name: @user_name)
@@ -317,7 +317,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 6-b
   # Alternative Care Placement | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username
-  def send_alternative_care_placement_verified_notification(case_record, current_user, declaration_value)
+  def send_alternative_care_placement_verified_notification(case_record, declaration_value)
     # SCW/Psy
     user_name = case_record.data['owned_by']
     user = User.find_by(user_name: user_name)
@@ -348,7 +348,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 7-a
   # Monitoring and Follow up Sub form | Mail to CPO
   # Case id | SCW/Psychologist Username | CPO Email
-  def send_monitoring_and_follow_up_subform_completed_notification(case_record, current_user, declaration_value)
+  def send_monitoring_and_follow_up_subform_completed_notification(case_record, declaration_value)
     # SCW/Psy
     @user_name = case_record.data['owned_by']
     user = User.find_by(user_name: @user_name)
@@ -383,7 +383,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 7-b
   # Monitoring and Follow up Sub form | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username
-  def send_monitoring_and_follow_up_subform_verified_notification(case_record, current_user, declaration_value)
+  def send_monitoring_and_follow_up_subform_verified_notification(case_record, declaration_value)
     # SCW/Psy
     user_name = case_record.data['owned_by']
     user = User.find_by(user_name: user_name)
@@ -523,7 +523,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 9-a
   # Case Transfer Completes | Mail to CPO
   # Case id | SCW/Psychologist Username | CPO Email
-  def send_case_transfer_completes_notification(case_record, current_user, declaration_value)
+  def send_case_transfer_completes_notification(case_record, declaration_value)
     # SCW/Psy
     @user_name = case_record.data['owned_by']
     user = User.find_by(user_name: @user_name)
@@ -558,7 +558,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 9-b
   # Case Transfer Verified | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username
-  def send_case_transfer_verified_notification(case_record, current_user, declaration_value)
+  def send_case_transfer_verified_notification(case_record, declaration_value)
     # SCW/Psy
     user_name = case_record.data['owned_by']
     user = User.find_by(user_name: user_name)
@@ -589,7 +589,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # 9-c
   # Case Transfer Approved | Mail to SCW/Psychologist
   # Case id | SCW/Psychologist Email | CPO Username
-  def send_case_transfer_approved_notification(case_record, current_user, declaration_value)
+  def send_case_transfer_approved_notification(case_record, declaration_value)
     # SCW/Psy
     user_name = case_record.data['owned_by']
     user = User.find_by(user_name: user_name)
