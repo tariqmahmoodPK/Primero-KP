@@ -196,31 +196,31 @@ module Graphs
       gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
       next unless gender
 
-      if child.data["case_goals_all_met_811860"].present?
+      if child.data["what_is_the_reason_for_closing_this_case__d2d2ce8"] == "case_goals_all_met_811860"
         stats[:case_goals_all_met][gender.to_sym] += 1
       end
 
-      if child.data["case_goals_substantially_met_and_there_is_no_further_child_protection_concern_376876"].present?
+      if child.data["what_is_the_reason_for_closing_this_case__d2d2ce8"] == "case_goals_substantially_met_and_there_is_no_further_child_protection_concern_376876"
         stats[:case_goals_substantially_met][gender.to_sym] += 1
       end
 
-      if child.data["child_reached_adulthood_490887"].present?
+      if child.data["what_is_the_reason_for_closing_this_case__d2d2ce8"] == "child_reached_adulthood_490887"
         stats[:child_reached_adulthood][gender.to_sym] += 1
       end
 
-      if child.data["child_refuses_services_181533"].present?
+      if child.data["what_is_the_reason_for_closing_this_case__d2d2ce8"] == "child_refuses_services_181533"
         stats[:child_refuses_services][gender.to_sym] += 1
       end
 
-      if child.data["safety_of_child_362513"].present?
+      if child.data["what_is_the_reason_for_closing_this_case__d2d2ce8"] == "safety_of_child_362513"
         stats[:safety_of_child][gender.to_sym] += 1
       end
 
-      if child.data["death_of_child_285462"].present?
+      if child.data["what_is_the_reason_for_closing_this_case__d2d2ce8"] == "death_of_child_285462"
         stats[:death_of_child][gender.to_sym] += 1
       end
 
-      if child.data["other_100182"].present?
+      if child.data["what_is_the_reason_for_closing_this_case__d2d2ce8"] == "other_100182"
         stats[:other][gender.to_sym] += 1
       end
     end
@@ -273,26 +273,28 @@ module Graphs
     cases_requiring_alternative_care = get_cases_requiring_alternative_care(user)
 
     cases_requiring_alternative_care.each do |child|
-      # Getting 'transgender_a797d7e' for child.data["sex"].
-      # That exactly match with the 'transgender' word.
-      # So, using this line.
-      gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
-      next unless gender
+      if child.data["is_separation_from_existing_care_arrangement_necessary__c7a61b9"] == "true"
+        # Getting 'transgender_a797d7e' for child.data["sex"].
+        # That exactly match with the 'transgender' word.
+        # So, using this line.
+        gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
+        next unless gender
 
-      if child.data["nationality_b80911e"].include?("nationality1")
-        stats[:pakistani][gender.to_sym] += 1
-      end
+        if child.data["nationality_b80911e"].include?("nationality1")
+          stats[:pakistani][gender.to_sym] += 1
+        end
 
-      if child.data["nationality_b80911e"].include?("nationality2")
-        stats[:afgani][gender.to_sym] += 1
-      end
+        if child.data["nationality_b80911e"].include?("nationality2")
+          stats[:afgani][gender.to_sym] += 1
+        end
 
-      if child.data["nationality_b80911e"].include?("nationality3")
-        stats[:irani][gender.to_sym] += 1
-      end
+        if child.data["nationality_b80911e"].include?("nationality3")
+          stats[:irani][gender.to_sym] += 1
+        end
 
-      if child.data["nationality_b80911e"].include?("nationality10")
-        stats[:other][gender.to_sym] += 1
+        if child.data["nationality_b80911e"].include?("nationality10")
+          stats[:other][gender.to_sym] += 1
+        end
       end
     end
 
@@ -601,13 +603,13 @@ module Graphs
 
     pakistani_national_records = cases.select do |record|
       record.data.key?('status') && record.data.key?('nationality_b80911e') &&
-      record.data['status'] == 'open' && record.data['nationality_b80911e'] == 'nationality1'
+      record.data['status'] == 'open' && record.data['nationality_b80911e'] == ['nationality1']
     end
 
     other_national_records = cases.select do |record|
       record.data.key?('status') && record.data.key?('nationality_b80911e') &&
       record.data['status'] == 'open' &&
-      ['nationality2', 'nationality3', 'nationality10'].include?(record.data['nationality_b80911e'])
+      [['nationality2'], ['nationality3'], ['nationality10']].include?(record.data['nationality_b80911e'])
     end
 
     high_risk_records = cases.select { |record| record.data['risk_level'] == 'high' if record.data.key?('risk_level') }
@@ -617,8 +619,8 @@ module Graphs
     low_risk_records = cases.select { |record| record.data['risk_level'] == 'low' if record.data.key?('risk_level') }
 
     assigned_to_me_records = cases.select do |record|
-      record.data.key?('assigned_user_names') &&
-      record.data['assigned_user_names'].include?(user.name)
+      record.data.key?("associated_user_names") &&
+      record.data["associated_user_names"].include?(user.name)
     end
 
     stats['Registered'       ] = registered_records.count
@@ -761,29 +763,19 @@ module Graphs
       gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
       next unless gender
 
-      if child.data["other"].present?
-        stats['Violence'][gender.to_sym] += 1
-      end
+      protection_concerns = child.data["protection_concerns"]
 
-      if child.data["exploitation_b9352d1"].present?
-        stats['Exploitation'][gender.to_sym] += 1
-      end
+      stats['Exploitation'][gender.to_sym] += 1 if protection_concerns.include?("exploitation_b9352d1")
 
-      if child.data["neglect_a7b48b2"].present?
-        stats['Neglect'][gender.to_sym] += 1
-      end
+      stats['Neglect'][gender.to_sym] += 1 if protection_concerns.include?("neglect_a7b48b2")
 
-      if child.data["harmful_practice_s__d1f7955"].present?
-        stats['Harmful Practice(s)'][gender.to_sym] += 1
-      end
+      stats['Harmful Practice(s)'][gender.to_sym] += 1 if protection_concerns.include?("harmful_practice_s__d1f7955")
 
-      if child.data["other_b637c39"].present?
-        stats['Abuse'][gender.to_sym] += 1
-      end
+      stats['Abuse'][gender.to_sym] += 1 if protection_concerns.include?("other_b637c39")
 
-      if child.data["other_7b13407"].present?
-        stats['Other'][gender.to_sym] += 1
-      end
+      stats['Other'][gender.to_sym] += 1 if protection_concerns.include?("other_b637c39")
+
+      stats['Violence'][gender.to_sym] += 1 if protection_concerns.include?("other")
     end
 
     stats
@@ -830,12 +822,13 @@ module Graphs
     end
 
     cases_with_bisp_benf_by_gender = cases.select do |record|
-      record.data.key?('status') && record.data["parent_guardian_38aba74"][0].key?('beneficiary_of_social_protection_programs__b2367d9') &&
+      record.data.key?('status') && record.data.key?("parent_guardian_38aba74") && record.data["parent_guardian_38aba74"][0].key?('beneficiary_of_social_protection_programs__b2367d9') &&
       record.data['status'] == 'open' &&
       ['bisp_146081', 'ehsaas_820053', 'other_214066'].include?(record.data["parent_guardian_38aba74"][0]['beneficiary_of_social_protection_programs__b2367d9'])
     end
 
     orphan = cases.select do |record|
+      record.data.key?("parent_guardian_38aba74") &&
       record.data["parent_guardian_38aba74"][0].key?('parent_guardian_b481d19') &&
       record.data["parent_guardian_38aba74"][0].key?('status_d359d3a') &&
       record.data["parent_guardian_38aba74"][0]['status_d359d3a'] == 'dead_765780' &&
