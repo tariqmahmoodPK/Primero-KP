@@ -74,7 +74,7 @@ class Api::V2::ChildrenController < ApplicationApiController
         workflow_stage: @record.data["workflow"]
       }.with_indifferent_access
 
-      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_query_notification.text.erb"
       service = ContentGeneratorService.new
       message_content = service.generate_message_content(file_path, message_params)
       twilio_service = TwilioWhatsappService.new
