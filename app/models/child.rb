@@ -228,9 +228,6 @@ class Child < ApplicationRecord
   before_save   :stamp_registry_fields
   before_save   :calculate_has_case_plan
   before_create :hide_name
-  # Allows to get the current_user object in model's lifecycle
-  after_update   :get_current_user
-  after_create   :get_current_user
   # Send a mail when Child record is created
   after_create  :send_case_registration_message
   # Method that send mails when specific 'conditions are met' / 'events are triggered'
@@ -392,7 +389,7 @@ class Child < ApplicationRecord
 
       if declaration_value
         if mailer_method && CaseLifecycleEventsNotificationMailer.respond_to?(mailer_method)
-          CaseLifecycleEventsNotificationMailer.send(mailer_method, updated_record, @current_user, declaration_value).deliver_now
+          CaseLifecycleEventsNotificationMailer.send(mailer_method, updated_record, declaration_value).deliver_now
         else
           # Handle the case where the mailer method is not found
           raise "Unknown mailer method for event: #{event_key}"
@@ -848,18 +845,6 @@ class Child < ApplicationRecord
 
   def associations_as_data_keys
     %w[incident_details]
-  end
-
-  # Save the Current User in an Instance variable for use in the Model
-  def set_current_user(current_user)
-    @current_user = current_user
-  end
-
-  private
-
-  # Access the @current_user set in the set_current_user method
-  def get_current_user
-    user = @current_user
   end
 end
 
