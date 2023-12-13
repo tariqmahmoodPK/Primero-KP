@@ -43,14 +43,12 @@ module GraphHelpers
     # And have a 'High Risk Level'/'Significant Harm'
     cases = Child.search do
       with(:owned_by, username)
-      with(:status, "open")
       with(:risk_level, 'high') if is_risk_level_high.present?
     end
 
     # Needed to panginate using the Total Number of Cases. That is why, Had to search twice.
     search = Child.search do
       with(:owned_by, username)
-      with(:status, "open")
       with(:risk_level, 'high') if is_risk_level_high.present?
 
       paginate :page => 1, :per_page => cases.total
