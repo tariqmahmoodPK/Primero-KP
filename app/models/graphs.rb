@@ -914,7 +914,7 @@ module Graphs
 
     minority_cases_by_gender = cases.select do |record|
       record.data.key?('status') && record.data.key?('does_the_child_belong_to_an_ethnic_minority__cddc53f') &&
-      record.data['status'] == 'open' && record.data['does_the_child_belong_to_an_ethnic_minority__cddc53f'] == 'true'
+      record.data['status'] == 'open' && record.data["does_the_child_belong_to_an_ethnic_minority__cddc53f"] == true
     end
 
     cwd_cases = cases.select do |record|
@@ -944,7 +944,7 @@ module Graphs
 
     legal_aid = cases.select do |record|
       record.data.key?('status') && record.data.key?('free_legal_support__through_pro_bono_lawyer__6e227bc') &&
-      record.data['status'] == 'open' && record.data['free_legal_support__through_pro_bono_lawyer__6e227bc'] == 'true'
+      record.data['status'] == 'open' && record.data['free_legal_support__through_pro_bono_lawyer__6e227bc'] == true
     end
 
     other_provinces = cases.select do |record|
@@ -1021,7 +1021,9 @@ module Graphs
 
       stats['Other Provinces'][gender.to_sym] += 1
     end
+
     guardianship_awarded = Child.attachment_with_specific_type("guardianship")
+
     guardianship_awarded.each do |child|
       gender = (child.data["sex"].in? ["male", "female"]) ? child.data["sex"] : "transgender"
       next unless gender
