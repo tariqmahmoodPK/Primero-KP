@@ -483,7 +483,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   def send_case_referred_rejected_notification(case_record, reciever)
     @reciever_name = reciever.user_name
     @case_id = case_record.record_id
-    @transfered_by_user_name = case_record.data["transitioned_by"]
+    @transfered_by_user_name = case_record["transitioned_by"]
     sender = User.find_by(user_name: @transfered_by_user_name)
     user_email = sender.email
 
@@ -504,7 +504,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # Case id | Referral Partner Username | Email of SCW/Psychologist
   def send_case_referred_response_notification(case_record, reciever, sender)
     @reciever_name = reciever.user_name
-    @case_id = case_record.record_id
+    @case_id = case_record.id
     @transfered_by_user_name = sender.user_name
     user_email = sender.email
 

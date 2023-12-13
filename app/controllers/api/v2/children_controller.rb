@@ -27,15 +27,15 @@ class Api::V2::ChildrenController < ApplicationApiController
     reciever = User.find_by(user_name: @record.data["last_updated_by"])
     sender = User.find_by(user_name: @record.data["created_by"])
 
-    CaseLifecycleEventsNotificationMailer.send_case_referred_response_notification(@record, reciever, sender).deliver_later
+    CaseLifecycleEventsNotificationMailer.send_case_referred_response_notification(@record, reciever, sender).deliver_now
 
     # Send Whatsapp Notification
     if sender&.phone
       message_params = {
         case: @record,
-          sender: sender,
-          reciever: reciever,
-          workflow_stage: @record.data["workflow"],
+        sender: sender,
+        reciever: reciever,
+        workflow_stage: @record.data["workflow"],
       }.with_indifferent_access
 
       file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_referred_response_notification.text.erb"

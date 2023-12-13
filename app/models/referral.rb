@@ -79,22 +79,25 @@ class Referral < Transition
   def revoke_referral_email
     record = self
     reciever = User.find_by(user_name: record["transitioned_to"])
+    sender = User.find_by(user_name: record["transitioned_by"])
+    @record = Child.find_by(id: record.record_id)
 
-    CaseLifecycleEventsNotificationMailer.send_case_referred_revoked_notification(record, reciever).deliver_later
+    CaseLifecycleEventsNotificationMailer.send_case_referred_revoked_notification(record, reciever).deliver_now
 
     # Send Whatsapp Notification
-    if cpo_user&.phone
+    if reciever&.phone
       message_params = {
         case: @record,
-        cpo_user: cpo_user,
+        sender: sender,
+        reciever: reciever,
         workflow_stage: @record.data["workflow"]
       }.with_indifferent_access
 
-      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_referred_revoked_notification.text.erb"
       message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
       twilio_service = TwilioWhatsappService.new
-      to_phone_number = cpo_user.phone
+      to_phone_number = reciever.phone
       message_body = message_content
 
       twilio_service.send_whatsapp_message(to_phone_number, message_body)
@@ -104,22 +107,25 @@ class Referral < Transition
   def accept_referral_email
     record = self
     reciever = User.find_by(user_name: record["transitioned_to"])
+    sender = User.find_by(user_name: record["transitioned_by"])
+    @record = Child.find_by(id: record.record_id)
 
-    CaseLifecycleEventsNotificationMailer.send_case_referred_accepted_notification(record, reciever).deliver_later
+    CaseLifecycleEventsNotificationMailer.send_case_referred_accepted_notification(record, reciever).deliver_now
 
     # Send Whatsapp Notification
-    if cpo_user&.phone
+    if sender&.phone
       message_params = {
         case: @record,
-        cpo_user: cpo_user,
+        sender: sender,
+        reciever: reciever,
         workflow_stage: @record.data["workflow"]
       }.with_indifferent_access
 
-      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_referred_accepted_notification.text.erb"
       message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
       twilio_service = TwilioWhatsappService.new
-      to_phone_number = cpo_user.phone
+      to_phone_number = sender.phone
       message_body = message_content
 
       twilio_service.send_whatsapp_message(to_phone_number, message_body)
@@ -129,22 +135,25 @@ class Referral < Transition
   def reject_referral_email
     record = self
     reciever = User.find_by(user_name: record["transitioned_to"])
+    sender = User.find_by(user_name: record["transitioned_by"])
+    @record = Child.find_by(id: record.record_id)
 
-    CaseLifecycleEventsNotificationMailer.send_case_referred_rejected_notification(record, reciever).deliver_later
+    CaseLifecycleEventsNotificationMailer.send_case_referred_rejected_notification(record, reciever).deliver_now
 
     # Send Whatsapp Notification
-    if cpo_user&.phone
+    if sender&.phone
       message_params = {
         case: @record,
-        cpo_user: cpo_user,
+        sender: sender,
+        reciever: reciever,
         workflow_stage: @record.data["workflow"]
       }.with_indifferent_access
 
-      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_referred_rejected_notification.text.erb"
       message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
       twilio_service = TwilioWhatsappService.new
-      to_phone_number = cpo_user.phone
+      to_phone_number = sender.phone
       message_body = message_content
 
       twilio_service.send_whatsapp_message(to_phone_number, message_body)
@@ -195,22 +204,25 @@ class Referral < Transition
   def send_referral_email
     record = self
     reciever = User.find_by(user_name: record["transitioned_to"])
+    sender = User.find_by(user_name: record["transitioned_by"])
+    @record = Child.find_by(id: record.record_id)
 
-    CaseLifecycleEventsNotificationMailer.send_case_referred_to_user_notification(record, reciever).deliver_later
+    CaseLifecycleEventsNotificationMailer.send_case_referred_to_user_notification(record, reciever).deliver_now
 
     # Send Whatsapp Notification
-    if cpo_user&.phone
+    if reciever&.phone
       message_params = {
         case: @record,
-        cpo_user: cpo_user,
+        reciever: reciever,
+        sender: sender,
         workflow_stage: @record.data["workflow"]
       }.with_indifferent_access
 
-      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_referred_to_user_notification.text.erb"
       message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
       twilio_service = TwilioWhatsappService.new
-      to_phone_number = cpo_user.phone
+      to_phone_number = reciever.phone
       message_body = message_content
 
       twilio_service.send_whatsapp_message(to_phone_number, message_body)
