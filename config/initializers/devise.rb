@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-email_settings = ConfigYamlLoader.load(Rails.root.join('config', 'mailers.yml'))
+# email_settings = ConfigYamlLoader.load(Rails.root.join('config', 'mailers.yml'))
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
@@ -21,7 +21,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = email_settings[:default_options][:from]
+  config.mailer_sender = 'noreply@septemsystems.com'
 
   # Configure the class responsible to send e-mails.
   config.mailer = 'DeviseMailer'
