@@ -23,6 +23,7 @@ Rails.application.configure do
   config.eager_load = true
 
   config.filter_parameters += %i[child incident tracing_request]
+  config.active_record.yaml_column_permitted_classes = [Symbol]
 
   if ENV['LOG_TO_STDOUT'].present?
     STDOUT.sync = true
