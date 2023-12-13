@@ -328,7 +328,8 @@ class Child < ApplicationRecord
       }.with_indifferent_access
 
       file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_registered_cpo_notification.text.erb"
-      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+      service = ContentGeneratorService.new
+      message_content = service.generate_message_content(file_path, message_params)
 
       twilio_service = TwilioWhatsappService.new
       to_phone_number = cpo_user.phone
@@ -421,7 +422,8 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_registration_completed_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            service = ContentGeneratorService.new
+            message_content = service.generate_message_content(file_path, message_params)
 
             to_phone_number = cpo_user.phone
             message_body = message_content
@@ -443,7 +445,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_registration_verified_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = scw_psy_user.phone
             message_body = message_content
@@ -466,7 +468,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_initial_assessment_completed_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = cpo_user.phone
             message_body = message_content
@@ -488,7 +490,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_initial_assessment_verified_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = scw_psy_user.phone
             message_body = message_content
@@ -511,7 +513,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_comprehensive_assessment_completed_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = cpo_user.phone
             message_body = message_content
@@ -533,7 +535,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_comprehensive_assessment_verified_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = scw_psy_user.phone
             message_body = message_content
@@ -555,7 +557,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_plan_completed_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = cpo_user.phone
             message_body = message_content
@@ -577,7 +579,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_plan_verified_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = scw_psy_user.phone
             message_body = message_content
@@ -599,7 +601,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_alternative_care_placement_completed_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = cpo_user.phone
             message_body = message_content
@@ -621,7 +623,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_alternative_care_placement_verified_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = scw_psy_user.phone
             message_body = message_content
@@ -643,7 +645,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_monitoring_and_follow_up_subform_completed_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = cpo_user.phone
             message_body = message_content
@@ -665,7 +667,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_monitoring_and_follow_up_subform_verified_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = scw_psy_user.phone
             message_body = message_content
@@ -687,7 +689,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_transfer_completes_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = cpo_user.phone
             message_body = message_content
@@ -709,7 +711,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_transfer_verified_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = scw_psy_user.phone
             message_body = message_content
@@ -731,7 +733,7 @@ class Child < ApplicationRecord
             }.with_indifferent_access
 
             file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_transfer_approved_notification.text.erb"
-            message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+            message_content = ContentGeneratorService.new.generate_message_content(file_path, message_params)
 
             to_phone_number = scw_psy_user.phone
             message_body = message_content
@@ -851,31 +853,6 @@ class Child < ApplicationRecord
   # Save the Current User in an Instance variable for use in the Model
   def set_current_user(current_user)
     @current_user = current_user
-  end
-
-  def send_response_update
-    record = self
-    reciever = User.find_by(user_name: record.data["last_updated_by"])
-
-    CaseLifecycleEventsNotificationMailer.send_case_referred_response_notification(record, reciever).deliver_later
-
-    # Send Whatsapp Notification
-    if cpo_user&.phone
-      message_params = {
-        case: @record,
-        cpo_user: cpo_user,
-        workflow_stage: @record.data["workflow"]
-      }.with_indifferent_access
-
-      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
-      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
-
-      twilio_service = TwilioWhatsappService.new
-      to_phone_number = cpo_user.phone
-      message_body = message_content
-
-      twilio_service.send_whatsapp_message(to_phone_number, message_body)
-    end
   end
 
   private

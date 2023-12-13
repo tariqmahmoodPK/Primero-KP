@@ -5,7 +5,7 @@ class Api::V2::ChildrenController < ApplicationApiController
   include Api::V2::Concerns::Pagination
   include Api::V2::Concerns::Record
   after_action :send_email_for_note, only: [:update], if: :note_params_present?
-  after_action :check_response_case_params, only: [:update]
+  after_action :send_response_email, only: [:update], if: :response_params_present?
 
   def traces
     authorize! :read, Child
@@ -23,15 +23,43 @@ class Api::V2::ChildrenController < ApplicationApiController
 
   private
 
-  def check_response_case_params
-    if ((record_params["response_on_referred_case_da89310"][1]["has_the_service_been_provided__23eb99e"].present?) &&
-        (record_params["response_on_referred_case_da89310"][1]["date_and_time_when_service_provided_63fd833"].present?))
-      @record.send_response_update
+  def send_response_email
+    reciever = User.find_by(user_name: @record.data["last_updated_by"])
+    sender = User.find_by(user_name: @record.data["created_by"])
+
+    CaseLifecycleEventsNotificationMailer.send_case_referred_response_notification(@record, reciever, sender).deliver_later
+
+    # Send Whatsapp Notification
+    if sender&.phone
+      message_params = {
+        case: @record,
+          sender: sender,
+          reciever: reciever,
+          workflow_stage: @record.data["workflow"],
+      }.with_indifferent_access
+
+      file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_referred_response_notification.text.erb"
+      content_generator_service = ContentGeneratorService.new
+      message_content = content_generator_service.generate_message_content(file_path, message_params)
+
+      twilio_service = TwilioWhatsappService.new
+      to_phone_number = sender.phone
+      message_body = message_content
+
+      twilio_service.send_whatsapp_message(to_phone_number, message_body)
     end
   end
 
   def note_params_present?
     record_params["notes_section"].present?
+  end
+
+  def response_params_present?
+    if record_params["response_on_referred_case_da89310"].present?
+      record_params["response_on_referred_case_da89310"].all? do |key, hash|
+        (hash["has_the_service_been_provided__23eb99e"].present? && hash["date_and_time_when_service_provided_63fd833"].present?)
+      end
+    end
   end
 
   def send_email_for_note
@@ -47,7 +75,8 @@ class Api::V2::ChildrenController < ApplicationApiController
       }.with_indifferent_access
 
       file_path = "app/views/case_lifecycle_events_notification_mailer/send_case_flags_notification.text.erb"
-      message_content = ContentGeneratorService.generate_message_content(file_path, message_params)
+      service = ContentGeneratorService.new
+      message_content = service.generate_message_content(file_path, message_params)
       twilio_service = TwilioWhatsappService.new
       to_phone_number = cpo_user.phone
       message_body = message_content

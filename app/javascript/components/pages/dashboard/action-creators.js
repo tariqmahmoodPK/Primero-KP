@@ -142,6 +142,14 @@ export const fetchPercentageChildrenReceivedChildProtectionServices = () => ({
   }
 });
 
+// 'Registered Cases'
+export const fetchRegisteredCases = () => ({
+  type: actions.REGISTERED_CASES,
+  api: {
+    path: "dashboards/registered_cases"
+  }
+});
+
 // 'Closed Cases by Sex and Reason'
 export const fetchResolvedCasesByGenderAndReason = () => ({
   type: actions.RESOLVED_CASES_BY_GENDER_AND_REASON,

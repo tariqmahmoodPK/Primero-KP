@@ -131,6 +131,8 @@ Rails.application.routes.draw do
         collection do
           # 'Percentage of Children who received Child Protection Services'
           get :percentage_children_received_child_protection_services
+          # 'Registered Cases'
+          get :registered_cases
           # 'Closed Cases by Sex and Reason'
           get :resolved_cases_by_gender_and_reason
           # 'Cases Referrals (To Agency)'
