@@ -67,7 +67,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     @case_id = case_record
 
     cpo_user = cpo_users[0]
-    @user_name = @cpo_user.user_name
+    @user_name = cpo_user.user_name
 
     subject = "Case Registration Verified"
 

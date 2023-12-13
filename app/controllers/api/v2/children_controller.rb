@@ -56,7 +56,7 @@ class Api::V2::ChildrenController < ApplicationApiController
 
   def response_params_present?
     if record_params["response_on_referred_case_da89310"].present?
-      record_params["response_on_referred_case_da89310"].all? do |key, hash|
+      record_params["response_on_referred_case_da89310"].all? do |hash|
         (hash["has_the_service_been_provided__23eb99e"].present? && hash["date_and_time_when_service_provided_63fd833"].present?)
       end
     end
