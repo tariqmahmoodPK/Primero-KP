@@ -171,7 +171,7 @@ module Graphs
     }
 
     # Getting Total Number of Cases that are High Risk
-    high_risk_cases = Child.get_childern_records(user, "high")
+    high_risk_cases = Child.get_childern_records(user)
     total_case_count = high_risk_cases.count
 
     # Calculate Stats
@@ -621,7 +621,8 @@ module Graphs
     }
 
     # Calculate Stats
-    Child.get_childern_records(user, "high", true).each do |child|
+
+    Child.get_childern_records(user, nil, true).each do |child|
       # child.data["protection_concerns"] returns an array of strings, Each specifing a Protection Concern
 
       # Getting 'transgender_a797d7e' for child.data["sex"].
