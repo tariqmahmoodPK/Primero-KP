@@ -153,6 +153,8 @@ Rails.application.routes.draw do
           get :cases_at_a_glance
           # 'Cases Source'
           get :cases_source
+          #  'workflow graph'
+          get :workflow_stats
           # 'Custody with Court Order'
           get :custody_with_court_order
           # 'Police Cases'
