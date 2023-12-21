@@ -716,7 +716,9 @@ class Child < ApplicationRecord
         else
         end
 
-        twilio_service.send_whatsapp_message(to_phone_number, message_body)
+        if to_phone_number.present? && message_body.present?
+          twilio_service.send_whatsapp_message(to_phone_number, message_body)
+        end
       end
     end
   end

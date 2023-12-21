@@ -61,49 +61,49 @@ const Component = () => {
             {/* Each card displays a percentage and the number of cases for a specific concern */}
             {/* Cards have different background colors for visual distinction */}
 
-            <div className={css.card} style={{ backgroundColor: "rgb(50, 158, 168)" }} flat>
+            <div className={css.card} style={{ backgroundColor: "rgb(99, 209, 219)" }} flat>
               <div className={css.perc}>
                 {stats["Registaration"]}
               </div>
               <div className={css.text}>Registaration</div>
             </div>
 
-            <div className={css.card} style={{ backgroundColor: "rgb(50, 158, 168)" }} flat>
+            <div className={css.card} style={{ backgroundColor: "rgb(99, 209, 219)" }} flat>
               <div className={css.perc}>
                 {stats["Assessment"]}
               </div>
               <div className={css.text}>Assessment</div>
             </div>
 
-            <div className={css.card} style={{ backgroundColor: "rgb(50, 158, 168)"}} flat>
+            <div className={css.card} style={{ backgroundColor: "rgb(99, 209, 219)"}} flat>
               <div className={css.perc}>
                 {stats["Case Plan"]}
               </div>
               <div className={css.text}>Case Plan</div>
             </div>
 
-            <div className={css.card} style={{ backgroundColor: "rgb(50, 158, 168)" }} flat>
+            <div className={css.card} style={{ backgroundColor: "rgb(99, 209, 219)" }} flat>
               <div className={css.perc}>
                 {stats["Referral"]}
               </div>
               <div className={css.text}>Referral</div>
             </div>
 
-            <div className={css.card} style={{ backgroundColor: "rgb(50, 158, 168)"}} flat>
+            <div className={css.card} style={{ backgroundColor: "rgb(99, 209, 219)"}} flat>
               <div className={css.perc}>
                 {stats["Case Conference"]}
               </div>
               <div className={css.text}>Case Conference</div>
             </div>
 
-            <div className={css.card} style={{ backgroundColor: "rgb(50, 158, 168)"}} flat>
+            <div className={css.card} style={{ backgroundColor: "rgb(99, 209, 219)"}} flat>
               <div className={css.perc}>
                 {stats["Final Case Review"]}
               </div>
               <div className={css.text}>Final Case Review</div>
             </div>
 
-            <div className={css.card} style={{ backgroundColor: "rgb(50, 158, 168)"}} flat>
+            <div className={css.card} style={{ backgroundColor: "rgb(99, 209, 219)"}} flat>
               <div className={css.perc}>
                 {stats["Case Closure"]}
               </div>

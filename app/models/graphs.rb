@@ -1097,11 +1097,12 @@ module Graphs
         stats["Case Closure"] += 1
       end
 
+    end
+
+    Child.all.each do |child|
       if child.data["assigned_user_names"].present?
-        child.data["assigned_user_names"].each do |referred_user|
-          if referred_user == user.user_name
-            stats["Referral"] += 1
-          end
+        if child.data["assigned_user_names"].include?(user.user_name)
+          stats["Referral"] += 1
         end
       end
     end
