@@ -48,6 +48,8 @@ export { default as CustodyWithCourtOrder } from "./custody-with-court-order";
 export { default as PoliceCases } from "./police-cases";
 // 'Cases Requiring Special Consideration'
 export { default as CasesRequiringSpecialConsideration } from "./cases-requiring-special-consideration";
+//'workflow graph'
+export { default as CaseStatuses } from "./case-statuses";
 
 /* ====================================== */
 /*             End of Graphs              */

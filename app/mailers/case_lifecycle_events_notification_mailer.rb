@@ -107,7 +107,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     subject = "Initial Assessment Completed"
 
     if user_email.present?
-      mail(to: users_emails, subject: subject) do |format|
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -133,12 +133,12 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     @case_id = case_record
 
     cpo_user = cpo_users[0]
-    @user_name = @cpo_user.user_name
+    @user_name = cpo_user.user_name
 
     subject = "Initial Assessment Verified"
 
     if user_email.present?
-      mail(to: users_emails, subject: subject) do |format|
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -173,7 +173,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     subject = "Comprehensive Assessment Completed"
 
     if user_email.present?
-      mail(to: users_emails, subject: subject) do |format|
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -199,12 +199,12 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     @case_id = case_record
 
     cpo_user = cpo_users[0]
-    @user_name = @cpo_user.user_name
+    @user_name = cpo_user.user_name
 
     subject = "Initial Assessment Verified"
 
     if user_email.present?
-      mail(to: users_emails, subject: subject) do |format|
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -239,7 +239,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     subject = "Case Plan Completed"
 
     if user_email.present?
-      mail(to: users_emails, subject: subject) do |format|
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -265,12 +265,12 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     @case_id = case_record
 
     cpo_user = cpo_users[0]
-    @user_name = @cpo_user.user_name
+    @user_name = cpo_user.user_name
 
     subject = "Case Plan Verified"
 
     if user_email.present?
-      mail(to: users_emails, subject: subject) do |format|
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -305,7 +305,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     subject = "Alternative Care Placement Completed"
 
     if user_email.present?
-      mail(to: users_emails, subject: subject) do |format|
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -331,12 +331,12 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     @case_id = case_record
 
     cpo_user = cpo_users[0]
-    @user_name = @cpo_user.user_name
+    @user_name = cpo_user.user_name
 
     subject = "Alternative Care Placement Verified"
 
     if user_email.present?
-      mail(to: users_emails, subject: subject) do |format|
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -371,7 +371,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     subject = "Monitoring and Follow up Sub form"
 
     if user_email.present?
-      mail(to: users_emails, subject: subject) do |format|
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -397,12 +397,12 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     @case_id = case_record
 
     cpo_user = cpo_users[0]
-    @user_name = @cpo_user.user_name
+    @user_name = cpo_user.user_name
 
     subject = "Monitoring and Follow up Sub form"
 
     if user_email.present?
-      mail(to: users_emails, subject: subject) do |format|
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -546,7 +546,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     subject = "Monitoring and Follow up Sub form"
 
     if user_email.present?
-      mail(to: users_emails, subject: subject) do |format|
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -560,7 +560,7 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
   # Case id | SCW/Psychologist Email | CPO Username
   def send_case_transfer_verified_notification(case_record, declaration_value)
     # SCW/Psy
-    user_name = case_record.data['owned_by']
+    user_name = case_record.data["owned_by"]
     user = User.find_by(user_name: user_name)
 
     cpo_users = User.joins(user_groups: { users: :role }).where(user_groups: { users: { id: user.id } }, roles: { unique_id: "role-cp-administrator" }).distinct
@@ -572,12 +572,12 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     @case_id = case_record
 
     cpo_user = cpo_users[0]
-    @user_name = @cpo_user.user_name
+    @user_name = cpo_user.user_name
 
     subject = "Monitoring and Follow up Sub form"
 
     if user_email.present?
-      mail(to: users_emails, subject: subject) do |format|
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end
@@ -603,12 +603,12 @@ class CaseLifecycleEventsNotificationMailer < ApplicationMailer
     @case_id = case_record
 
     cpo_user = cpo_users[0]
-    @user_name = @cpo_user.user_name
+    @user_name = cpo_user.user_name
 
     subject = "Monitoring and Follow up Sub form"
 
     if user_email.present?
-      mail(to: users_emails, subject: subject) do |format|
+      mail(to: user_email, subject: subject) do |format|
         format.html { render __method__.to_s }
         format.text { render __method__.to_s }
       end

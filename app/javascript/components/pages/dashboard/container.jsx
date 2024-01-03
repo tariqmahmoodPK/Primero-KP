@@ -58,8 +58,8 @@ import {
   CasesAtAGlance,
   // 'Cases Source'
   CasesSource,
-  //
-  // CaseStatuses,
+  //  'workflow graph'
+  CaseStatuses,
   // 'Custody with Court Order'
   CustodyWithCourtOrder,
   // 'Police Cases'
@@ -124,7 +124,11 @@ const Dashboard = () => {
       <PageContent>
         <OfflineAlert text={i18n.t("messages.dashboard_offline")} />
         <Grid container spacing={3}>
-          {/* <CaseStatuses /> */}
+
+          <Grid item xl={12} md={12} xs={12}>
+          {/* 'workflow graph' */}
+            <CaseStatuses />
+          </Grid>
           <Grid item xl={12} md={12} xs={12}>
             <RegisteredCases />
           </Grid>

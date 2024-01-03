@@ -18,7 +18,7 @@ const Component = () => {
   const css = useStyles();
   const dispatch = useDispatch();
   const data = useMemoizedSelector(state => getCustodyWithCourtOrder(state));
-  const stats = data.get("data") ? data.get("data").toJS() : null;
+  const stats = data.getIn(["data", "stats"]) ? data.getIn(["data", "stats"]).toJS() : null;
 
   useEffect(() => {
     dispatch(fetchCustodyWithCourtOrder());

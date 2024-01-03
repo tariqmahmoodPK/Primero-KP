@@ -28,11 +28,11 @@ export const fetchCasesByStatus = () => {
     }
   };
 };
-
+// 'workflow graph'
 export const fetchCaseStatuses = () => ({
   type: actions.CASE_STATUSES,
   api: {
-    path: "dashboards/get_child_statuses"
+    path: "dashboards/workflow_stats"
   }
 });
 

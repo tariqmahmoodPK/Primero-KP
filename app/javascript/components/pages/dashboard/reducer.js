@@ -67,6 +67,7 @@ const reducer = (state = DEFAULT_STATE, { type, payload }) => {
       return state.set("casesOverview", fromJS(payload.casesOverview));
     case actions.DASHBOARDS_STARTED:
       return state.set("loading", fromJS(payload)).set("errors", false);
+      // 'workflow graph'
     case actions.CASE_STATUSES_SUCCESS:
       return state.set("caseStatuses", fromJS(payload));
     case actions.DASHBOARDS_SUCCESS:

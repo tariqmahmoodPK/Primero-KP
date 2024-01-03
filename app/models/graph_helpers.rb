@@ -1631,4 +1631,241 @@ module GraphHelpers
 
   # -------------------------------------------------------------------------------------------------
 
+  def get_stats_case_records(user)
+    # User's role
+    role = user.role.name
+
+    # Getting records based on the Permissions of Each Role to View the Graphs
+    case role
+    # View Cases of a User
+    when 'Social Case Worker', 'Psychologist', 'Child Helpline Officer'
+      get_case_stats_assigned_to_specific_user(user)
+    # View Cases of all Districts (Provincial data)
+    when 'CPWC'
+      get_cases_stats_assigned_to_specific_location(user)
+    # View Cases of
+      # Users with Roles:
+        # Social Case Worker
+        # Psychologist
+        # Child Helpline Operator
+      # That are Working in his UserGroup.
+    when 'CPO'
+      get_cases_stats_for_particular_user_group(user)
+    # View Cases Referred to User
+    when 'Referral'
+      get_cases_stats_referred_to_user(user)
+    else
+      # All Cases that are owned by the users under an Agency and are also owned by a particular location
+      get_cases_stats_with_location_and_agency(user)
+    end
+  end
+
+
+  def get_case_stats_assigned_to_specific_user(user)
+    username = user.user_name
+
+    # Search for Records that are 'Owned By'/'Created by' Username
+
+    cases = Child.search do
+      with(:owned_by, username)
+
+      any_of do
+        without(:registration_date, nil)
+        without(:date_and_time_initial_assessment_started_295aaf1, nil)
+        without(:meeting_date, nil)
+        without(:review_date, nil)
+
+        all_of do
+          with(:declaration_from_case_worker_ec811f6, true)
+          without(:date_759dc3b, nil)
+        end
+
+        all_of do
+          with(:verification_by_child_protection_officer_31d4905, true)
+          without(:date_97dba96, nil)
+        end
+      end
+    end
+
+    cases.results
+  end
+
+  def get_cases_stats_assigned_to_specific_location(user)
+    username = user.user_name
+    # User's Location Code
+    location_code = user.location
+
+    cases = nil
+
+    # If the location of the each record matches the User's Location then get those records
+    if location_code.present?
+      cases = Child.search do
+        with(:location_current, location_code)
+        with(:owned_by, username)
+
+        any_of do
+          without(:registration_date, nil)
+          without(:date_and_time_initial_assessment_started_295aaf1, nil)
+          without(:meeting_date, nil)
+          without(:review_date, nil)
+
+          all_of do
+            with(:declaration_from_case_worker_ec811f6, true)
+            without(:date_759dc3b, nil)
+          end
+
+          all_of do
+            with(:verification_by_child_protection_officer_31d4905, true)
+            without(:date_97dba96, nil)
+          end
+        end
+      end
+    # If there is no User location present then get all the records with location in 'Khyber Pakhtunkhwa'/KPK
+    else
+      cases = Child.search do
+        with_province # Checks if the location_current has 'KPK' in it
+        with(:owned_by, username)
+
+        any_of do
+          without(:registration_date, nil)
+          without(:date_and_time_initial_assessment_started_295aaf1, nil)
+          without(:meeting_date, nil)
+          without(:review_date, nil)
+
+          all_of do
+            with(:declaration_from_case_worker_ec811f6, true)
+            without(:date_759dc3b, nil)
+          end
+
+          all_of do
+            with(:verification_by_child_protection_officer_31d4905, true)
+            without(:date_97dba96, nil)
+          end
+        end
+      end
+    end
+
+    cases.results
+  end
+
+  def get_cases_stats_for_particular_user_group(cpo_user)
+    # Find users with the specified roles ('Social Case Worker', 'Psychologist', 'Child Helpline Officer')
+    role_names = [
+      'Social Case Worker',
+      'Psychologist',
+      'Child Helpline Officer'
+    ]
+
+    users_with_roles = User.joins(:role).where(roles: { name: role_names })
+
+    # Find the user group of the cpo user
+    cpo_user_group_ids = cpo_user.user_groups.pluck(:id)
+
+    # Find users with the specified roles who are in the same user group as the cpo user
+    users_in_same_user_group = users_with_roles.joins(:user_groups).where(user_groups: { id: cpo_user_group_ids })
+
+    # Extract the usernames of users in the same user group
+    usernames = users_in_same_user_group.pluck(:user_name)
+
+    cases = Child.search do
+      with(:owned_by, usernames)
+
+      any_of do
+        without(:registration_date, nil)
+        without(:date_and_time_initial_assessment_started_295aaf1, nil)
+        without(:meeting_date, nil)
+        without(:review_date, nil)
+
+        all_of do
+          with(:declaration_from_case_worker_ec811f6, true)
+          without(:date_759dc3b, nil)
+        end
+
+        all_of do
+          with(:verification_by_child_protection_officer_31d4905, true)
+          without(:date_97dba96, nil)
+        end
+      end
+    end
+
+    cases.results
+  end
+
+  def get_cases_stats_referred_to_user(user)
+    # User's Name, Duh!
+    user_name = user.name
+
+    results = []
+
+    # Get all the referred cases and see if the User has any cases referred to him.
+    Child.get_referred_cases.each do |child|
+      child.data["assigned_user_names"].each do |referred_user|
+        # If referred_user matches the user_name, add the child to results
+        results << child if referred_user == user_name
+      end
+    end
+
+    results
+  end
+
+ # All Cases that are owned by the users under an Agency and are also owned by a particular location
+  def get_cases_stats_with_location_and_agency(user)
+  # User's Location Code
+    location_code = user.location
+
+    # Users under an Agency that another User created.
+    usernames = user.agency.users.pluck(:user_name)
+
+    # Search for Records
+      # That have a 'High Risk Level'/'Significant Harm' and
+      # That are either 'Owned By'/'Created by' Username or have the same location as the User.
+    cases = Child.search do
+      with(:owned_by, usernames)
+      with(:location_current, location_code)
+
+      any_of do
+        without(:registration_date, nil)
+        without(:date_and_time_initial_assessment_started_295aaf1, nil)
+        without(:meeting_date, nil)
+        without(:review_date, nil)
+
+        all_of do
+          with(:declaration_from_case_worker_ec811f6, true)
+          without(:date_759dc3b, nil)
+        end
+
+        all_of do
+          with(:verification_by_child_protection_officer_31d4905, true)
+          without(:date_97dba96, nil)
+        end
+      end
+    end
+
+    # Needed to panginate using the Total Number of Cases. That is why, Had to search twice.
+    search = Child.search do
+      with(:owned_by, usernames)
+      with(:location_current, location_code)
+
+      any_of do
+        without(:registration_date, nil)
+        without(:date_and_time_initial_assessment_started_295aaf1, nil)
+        without(:meeting_date, nil)
+        without(:review_date, nil)
+
+        all_of do
+          with(:declaration_from_case_worker_ec811f6, true)
+          without(:date_759dc3b, nil)
+        end
+
+        all_of do
+          with(:verification_by_child_protection_officer_31d4905, true)
+          without(:date_97dba96, nil)
+        end
+      end
+
+      paginate :page => 1, :per_page => cases.total
+    end
+
+    search.results
+  end
 end

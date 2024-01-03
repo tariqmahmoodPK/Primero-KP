@@ -67,11 +67,11 @@ module Graphs
     }
 
     # Getting Total Number of Cases that are High Risk
-    high_risk_cases = Child.get_childern_records(user, "high")
-    total_case_count = high_risk_cases.count
+    cases = Child.get_childern_records(user)
+    total_case_count = cases.count
 
     # Calculate Stats
-    high_risk_cases.each do |child|
+    cases.each do |child|
       # child.data["response_on_referred_case_da89310"] is an array containing a hash
       response_on_referred_case = child.data["response_on_referred_case_da89310"]
 
@@ -171,7 +171,7 @@ module Graphs
     }
 
     # Getting Total Number of Cases that are High Risk
-    high_risk_cases = Child.get_childern_records(user, "high")
+    high_risk_cases = Child.get_childern_records(user)
     total_case_count = high_risk_cases.count
 
     # Calculate Stats
@@ -621,7 +621,8 @@ module Graphs
     }
 
     # Calculate Stats
-    Child.get_childern_records(user, "high", true).each do |child|
+
+    Child.get_childern_records(user, nil, true).each do |child|
       # child.data["protection_concerns"] returns an array of strings, Each specifing a Protection Concern
 
       # Getting 'transgender_a797d7e' for child.data["sex"].
@@ -1029,6 +1030,81 @@ module Graphs
       next unless gender
 
       stats["Guardianship Awarded"][gender.to_sym] += 1
+    end
+
+    stats
+  end
+
+  def workflow_stats(user)
+    # Getting User's Role to check if they are allowed to view the graph.
+    name = user.role.name
+
+    # User Roles allowed
+    return { permission: false } unless name.in? [
+      'Social Case Worker'    ,
+      'Psychologist'          ,
+      'Child Helpline Officer',
+      'Referral'              ,
+      'CPO'                   ,
+      'CPWC'
+    ]
+
+    cases = Child.get_stats_case_records(user)
+
+    stats = {
+      'Registaration'               => 0,
+      'Assessment'                  => 0,
+      'Case Plan'                   => 0,
+      'Referral'                    => 0,
+      'Case Conference'             => 0,
+      'Final Case Review'           => 0,
+      'Case Closure'                => 0,
+    }
+
+     # Calculate Stats
+    cases.each do |child|
+      # child.data["protection_concerns"] returns an array of strings, Each specifing a Protection Concern
+
+      if child.data["registration_date"].present?
+        stats["Registaration"] += 1
+      end
+
+      if child.data["date_and_time_initial_assessment_started_295aaf1"].present?
+        stats["Assessment"] += 1
+      end
+
+      if child.data["declaration_from_case_worker_ec811f6"].present? && child.data["date_759dc3b"].present?
+        stats["Case Plan"] += 1
+      end
+
+      if child.data["case_conference_details_7af6598"].present?
+        child.data["case_conference_details_7af6598"].any? do |hash|
+          if hash["date_of_meeting_88eb7e3"].present?
+            stats["Case Conference"] += 1
+          end
+        end
+      end
+
+      if child.data["case_review_2945fb6"].present?
+        child.data["case_review_2945fb6"].any? do |hash|
+          if hash["date_of_case_review_6f6df01"].present?
+            stats["Final Case Review"] += 1
+          end
+        end
+      end
+
+      if child.data["verification_by_child_protection_officer_31d4905"].present? && child.data["date_97dba96"].present?
+        stats["Case Closure"] += 1
+      end
+
+    end
+
+    Child.all.each do |child|
+      if child.data["assigned_user_names"].present?
+        if child.data["assigned_user_names"].include?(user.user_name)
+          stats["Referral"] += 1
+        end
+      end
     end
 
     stats

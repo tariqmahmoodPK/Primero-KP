@@ -19,9 +19,10 @@ class Api::V2::DashboardsController < ApplicationApiController
     @stats = Child.registered_cases_stats(current_user)
   end
 
-  # def get_child_statuses
-  #   @statuses = Child.get_child_statuses(current_user)
-  # end
+  # 'Workflow Stats' Graph
+  def workflow_stats
+    @stats = Child.workflow_stats(current_user)
+  end
 
   # 'Closed Cases by Sex and Reason' Graph
   def resolved_cases_by_gender_and_reason

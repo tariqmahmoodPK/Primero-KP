@@ -238,10 +238,11 @@ class NotificationMailer < ApplicationMailer
   end
 
   def transition_subject(record)
+
     t(
       "email_notification.#{@transition.key}_subject",
       record_type: t("forms.record_types.#{record.class.parent_form}", locale: @locale_email),
-      id: record.short_id,
+      id: record.data["short_id"],
       locale: @locale_email
     )
   end
