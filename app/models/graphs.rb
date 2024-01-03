@@ -67,11 +67,11 @@ module Graphs
     }
 
     # Getting Total Number of Cases that are High Risk
-    high_risk_cases = Child.get_childern_records(user, "high")
-    total_case_count = high_risk_cases.count
+    cases = Child.get_childern_records(user)
+    total_case_count = cases.count
 
     # Calculate Stats
-    high_risk_cases.each do |child|
+    cases.each do |child|
       # child.data["response_on_referred_case_da89310"] is an array containing a hash
       response_on_referred_case = child.data["response_on_referred_case_da89310"]
 
