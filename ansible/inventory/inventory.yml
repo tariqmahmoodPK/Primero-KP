@@ -1,9 +1,9 @@
 ---
 all:
   hosts:
-    kpk.cpims.org.pk:
+    cpims.kpcpwc.gov.pk:
       ansible_user: 'deploy'
-      primero_host: 'kpk.cpims.org.pk'
+      primero_host: 'cpims.kpcpwc.gov.pk'
       primero_tag: 'latest'
       # As of Primero v2.5, the default Docker deployed PostgreSQL is 10.22.
       # If you want to run Primero with a different version of PostgreSQL,
@@ -22,17 +22,15 @@ all:
       # primero_configuration_repo: 'git@bitbucket.org:quoin/primero-x-configuration.git'
       # primero_configuration_repo_branch: 'main'
       # primero_configuration_path: 'directory/of/config/loader/script'
-      use_lets_encrypt: 'true'
-      use_external_certs: 'false'
+      use_lets_encrypt: 'false'
+      use_external_certs: 'true'
       # The other certbot/lets_encrypt variables are optional. Include only if using Let's Encrypt
-      certbot_domain:
-      - '{{ primero_host }}'
-      certbot_email: 'kpk@cpims.org.pk'
-      lets_encrypt_domain: '{{ primero_host }}'
-      lets_encrypt_email: '{{ certbot_email }}'
+      # certbot_email: 'kpk@cpims.org.pk'
+      # lets_encrypt_domain: '{{ primero_host }}'
+      # lets_encrypt_email: '{{ certbot_email }}'
       # Different for self-signed certs
-      nginx_ssl_cert_path: '/etc/letsencrypt/live/primero/fullchain.pem'
-      nginx_ssl_key_path: '/etc/letsencrypt/live/primero/privkey.pem'
+      nginx_ssl_cert_path: '/external-certs/primero.crt'
+      nginx_ssl_key_path: '/external-certs/primero.key'
       # Optionally parametrize Primero containers with other environment attributes.
       # Do not use this dictionary for secrets!!!
       environment_variables:
